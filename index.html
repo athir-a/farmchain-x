@@ -84,7 +84,26 @@
         display: block;
         animation: fadeIn 0.4s ease-out;
       }
+      .order-status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
 
+.status-delivered {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-transit {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -481,6 +500,7 @@
 
         if (viewName === "home") renderProducts(products, "productGrid");
         if (viewName === "top-farms") renderTopFarms();
+        if (viewName === "orders") renderOrders();
 
         window.scrollTo(0, 0);
         lucide.createIcons();
