@@ -150,11 +150,9 @@
         >
           <i data-lucide="layout-grid" class="w-5 h-5"></i> Categories
         </button>
-        <a href="yourorder.html">
         <button onclick="showView('orders')" class="nav-link" id="btn-orders">
           <i data-lucide="shopping-bag" class="w-5 h-5"></i> Your Orders
         </button>
-        </a>
         <button
           onclick="showView('top-farms')"
           class="nav-link"
@@ -308,7 +306,13 @@
             <!-- Farm injected via JS -->
           </div>
         </section>
-
+<!-- ORDERS VIEW -->
+            <section id="view-orders" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Your Order History</h2>
+                <div class="space-y-6" id="ordersContainer">
+                    <!-- Orders will be injected here -->
+                </div>
+            </section>
         <!-- TOP FARMS VIEW -->
         <section id="view-top-farms" class="view-section">
           <h2 class="text-3xl font-black text-white mb-8">
@@ -391,7 +395,28 @@
           unit: "bag",
         },
       ];
-
+const orders = [
+            {
+                id: "ORD-9921",
+                date: "Oct 24, 2023",
+                status: "Delivered",
+                total: 35.40,
+                items: [
+                    { name: "Heirloom Tomatoes", qty: "2kg", price: 9.00, img: products[0].image },
+                    { name: "Free Range Brown Eggs", qty: "2 doz", price: 12.00, img: products[2].image },
+                    { name: "Honey Crisp Apples", qty: "1 bag", price: 5.40, img: products[5].image }
+                ]
+            },
+            {
+                id: "ORD-8812",
+                date: "Nov 02, 2023",
+                status: "In Transit",
+                total: 24.99,
+                items: [
+                    { name: "Grass-Fed Ribeye", qty: "1lb", price: 24.99, img: products[3].image }
+                ]
+            }
+        ];
       const farms = {
         101: {
           name: "Gloria's Sun Valley Farm",
