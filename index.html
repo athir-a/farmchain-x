@@ -395,7 +395,7 @@
           unit: "bag",
         },
       ];
-const orders = [
+      const orders = [
             {
                 id: "ORD-9921",
                 date: "Oct 24, 2023",
@@ -521,7 +521,51 @@ const orders = [
         renderProducts(filtered, "productGrid");
         showView("home");
       });
-
+      
+      function renderOrders() {
+            const container = document.getElementById('ordersContainer');
+            container.innerHTML = orders.map(order => `
+                <div class="glass-card p-6 rounded-[32px] border border-white/5">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/50 pb-4 mb-6">
+                        <div class="mb-4 md:mb-0">
+                            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black">Order ID</p>
+                            <h4 class="text-xl font-black text-white">${order.id}</h4>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="text-right">
+                                <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black">Ordered on</p>
+                                <p class="text-sm font-bold text-white">${order.date}</p>
+                            </div>
+                            <span class="order-status-badge ${order.status === 'Delivered' ? 'status-delivered' : 'status-transit'}">${order.status}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 mb-6">
+                        ${order.items.map(item => `
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <img src="${item.img}" class="w-12 h-12 rounded-xl object-cover border border-white/5">
+                                    <div>
+                                        <p class="font-bold text-white text-sm">${item.name}</p>
+                                        <p class="text-xs text-slate-500">Qty: ${item.qty}</p>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-slate-300 text-sm">$${item.price.toFixed(2)}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-white/5">
+                        <div class="mb-4 sm:mb-0">
+                            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black">Total Paid</p>
+                            <p class="text-2xl font-black text-emerald-500">$${order.total.toFixed(2)}</p>
+                        </div>
+                        <div class="flex gap-3 w-full sm:w-auto">
+                            <button class="flex-1 sm:flex-initial px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors">Track Order</button>
+                            <button class="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-900/20 transition-all">Order Again</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
       // Detail Views
       function viewProduct(id) {
         const product = products.find((p) => p.id === id);
