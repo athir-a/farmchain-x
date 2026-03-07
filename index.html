@@ -1,429 +1,306 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FarmChain X | Direct Farmer Marketplace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
-      :root {
-        --farm-green: #10b981;
-        --farm-emerald: #059669;
-        --bg-dark: #020617;
-      }
-
-      body {
-        font-family: "Plus Jakarta Sans", sans-serif;
-        background-color: var(--bg-dark);
-        color: #f8fafc;
-        margin: 0;
-        -webkit-font-smoothing: antialiased;
-      }
-
-      .glass-card {
-        background: rgba(15, 23, 42, 0.6);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .glass-card:hover {
-        border-color: rgba(16, 185, 129, 0.4);
-        transform: translateY(-2px);
-      }
-
-      .nav-link {
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px;
-        width: 100%;
-        border-radius: 12px;
-        color: #94a3b8;
-      }
-
-      .nav-link:hover {
-        background: rgba(255, 255, 255, 0.05);
-        color: white;
-      }
-
-      .nav-link.active {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-        font-weight: 600;
-      }
-
-      .category-pill {
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      .category-pill.active {
-        background: var(--farm-green);
-        color: white;
-        border-color: var(--farm-green);
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-      }
-
-      .product-img {
-        aspect-ratio: 1/1;
-        object-fit: cover;
-        border-radius: 20px;
-      }
-
-      .view-section {
-        display: none;
-      }
-
-      .view-section.active {
-        display: block;
-        animation: fadeIn 0.4s ease-out;
-      }
-      .order-status-badge {
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-
-.status-delivered {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.status-transit {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
+        :root {
+            --farm-green: #10b981;
+            --farm-emerald: #059669;
+            --bg-dark: #020617;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
-      }
 
-      .verification-tag {
-        background: rgba(16, 185, 129, 0.1);
-        color: #34d399;
-        padding: 4px 12px;
-        border-radius: 99px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        border: 1px solid rgba(16, 185, 129, 0.2);
-      }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-      /* Hide scrollbar for category list */
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
+        .glass-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            text-align: left;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        .product-img {
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .verification-tag {
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .order-status-badge {
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-delivered { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .status-transit { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+
+        .step-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        }
+
+        .basket-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-dark);
+        }
     </style>
-  </head>
-  <body class="flex min-h-screen">
+</head>
+<body class="flex min-h-screen">
+
     <!-- Sidebar -->
-    <aside
-      class="w-72 fixed h-screen glass-card border-r border-slate-800/50 p-6 flex flex-col z-50"
-    >
-      <div
-        class="flex items-center gap-3 mb-10 px-2 cursor-pointer"
-        onclick="showView('home')"
-      >
-        <div
-          class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20"
-        >
-          <i data-lucide="sprout" class="text-white w-6 h-6"></i>
+    <aside class="w-72 fixed h-screen glass-card border-r border-slate-800/50 p-6 flex flex-col z-50">
+        <div class="flex items-center gap-3 mb-10 px-2 cursor-pointer" onclick="showView('home')">
+            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-900/20">
+                <i data-lucide="sprout" class="text-white w-6 h-6"></i>
+            </div>
+            <span class="text-2xl font-black tracking-tight text-white">FarmChain <span class="text-emerald-500">X</span></span>
         </div>
-        <span class="text-2xl font-black tracking-tight text-white"
-          >FarmChain <span class="text-emerald-500">X</span></span
-        >
-      </div>
 
-      <nav class="space-y-2 flex-1">
-        <button
-          onclick="showView('home')"
-          class="nav-link active"
-          id="btn-home"
-        >
-          <i data-lucide="home" class="w-5 h-5"></i> Home
-        </button>
-        <button
-          onclick="showView('categories')"
-          class="nav-link"
-          id="btn-categories"
-        >
-          <i data-lucide="layout-grid" class="w-5 h-5"></i> Categories
-        </button>
-        <button onclick="showView('orders')" class="nav-link" id="btn-orders">
-          <i data-lucide="shopping-bag" class="w-5 h-5"></i> Your Orders
-        </button>
-        <button
-          onclick="showView('top-farms')"
-          class="nav-link"
-          id="btn-top-farms"
-        >
-          <i data-lucide="award" class="w-5 h-5"></i> Top Farms
-        </button>
-        <div class="pt-6 mt-6 border-t border-slate-800/50 space-y-2">
-          <button class="nav-link">
-            <i data-lucide="heart" class="w-5 h-5"></i> Favorites
-          </button>
-          <button class="nav-link">
-            <i data-lucide="settings" class="w-5 h-5"></i> Settings
-          </button>
-        </div>
-      </nav>
+        <nav class="space-y-2 flex-1">
+            <button onclick="showView('home')" class="nav-link active" id="btn-home">
+                <i data-lucide="home" class="w-5 h-5"></i> Home
+            </button>
+            <button onclick="showView('categories')" class="nav-link" id="btn-categories">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i> Categories
+            </button>
+            <button onclick="showView('orders')" class="nav-link" id="btn-orders">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i> Your Orders
+            </button>
+            <button onclick="showView('top-farms')" class="nav-link" id="btn-top-farms">
+                <i data-lucide="award" class="w-5 h-5"></i> Top Farms
+            </button>
+            <div class="pt-6 mt-6 border-t border-slate-800/50 space-y-2">
+                <button onclick="showCheckout()" class="nav-link relative" id="btn-checkout">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i> My Basket
+                    <span id="basketCount" class="basket-badge hidden">0</span>
+                </button>
+                <button class="nav-link"><i data-lucide="heart" class="w-5 h-5"></i> Favorites</button>
+                <button class="nav-link"><i data-lucide="settings" class="w-5 h-5"></i> Settings</button>
+            </div>
+        </nav>
 
-      <div
-        class="p-4 bg-slate-900/50 rounded-2xl border border-white/5 mt-auto"
-      >
-        <div class="flex items-center gap-3">
-          <div
-            class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold"
-          >
-            AJ
-          </div>
-          <div class="overflow-hidden">
-            <p class="text-sm font-bold text-white">Athira K Jayan</p>
-            <p class="text-[10px] text-slate-500 uppercase tracking-widest">
-              Premium Buyer
-            </p>
-          </div>
+        <div class="p-4 bg-slate-900/50 rounded-2xl border border-white/5 mt-auto">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold">JD</div>
+                <div class="overflow-hidden">
+                    <p class="text-sm font-bold text-white">John Doe</p>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest">Premium Buyer</p>
+                </div>
+            </div>
         </div>
-      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="flex-1 ml-72 p-8">
-      <!-- Top Search Bar (Fixed for all views) -->
-      <div class="max-w-6xl mx-auto mb-8">
-        <div class="relative group">
-          <i
-            data-lucide="search"
-            class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5 group-focus-within:text-emerald-500 transition-colors"
-          ></i>
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="Search fresh tomatoes, organic eggs, or local farms..."
-            class="w-full bg-slate-900/80 border border-slate-800 rounded-2xl py-4 pl-14 pr-6 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all placeholder:text-slate-600"
-          />
+        <!-- Top Search Bar -->
+        <div class="max-w-6xl mx-auto mb-8">
+            <div class="relative group">
+                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5 group-focus-within:text-emerald-500 transition-colors"></i>
+                <input type="text" id="searchInput" placeholder="Search fresh produce or local farms..." 
+                    class="w-full bg-slate-900/80 border border-slate-800 rounded-2xl py-4 pl-14 pr-6 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/40 transition-all placeholder:text-slate-600">
+            </div>
         </div>
-      </div>
 
-      <div id="content-area" class="max-w-6xl mx-auto">
-        <!-- HOME VIEW -->
-        <section id="view-home" class="view-section active">
-          <div class="flex items-center justify-between mb-8">
-            <h2 class="text-3xl font-black text-white">Fresh From The Field</h2>
-            <div class="flex gap-2">
-              <button class="p-2 hover:bg-white/5 rounded-lg">
-                <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
-              </button>
-            </div>
-          </div>
+        <div id="content-area" class="max-w-6xl mx-auto">
+            
+            <!-- HOME VIEW -->
+            <section id="view-home" class="view-section active">
+                <h2 class="text-3xl font-black text-white mb-8">Fresh From The Field</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="productGrid"></div>
+            </section>
 
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-            id="productGrid"
-          >
-            <!-- Products injected via JS -->
-          </div>
-        </section>
+            <!-- CATEGORIES VIEW -->
+            <section id="view-categories" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Categories</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                    <div onclick="filterCategory('Vegetables')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-emerald-500/10 border-emerald-500/20">
+                        <i data-lucide="carrot" class="w-10 h-10 text-emerald-500 mx-auto mb-4"></i>
+                        <span class="font-bold">Vegetables</span>
+                    </div>
+                    <div onclick="filterCategory('Fruits')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-orange-500/10 border-orange-500/20">
+                        <i data-lucide="apple" class="w-10 h-10 text-orange-500 mx-auto mb-4"></i>
+                        <span class="font-bold">Fruits</span>
+                    </div>
+                    <div onclick="filterCategory('Animal')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-yellow-500/10 border-yellow-500/20">
+                        <i data-lucide="egg" class="w-10 h-10 text-yellow-500 mx-auto mb-4"></i>
+                        <span class="font-bold">Dairy & Eggs</span>
+                    </div>
+                    <div onclick="filterCategory('Meat')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-red-500/10 border-red-500/20">
+                        <i data-lucide="drumstick" class="w-10 h-10 text-red-500 mx-auto mb-4"></i>
+                        <span class="font-bold">Fresh Meat</span>
+                    </div>
+                </div>
+                <div id="categoryResults" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div>
+            </section>
 
-        <!-- CATEGORIES VIEW -->
-        <section id="view-categories" class="view-section">
-          <h2 class="text-3xl font-black text-white mb-8">Categories</h2>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div
-              onclick="filterCategory('Vegetables')"
-              class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-emerald-500/10 border-emerald-500/20"
-            >
-              <i
-                data-lucide="carrot"
-                class="w-10 h-10 text-emerald-500 mx-auto mb-4"
-              ></i>
-              <span class="font-bold">Vegetables</span>
-            </div>
-            <div
-              onclick="filterCategory('Fruits')"
-              class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-orange-500/10 border-orange-500/20"
-            >
-              <i
-                data-lucide="apple"
-                class="w-10 h-10 text-orange-500 mx-auto mb-4"
-              ></i>
-              <span class="font-bold">Fruits</span>
-            </div>
-            <div
-              onclick="filterCategory('Animal')"
-              class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-yellow-500/10 border-yellow-500/20"
-            >
-              <i
-                data-lucide="egg"
-                class="w-10 h-10 text-yellow-500 mx-auto mb-4"
-              ></i>
-              <span class="font-bold">Dairy & Eggs</span>
-            </div>
-            <div
-              onclick="filterCategory('Meat')"
-              class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-red-500/10 border-red-500/20"
-            >
-              <i
-                data-lucide="drumstick"
-                class="w-10 h-10 text-red-500 mx-auto mb-4"
-              ></i>
-              <span class="font-bold">Fresh Meat</span>
-            </div>
-          </div>
-          <div
-            id="categoryResults"
-            class="grid grid-cols-1 md:grid-cols-4 gap-6"
-          ></div>
-        </section>
-
-        <!-- PRODUCT DETAIL VIEW -->
-        <section id="view-product-detail" class="view-section">
-          <button
-            onclick="showView('home')"
-            class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-          >
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to marketplace
-          </button>
-          <div
-            class="grid grid-cols-1 lg:grid-cols-12 gap-10"
-            id="productDetailContent"
-          >
-            <!-- Detail injected via JS -->
-          </div>
-        </section>
-
-        <!-- FARM DETAIL VIEW -->
-        <section id="view-farm-detail" class="view-section">
-          <button
-            onclick="showView('home')"
-            class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-          >
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to marketplace
-          </button>
-          <div id="farmDetailContent">
-            <!-- Farm injected via JS -->
-          </div>
-        </section>
-<!-- ORDERS VIEW -->
+            <!-- ORDERS VIEW -->
             <section id="view-orders" class="view-section">
                 <h2 class="text-3xl font-black text-white mb-8">Your Order History</h2>
-                <div class="space-y-6" id="ordersContainer">
-                    <!-- Orders will be injected here -->
-                </div>
+                <div class="space-y-6" id="ordersContainer"></div>
             </section>
-        <!-- TOP FARMS VIEW -->
-        <section id="view-top-farms" class="view-section">
-          <h2 class="text-3xl font-black text-white mb-8">
-            Top Verified Farms
-          </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="topFarmsList">
-            <!-- Top farms injected via JS -->
-          </div>
-        </section>
-      </div>
+
+            <!-- CHECKOUT VIEW -->
+            <section id="view-checkout" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Review Your Basket</h2>
+                <div id="checkoutContent"></div>
+            </section>
+
+            <!-- TRACK ORDER VIEW -->
+            <section id="view-track-order" class="view-section">
+                <button onclick="showView('orders')" class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to orders
+                </button>
+                <div id="trackOrderContent"></div>
+            </section>
+
+            <!-- PRODUCT DETAIL VIEW -->
+            <section id="view-product-detail" class="view-section">
+                <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to marketplace
+                </button>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10" id="productDetailContent"></div>
+            </section>
+
+            <!-- FARM DETAIL VIEW -->
+            <section id="view-farm-detail" class="view-section">
+                <button onclick="showView('home')" class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to marketplace
+                </button>
+                <div id="farmDetailContent"></div>
+            </section>
+
+            <!-- TOP FARMS VIEW -->
+            <section id="view-top-farms" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Top Verified Farms</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="topFarmsList"></div>
+            </section>
+
+        </div>
     </main>
 
     <script>
-      // Mock Data
-      const products = [
-        {
-          id: 1,
-          name: "Heirloom Tomatoes",
-          category: "Vegetables",
-          price: 4.5,
-          rating: 4.9,
-          image:
-            "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400",
-          farmId: 101,
-          unit: "kg",
-        },
-        {
-          id: 2,
-          name: "Organic Russet Potatoes",
-          category: "Vegetables",
-          price: 2.3,
-          rating: 4.7,
-          image:
-            "https://imgs.search.brave.com/ji35ltWn6P-ikFM2GtAsetVXl5RnzCUllKeVXKWMcUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9yYXct/b3JnYW5pYy1ydXNz/ZXQtcG90YXRvZXMt/YnVuY2gtMjQ0MzUz/MTY5LmpwZw",
-          farmId: 102,
-          unit: "kg",
-        },
-        {
-          id: 3,
-          name: "Free Range Brown Eggs",
-          category: "Animal",
-          price: 6.0,
-          rating: 5.0,
-          image:
-            "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&q=80&w=600",
-          farmId: 103,
-          unit: "doz",
-        },
-        {
-          id: 4,
-          name: "Grass-Fed Ribeye",
-          category: "Meat",
-          price: 24.99,
-          rating: 4.8,
-          image:
-            "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&q=80&w=400",
-          farmId: 103,
-          unit: "lb",
-        },
-        {
-          id: 5,
-          name: "Bell Peppers Mix",
-          category: "Vegetables",
-          price: 3.2,
-          rating: 4.6,
-          image:
-            "https://imgs.search.brave.com/cYQXFL0ujgoKuZlDf9BmisPGqWiQm23dL4ZxoJQQkPI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/OTI4MDEwNjIyMDEt/MDRmZDZjZjNkNWVk/P2ZtPWpwZyZxPTYw/Jnc9MzAwMCZpeGxp/Yj1yYi00LjAuMyZp/eGlkPU0zd3hNakEz/ZkRCOE1IeHpaV0Z5/WTJoOE5ueDhZbVZz/YkNVeU1IQmxjSEJs/Y25OOFpXNThNSHg4/TUh4OGZEQT0",
-          farmId: 101,
-          unit: "lb",
-        },
-        {
-          id: 6,
-          name: "Honey Crisp Apples",
-          category: "Fruits",
-          price: 5.4,
-          rating: 4.9,
-          image:
-            "https://imgs.search.brave.com/mp2uDl5G2I3HkD0edg3acKrmBJhlGyIwW4m2SNlBs6U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTE3/MDQ4OTYyNi9waG90/by9ob25leWNyaXNw/LWFwcGxlcy1zaW5n/bGUtYW5kLW11bHRp/cGxlLXVwLWNsb3Nl/LXJlZC5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9c2NyR3FY/dFlBMG9BQ1RCclhH/Zi15VVNveG9lSDA4/Yi1zcjV2cXZ4YU0y/TT0",
-          farmId: 102,
-          unit: "bag",
-        },
-      ];
-      const orders = [
+        // State Management
+        let basket = [];
+
+        const products = [
+            { id: 1, name: "Heirloom Tomatoes", category: "Vegetables", price: 4.50, rating: 4.9, image: "https://images.unsplash.com/photo-1518977822534-7049a61ee0c2?auto=format&fit=crop&q=80&w=600", farmId: 101, unit: "kg" },
+            { id: 2, name: "Organic Russet Potatoes", category: "Vegetables", price: 2.30, rating: 4.7, image: "https://images.unsplash.com/photo-1518977676601-b53f02ac6d31?auto=format&fit=crop&q=80&w=600", farmId: 102, unit: "kg" },
+            { id: 3, name: "Free Range Brown Eggs", category: "Animal", price: 6.00, rating: 5.0, image: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "doz" },
+            { id: 4, name: "Grass-Fed Ribeye", category: "Meat", price: 24.99, rating: 4.8, image: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "lb" },
+            { id: 5, name: "Bell Peppers Mix", category: "Vegetables", price: 3.20, rating: 4.6, image: "https://images.unsplash.com/photo-1566567173737-251f930058ec?auto=format&fit=crop&q=80&w=600", farmId: 101, unit: "lb" },
+            { id: 6, name: "Honey Crisp Apples", category: "Fruits", price: 5.40, rating: 4.9, image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&q=80&w=600", farmId: 102, unit: "bag" },
+        ];
+
+        const farms = {
+            101: { 
+                name: "Gloria's Sun Valley Farm", 
+                image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800",
+                description: "Gloria focuses on heirloom seeds and natural pest control.",
+                tags: ["Verified Organic", "No Pesticides"],
+                rating: 4.9,
+                location: "Napa Valley, CA",
+                images: ["https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=400"]
+            },
+            102: { name: "Highland Root Farm", image: "https://images.unsplash.com/photo-1495107336281-19951664d930?auto=format&fit=crop&q=80&w=800", description: "Specializing in root vegetables.", tags: ["Mountain Grown"], rating: 4.7, location: "Asheville, NC", images: [] },
+            103: { name: "Ethical Pastures", image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=800", description: "Where animals come first.", tags: ["Cruelty Free"], rating: 5.0, location: "Lancaster, PA", images: [] }
+        };
+
+        const orders = [
             {
                 id: "ORD-9921",
                 date: "Oct 24, 2023",
                 status: "Delivered",
                 total: 35.40,
                 items: [
-                    { name: "Heirloom Tomatoes", qty: "2kg", price: 9.00, img: products[0].image },
-                    { name: "Free Range Brown Eggs", qty: "2 doz", price: 12.00, img: products[2].image },
-                    { name: "Honey Crisp Apples", qty: "1 bag", price: 5.40, img: products[5].image }
+                    { productId: 1, name: "Heirloom Tomatoes", qty: 2, unit: "kg", price: 4.50, img: products[0].image },
+                    { productId: 3, name: "Free Range Brown Eggs", qty: 2, unit: "doz", price: 6.00, img: products[2].image },
+                    { productId: 6, name: "Honey Crisp Apples", qty: 1, unit: "bag", price: 5.40, img: products[5].image }
                 ]
             },
             {
@@ -432,117 +309,187 @@
                 status: "In Transit",
                 total: 24.99,
                 items: [
-                    { name: "Grass-Fed Ribeye", qty: "1lb", price: 24.99, img: products[3].image }
+                    { productId: 4, name: "Grass-Fed Ribeye", qty: 1, unit: "lb", price: 24.99, img: products[3].image }
                 ]
             }
         ];
-      const farms = {
-        101: {
-          name: "Gloria's Sun Valley Farm",
-          image:
-            "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=600",
-          description:
-            "Gloria has been running this valley farm for 20 years, focusing on heirloom seeds and natural pest control. We believe in transparency and soil health.",
-          tags: ["Verified Organic", "No Pesticides", "Safe Fertilizers"],
-          rating: 4.9,
-          location: "Napa Valley, CA",
-          images: [
-            "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=200",
-            "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=200",
-          ],
-        },
-        102: {
-          name: "Highland Root Farm",
-          image:
-            "https://images.unsplash.com/photo-1495107336281-19951664d930?auto=format&fit=crop&q=80&w=600",
-          description:
-            "Specializing in root vegetables and mountain fruits. Our elevation gives our produce a unique sweetness.",
-          tags: ["Mountain Grown", "Safe Fertilizers", "Local Pick"],
-          rating: 4.7,
-          location: "Asheville, NC",
-          images: [
-            "https://images.unsplash.com/photo-1595855759920-86582396756a?auto=format&fit=crop&q=80&w=200",
-          ],
-        },
-        103: {
-          name: "Ethical Pastures",
-          image:
-            "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=600",
-          description:
-            "Where animals come first. Our livestock roam freely on rotated pastures. We provide the highest quality meat and eggs with zero hormones.",
-          tags: [
-            "Cruelty Free",
-            "Vaccinated Animals",
-            "Hormone Free",
-            "Pasture Raised",
-          ],
-          rating: 5.0,
-          location: "Lancaster, PA",
-          images: [
-            "https://images.unsplash.com/photo-1544473489-07469a93077e?auto=format&fit=crop&q=80&w=200",
-            "https://images.unsplash.com/photo-1544473244-f6895a69ad41?auto=format&fit=crop&q=80&w=200",
-          ],
-        },
-      };
 
-      // Navigation Controller
-      function showView(viewName) {
-        document
-          .querySelectorAll(".view-section")
-          .forEach((v) => v.classList.remove("active"));
-        document.getElementById(`view-${viewName}`).classList.add("active");
+        function showView(viewName) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            const target = document.getElementById(`view-${viewName}`);
+            if (target) target.classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            const btn = document.getElementById(`btn-${viewName}`);
+            if (btn) btn.classList.add('active');
 
-        document
-          .querySelectorAll(".nav-link")
-          .forEach((n) => n.classList.remove("active"));
-        const btn = document.getElementById(`btn-${viewName}`);
-        if (btn) btn.classList.add("active");
+            if(viewName === 'home') renderProducts(products, 'productGrid');
+            if(viewName === 'top-farms') renderTopFarms();
+            if(viewName === 'orders') renderOrders();
+            
+            window.scrollTo(0,0);
+            lucide.createIcons();
+        }
 
-        if (viewName === "home") renderProducts(products, "productGrid");
-        if (viewName === "top-farms") renderTopFarms();
-        if (viewName === "orders") renderOrders();
+        function addToBasket(productId, qty = 1) {
+            const product = products.find(p => p.id === productId);
+            const existing = basket.find(item => item.id === productId);
+            
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                basket.push({ ...product, qty });
+            }
+            updateBasketUI();
+            
+            // Temporary confirmation animation
+            const feedback = document.createElement('div');
+            feedback.className = "fixed bottom-10 right-10 bg-emerald-500 text-white px-6 py-3 rounded-2xl font-bold shadow-2xl z-[100] animate-bounce";
+            feedback.innerText = "Added to Basket!";
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 2000);
+        }
 
-        window.scrollTo(0, 0);
-        lucide.createIcons();
-      }
+        function orderAgain(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            order.items.forEach(item => {
+                addToBasket(item.productId, item.qty);
+            });
+            showCheckout();
+        }
 
-      // Render Marketplace
-      function renderProducts(items, containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = items
-          .map(
-            (p) => `
-                <div class="glass-card p-4 rounded-3xl cursor-pointer group" onclick="viewProduct(${p.id})">
-                    <div class="relative overflow-hidden rounded-2xl mb-4">
-                        <img src="${p.image}" alt="${p.name}" class="product-img group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">
-                            ★ ${p.rating}
+        function updateBasketUI() {
+            const count = basket.reduce((acc, item) => acc + item.qty, 0);
+            const badge = document.getElementById('basketCount');
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function showCheckout() {
+            const container = document.getElementById('checkoutContent');
+            if (basket.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card p-20 rounded-[40px] text-center">
+                        <i data-lucide="shopping-cart" class="w-16 h-16 text-slate-700 mx-auto mb-6"></i>
+                        <h3 class="text-2xl font-black text-white mb-2">Your basket is empty</h3>
+                        <p class="text-slate-500 mb-8">Add some fresh farm products to get started.</p>
+                        <button onclick="showView('home')" class="bg-emerald-600 px-8 py-4 rounded-2xl font-black text-white">Browse Market</button>
+                    </div>
+                `;
+            } else {
+                const subtotal = basket.reduce((acc, item) => acc + (item.price * item.qty), 0);
+                const delivery = 4.99;
+                const total = subtotal + delivery;
+
+                container.innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        <div class="lg:col-span-8 space-y-4">
+                            ${basket.map(item => `
+                                <div class="glass-card p-6 rounded-3xl flex items-center justify-between">
+                                    <div class="flex items-center gap-6">
+                                        <img src="${item.image}" class="w-20 h-20 rounded-2xl object-cover shadow-lg" />
+                                        <div>
+                                            <h4 class="text-lg font-black text-white">${item.name}</h4>
+                                            <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">${item.category}</p>
+                                            <div class="flex items-center gap-4 mt-3">
+                                                <button onclick="changeQty(${item.id}, -1)" class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700">-</button>
+                                                <span class="font-bold text-white">${item.qty} ${item.unit}</span>
+                                                <button onclick="changeQty(${item.id}, 1)" class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-slate-700">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-xl font-black text-emerald-500">$${(item.price * item.qty).toFixed(2)}</p>
+                                        <button onclick="removeFromBasket(${item.id})" class="text-xs text-red-500 font-bold mt-2 hover:underline">Remove</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="lg:col-span-4">
+                            <div class="glass-card p-8 rounded-[40px] sticky top-8">
+                                <h3 class="text-xl font-black text-white mb-6">Order Summary</h3>
+                                <div class="space-y-4 mb-8">
+                                    <div class="flex justify-between text-slate-400">
+                                        <span>Subtotal</span>
+                                        <span class="text-white font-bold">$${subtotal.toFixed(2)}</span>
+                                    </div>
+                                    <div class="flex justify-between text-slate-400">
+                                        <span>Eco-Delivery</span>
+                                        <span class="text-white font-bold">$${delivery.toFixed(2)}</span>
+                                    </div>
+                                    <div class="pt-4 border-t border-slate-800 flex justify-between">
+                                        <span class="text-lg font-black text-white">Total</span>
+                                        <span class="text-2xl font-black text-emerald-500">$${total.toFixed(2)}</span>
+                                    </div>
+                                </div>
+                                <button onclick="completeOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-900/20 transition-all">
+                                    Confirm & Pay
+                                </button>
+                                <p class="text-[10px] text-slate-600 text-center mt-4 uppercase tracking-widest">Secure Checkout Powered by FarmChain</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="font-bold text-white truncate pr-2">${p.name}</h3>
-                        <span class="text-emerald-400 font-extrabold">$${p.price.toFixed(2)}</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">${p.category} • ${p.unit}</p>
-                </div>
-            `,
-          )
-          .join("");
-      }
+                `;
+            }
+            showView('checkout');
+            lucide.createIcons();
+        }
 
-      // Search Logic
-      document.getElementById("searchInput").addEventListener("input", (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = products.filter(
-          (p) =>
-            p.name.toLowerCase().includes(term) ||
-            p.category.toLowerCase().includes(term),
-        );
-        renderProducts(filtered, "productGrid");
-        showView("home");
-      });
-      
-      function renderOrders() {
+        function changeQty(id, delta) {
+            const item = basket.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) removeFromBasket(id);
+                else showCheckout();
+            }
+            updateBasketUI();
+        }
+
+        function removeFromBasket(id) {
+            basket = basket.filter(i => i.id !== id);
+            updateBasketUI();
+            showCheckout();
+        }
+
+        function completeOrder() {
+            // Mock successful order
+            const newId = "ORD-" + Math.floor(1000 + Math.random() * 9000);
+            const total = basket.reduce((acc, item) => acc + (item.price * item.qty), 0) + 4.99;
+            
+            orders.unshift({
+                id: newId,
+                date: "Just Now",
+                status: "In Transit",
+                total: total,
+                items: basket.map(b => ({ ...b, productId: b.id, qty: b.qty, img: b.image }))
+            });
+
+            basket = [];
+            updateBasketUI();
+            
+            // Show success animation/view
+            const container = document.getElementById('checkoutContent');
+            container.innerHTML = `
+                <div class="glass-card p-20 rounded-[40px] text-center animate-in fade-in zoom-in duration-500">
+                    <div class="w-24 h-24 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-emerald-900/40">
+                        <i data-lucide="check" class="w-12 h-12 text-white"></i>
+                    </div>
+                    <h2 class="text-4xl font-black text-white mb-4">Order Placed!</h2>
+                    <p class="text-slate-400 mb-10">Your fresh produce is being prepared at the farm.<br>Order ID: <b>${newId}</b></p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="trackOrder('${newId}')" class="bg-white/10 hover:bg-white/20 px-8 py-4 rounded-2xl font-black text-white transition-all">Track My Delivery</button>
+                        <button onclick="showView('home')" class="bg-emerald-600 hover:bg-emerald-500 px-8 py-4 rounded-2xl font-black text-white shadow-lg transition-all">Back to Market</button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderOrders() {
             const container = document.getElementById('ordersContainer');
             container.innerHTML = orders.map(order => `
                 <div class="glass-card p-6 rounded-[32px] border border-white/5">
@@ -566,10 +513,10 @@
                                     <img src="${item.img}" class="w-12 h-12 rounded-xl object-cover border border-white/5">
                                     <div>
                                         <p class="font-bold text-white text-sm">${item.name}</p>
-                                        <p class="text-xs text-slate-500">Qty: ${item.qty}</p>
+                                        <p class="text-xs text-slate-500">Qty: ${item.qty} ${item.unit || ''}</p>
                                     </div>
                                 </div>
-                                <p class="font-bold text-slate-300 text-sm">$${item.price.toFixed(2)}</p>
+                                <p class="font-bold text-slate-300 text-sm">$${(item.price * item.qty).toFixed(2)}</p>
                             </div>
                         `).join('')}
                     </div>
@@ -579,23 +526,108 @@
                             <p class="text-2xl font-black text-emerald-500">$${order.total.toFixed(2)}</p>
                         </div>
                         <div class="flex gap-3 w-full sm:w-auto">
-                            <button class="flex-1 sm:flex-initial px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors">Track Order</button>
-                            <button class="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-900/20 transition-all">Order Again</button>
+                            <button onclick="trackOrder('${order.id}')" class="flex-1 sm:flex-initial px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors">Track Order</button>
+                            <button onclick="orderAgain('${order.id}')" class="flex-1 sm:flex-initial px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-900/20 transition-all">Order Again</button>
                         </div>
                     </div>
                 </div>
             `).join('');
         }
-      // Detail Views
-      function viewProduct(id) {
-        const product = products.find((p) => p.id === id);
-        const farm = farms[product.farmId];
 
-        const detailView = document.getElementById("productDetailContent");
-        detailView.innerHTML = `
+        function trackOrder(orderId) {
+            const order = orders.find(o => o.id === orderId);
+            const container = document.getElementById('trackOrderContent');
+            
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <div class="lg:col-span-8 space-y-8">
+                        <div class="glass-card p-10 rounded-[40px] relative overflow-hidden">
+                            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+                                <div>
+                                    <h3 class="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Live Tracking</h3>
+                                    <h2 class="text-4xl font-black text-white">${order.id}</h2>
+                                </div>
+                                <div class="bg-emerald-500/10 border border-emerald-500/20 px-6 py-3 rounded-2xl text-center min-w-[140px]">
+                                    <p class="text-[10px] text-emerald-500 uppercase font-black tracking-widest">Est. Arrival</p>
+                                    <p class="text-xl font-black text-white">Today, 5:30 PM</p>
+                                </div>
+                            </div>
+                            <div class="relative flex justify-between">
+                                <div class="absolute top-6 left-0 w-full h-1 bg-slate-800 rounded-full -z-0">
+                                    <div class="h-full bg-emerald-500 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <div class="flex flex-col items-center z-10"><div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white mb-4 border-4 border-slate-900 shadow-xl"><i data-lucide="check" class="w-6 h-6"></i></div><p class="text-xs font-black text-white uppercase tracking-tighter">Ordered</p></div>
+                                <div class="flex flex-col items-center z-10"><div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white mb-4 border-4 border-slate-900 shadow-xl"><i data-lucide="package" class="w-6 h-6"></i></div><p class="text-xs font-black text-white uppercase tracking-tighter">Processed</p></div>
+                                <div class="flex flex-col items-center z-10"><div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center text-white mb-4 border-4 border-slate-900 step-pulse shadow-xl shadow-emerald-500/20"><i data-lucide="truck" class="w-6 h-6"></i></div><p class="text-xs font-black text-emerald-500 uppercase tracking-tighter">Shipping</p></div>
+                                <div class="flex flex-col items-center z-10 opacity-30"><div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-slate-400 mb-4 border-4 border-slate-900"><i data-lucide="home" class="w-6 h-6"></i></div><p class="text-xs font-black text-slate-500 uppercase tracking-tighter">Arrived</p></div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-8 rounded-[32px]">
+                            <h3 class="text-xl font-black text-white mb-8">Shipping Journey</h3>
+                            <div class="space-y-8">
+                                <div class="flex gap-6 items-start relative before:absolute before:left-3 before:top-8 before:w-[2px] before:h-full before:bg-slate-800">
+                                    <div class="w-6 h-6 rounded-full bg-emerald-500 flex-shrink-0 z-10 border-4 border-slate-900"></div>
+                                    <div>
+                                        <p class="font-black text-white">Arrived at Local Hub</p>
+                                        <p class="text-xs text-slate-500 mb-2">Chicago, IL • 2:30 PM</p>
+                                        <p class="text-sm text-slate-400">Package is sorted and ready for final delivery vehicle.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-6 items-start">
+                                    <div class="w-6 h-6 rounded-full bg-slate-700 flex-shrink-0 z-10 border-4 border-slate-900"></div>
+                                    <div>
+                                        <p class="font-bold text-slate-300">Left Farm Facility</p>
+                                        <p class="text-xs text-slate-500 mb-2">Napa Valley, CA • Oct 25, 9:15 AM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="h-64 glass-card rounded-[32px] overflow-hidden relative">
+                            <div class="absolute inset-0 bg-slate-900 flex items-center justify-center"><i data-lucide="map" class="w-20 h-20 text-slate-800"></i><div class="absolute w-4 h-4 bg-emerald-500 rounded-full step-pulse"></div></div>
+                            <div class="absolute bottom-4 left-4 right-4 bg-black/60 backdrop-blur-md p-3 rounded-2xl flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-black">MK</div>
+                                <div><p class="text-[10px] text-slate-400 uppercase font-black">Your Courier</p><p class="text-xs font-bold text-white">Mike K. (5.0 ★)</p></div>
+                            </div>
+                        </div>
+                        <div class="glass-card p-6 rounded-[32px]">
+                            <h4 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">Destination</h4>
+                            <p class="text-sm text-slate-300 leading-relaxed">John Doe<br>123 Eco-Friendly Lane<br>Green District, IL 60610</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            showView('track-order');
+            lucide.createIcons();
+        }
+
+        function renderProducts(items, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = items.map(p => `
+                <div class="glass-card p-4 rounded-3xl cursor-pointer group" onclick="viewProduct(${p.id})">
+                    <div class="relative overflow-hidden rounded-2xl mb-4 bg-slate-800">
+                        <img src="${p.image}" alt="${p.name}" class="product-img group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">★ ${p.rating}</div>
+                    </div>
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-bold text-white truncate pr-2">${p.name}</h3>
+                        <span class="text-emerald-400 font-extrabold">$${p.price.toFixed(2)}</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">${p.category} • ${p.unit}</p>
+                </div>
+            `).join('');
+        }
+
+        function viewProduct(id) {
+            const product = products.find(p => p.id === id);
+            const farm = farms[product.farmId];
+            const detailView = document.getElementById('productDetailContent');
+            detailView.innerHTML = `
                 <div class="lg:col-span-7">
                     <div class="rounded-[40px] overflow-hidden bg-slate-900 border border-white/5 mb-6">
-                        <img src="${product.image}" class="w-full h-[500px] object-cover" alt="${product.name}">
+                        <img src="${product.image}" class="w-full h-[500px] object-cover">
                     </div>
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-4xl font-black text-white">${product.name}</h1>
@@ -604,137 +636,65 @@
                             <p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Per ${product.unit}</p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 mb-8 text-yellow-500">
-                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                        <span class="text-lg font-bold">${product.rating}</span>
-                        <span class="text-slate-500 text-sm font-medium ml-2">(120+ reviews)</span>
-                    </div>
-                    <button class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-900/20 transition-all flex items-center justify-center gap-3">
+                    <div class="flex items-center gap-2 mb-8 text-yellow-500"><i data-lucide="star" class="w-5 h-5 fill-current"></i><span class="text-lg font-bold">${product.rating}</span></div>
+                    <button onclick="addToBasket(${product.id})" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-900/20 transition-all flex items-center justify-center gap-3">
                         <i data-lucide="shopping-cart" class="w-6 h-6"></i> Add to Basket
                     </button>
                 </div>
-
                 <div class="lg:col-span-5">
                     <div class="glass-card p-8 rounded-[32px] sticky top-8">
                         <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">About Farm</h3>
                         <div class="flex items-center gap-4 mb-6 cursor-pointer" onclick="viewFarm(${product.farmId})">
                             <img src="${farm.image}" class="w-16 h-16 rounded-2xl object-cover border border-white/10" />
-                            <div>
-                                <h4 class="text-xl font-bold text-white group-hover:text-emerald-400">${farm.name}</h4>
-                                <p class="text-xs text-slate-500">${farm.location}</p>
-                            </div>
+                            <div><h4 class="text-xl font-bold text-white">${farm.name}</h4><p class="text-xs text-slate-500">${farm.location}</p></div>
                         </div>
                         <p class="text-slate-400 text-sm leading-relaxed mb-6">${farm.description}</p>
-                        <div class="grid grid-cols-2 gap-3">
-                            ${farm.images.map((img) => `<img src="${img}" class="rounded-xl w-full aspect-square object-cover" />`).join("")}
-                        </div>
                     </div>
                 </div>
             `;
-        showView("product-detail");
-      }
+            showView('product-detail');
+            lucide.createIcons();
+        }
 
-      function viewFarm(id) {
-        const farm = farms[id];
-        const farmView = document.getElementById("farmDetailContent");
-
-        farmView.innerHTML = `
-                <div class="relative rounded-[48px] overflow-hidden h-[400px] mb-12">
-                    <img src="${farm.image}" class="w-full h-full object-cover" />
+        function viewFarm(id) {
+            const farm = farms[id];
+            const farmView = document.getElementById('farmDetailContent');
+            farmView.innerHTML = `
+                <div class="relative rounded-[48px] overflow-hidden h-[400px] mb-12 bg-slate-900">
+                    <img src="${farm.image}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-10 left-10">
-                        <h1 class="text-6xl font-black text-white mb-2">${farm.name}</h1>
-                        <div class="flex items-center gap-4">
-                            <span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white font-bold flex items-center gap-2">
-                                <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400"></i> ${farm.location}
-                            </span>
-                            <span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white font-bold flex items-center gap-2">
-                                ★ ${farm.rating} (Verified)
-                            </span>
-                        </div>
-                    </div>
+                    <div class="absolute bottom-10 left-10"><h1 class="text-6xl font-black text-white mb-2">${farm.name}</h1><span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white font-bold flex items-center gap-2">★ ${farm.rating} (Verified)</span></div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <div class="lg:col-span-2">
-                        <h2 class="text-2xl font-black text-white mb-6">Our Heritage</h2>
-                        <p class="text-slate-400 text-lg leading-relaxed mb-10">${farm.description}</p>
-                        
-                        <h3 class="text-sm font-black text-slate-500 uppercase tracking-widest mb-4">Purity & Safety Verifications</h3>
-                        <div class="flex flex-wrap gap-3 mb-12">
-                            ${farm.tags.map((tag) => `<span class="verification-tag">${tag}</span>`).join("")}
-                        </div>
-
-                        <h3 class="text-2xl font-black text-white mb-6">Available From This Farm</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            ${products
-                              .filter((p) => p.farmId == id)
-                              .map(
-                                (p) => `
-                                <div class="glass-card p-4 rounded-2xl flex items-center gap-4 cursor-pointer" onclick="viewProduct(${p.id})">
-                                    <img src="${p.image}" class="w-20 h-20 rounded-xl object-cover" />
-                                    <div>
-                                        <h5 class="font-bold text-white">${p.name}</h5>
-                                        <p class="text-emerald-400 font-bold">$${p.price.toFixed(2)}</p>
-                                    </div>
-                                </div>
-                            `,
-                              )
-                              .join("")}
-                        </div>
-                    </div>
-                </div>
+                <p class="text-slate-400 text-lg leading-relaxed mb-10">${farm.description}</p>
             `;
-        showView("farm-detail");
-      }
+            showView('farm-detail');
+        }
 
-      function filterCategory(cat) {
-        const filtered = products.filter(
-          (p) =>
-            p.category.includes(cat) ||
-            (cat === "Animal" && p.category === "Animal"),
-        );
-        renderProducts(filtered, "categoryResults");
-        showView("categories");
-      }
+        function filterCategory(cat) {
+            const filtered = products.filter(p => p.category.includes(cat) || (cat === 'Animal' && p.category === 'Animal'));
+            renderProducts(filtered, 'categoryResults');
+            showView('categories');
+        }
 
-      function renderTopFarms() {
-        const list = document.getElementById("topFarmsList");
-        list.innerHTML = Object.keys(farms)
-          .map((id) => {
-            const f = farms[id];
-            return `
-                    <div class="glass-card p-6 rounded-[32px] cursor-pointer" onclick="viewFarm(${id})">
-                        <div class="flex gap-6">
-                            <img src="${f.image}" class="w-32 h-32 rounded-3xl object-cover" />
-                            <div class="flex-1">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold text-white">${f.name}</h3>
-                                    <span class="text-emerald-400 font-black">★ ${f.rating}</span>
-                                </div>
-                                <p class="text-slate-500 text-sm line-clamp-2 mb-4">${f.description}</p>
-                                <div class="flex flex-wrap gap-2">
-                                    ${f.tags
-                                      .slice(0, 2)
-                                      .map(
-                                        (t) =>
-                                          `<span class="text-[9px] border border-white/10 px-2 py-1 rounded text-slate-400 uppercase font-bold">${t}</span>`,
-                                      )
-                                      .join("")}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-          })
-          .join("");
-      }
+        function renderTopFarms() {
+            const list = document.getElementById('topFarmsList');
+            list.innerHTML = Object.keys(farms).map(id => {
+                const f = farms[id];
+                return `<div class="glass-card p-6 rounded-[32px] cursor-pointer" onclick="viewFarm(${id})"><div class="flex gap-6"><img src="${f.image}" class="w-32 h-32 rounded-3xl object-cover bg-slate-800"><div class="flex-1"><h3 class="text-xl font-bold text-white mb-2">${f.name}</h3><p class="text-slate-500 text-sm line-clamp-2">${f.description}</p></div></div></div>`;
+            }).join('');
+        }
 
-      // Init
-      window.onload = () => {
-        showView("home");
-        lucide.createIcons();
-      };
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
+            renderProducts(filtered, 'productGrid');
+            showView('home');
+        });
+
+        window.onload = () => {
+            showView('home');
+            lucide.createIcons();
+        };
     </script>
-  </body>
+</body>
 </html>
