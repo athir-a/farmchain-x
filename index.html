@@ -535,6 +535,7 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         }
 
         function setGeminiApiKey(key) {
+            const apiKey = "AIzaSyAH-tnMBNNWvp827vlkBN8T1BiopA8aOCU";
             if (key && key.trim()) localStorage.setItem(GEMINI_KEY_STORAGE, key.trim());
         }
 
@@ -558,41 +559,49 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         }
 
         async function sendToGemini(userText) {
-            const apiKey = getGeminiApiKey();
-            if (!apiKey) {
-                return "Please set your Gemini API key first. Paste it in the chat (it will be saved locally). Get a free key at https://aistudio.google.com/apikey";
+    const apiKey = getGeminiApiKey();
+
+    if (!apiKey) {
+        return "Please set your Gemini API key first.";
+    }
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
+    const body = {
+        contents: [
+            {
+                role: "user",
+                parts: [{ text: SYSTEM_PROMPT + "\n\nUser: " + userText }]
             }
-
-            const contents = chatHistory.map(msg => ({
-                role: msg.role === 'user' ? 'user' : 'model',
-                parts: [{ text: msg.text }]
-            }));
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
-            const body = {
-                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-                contents: contents,
-                generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
-            };
-
-            const res = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-
-            if (!res.ok) {
-                const err = await res.text();
-                if (res.status === 400 || res.status === 403) {
-                    return "Invalid or missing API key. Get a key at https://aistudio.google.com/apikey and set it in chat.";
-                }
-                return "Sorry, the assistant is temporarily unavailable. Try again in a moment.";
-            }
-
-            const data = await res.json();
-            const part = data.candidates?.[0]?.content?.parts?.[0];
-            return part?.text?.trim() || "I couldn't generate a response. Please try again.";
+        ],
+        generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
         }
+    };
+
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (!data.candidates) {
+            console.error(data);
+            return "The assistant failed to generate a response.";
+        }
+
+        return data.candidates[0].content.parts[0].text;
+    } catch (err) {
+        console.error(err);
+        return "Connection error. Check your API key and internet.";
+    }
+}
 
         async function handleChatSend() {
             const input = document.getElementById('chatInput');
