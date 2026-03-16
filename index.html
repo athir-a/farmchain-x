@@ -531,7 +531,7 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         let chatHistory = [];
 
         function getGeminiApiKey() {
-    return "AIzaSyATIKnvLGClSzYSvtaNss3SZWDXPZyRRHw";
+    return localStorage.getItem(GEMINI_KEY_STORAGE) || '';
 }
 
         function setGeminiApiKey(key) {
