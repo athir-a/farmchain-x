@@ -531,8 +531,8 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         let chatHistory = [];
 
         function getGeminiApiKey() {
-            return localStorage.getItem(GEMINI_KEY_STORAGE) || '';
-        }
+    return "AIzaSyAH-tnMBNNWvp827vlkBN8T1BiopA8aOCU";
+}
 
         function setGeminiApiKey(key) {
             const apiKey = "AIzaSyAH-tnMBNNWvp827vlkBN8T1BiopA8aOCU";
@@ -557,10 +557,9 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
             const last = el.querySelector('.chat-msg.bot:last-child');
             if (last) last.remove();
         }
-
-        async function sendToGemini(userText) {
+async function sendToGemini(userText) {
     const apiKey = getGeminiApiKey();
-
+    
     if (!apiKey) {
         return "Please set your Gemini API key first.";
     }
@@ -571,7 +570,11 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         contents: [
             {
                 role: "user",
-                parts: [{ text: SYSTEM_PROMPT + "\n\nUser: " + userText }]
+                parts: [
+                    {
+                        text: `${SYSTEM_PROMPT}\n\nUser: ${userText}`
+                    }
+                ]
             }
         ],
         generationConfig: {
@@ -590,20 +593,30 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
         });
 
         const data = await res.json();
-        console.log(data);
+        console.log("Gemini response:", data);
 
-        if (!data.candidates) {
-            console.error(data);
-            return "The assistant failed to generate a response.";
+        if (data.error) {
+            console.error(data.error);
+            return "Gemini API error: " + data.error.message;
         }
 
-        return data.candidates[0].content.parts[0].text;
+        if (
+            data.candidates &&
+            data.candidates.length > 0 &&
+            data.candidates[0].content &&
+            data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.length > 0
+        ) {
+            return data.candidates[0].content.parts[0].text.trim();
+        }
+
+        return "Hmm... the assistant didn't generate a reply.";
+
     } catch (err) {
-        console.error(err);
+        console.error("Fetch error:", err);
         return "Connection error. Check your API key and internet.";
     }
 }
-
         async function handleChatSend() {
             const input = document.getElementById('chatInput');
             const sendBtn = document.getElementById('chatSend');
