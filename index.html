@@ -557,38 +557,98 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
             if (last) last.remove();
         }
 async function sendToGemini(userText) {
-
-    const text = userText.toLowerCase();
-
-    // small delay so it looks like AI is thinking
-    await new Promise(r => setTimeout(r, 800));
-
-    if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
-        return "Hey! 👋 I'm the FarmChain X assistant. I can help you find fresh farm products, track orders, or learn about local farms.";
+    const apiKey = getGeminiApiKey();
+    
+    if (!apiKey) {
+        return "Please set your Gemini API key first.";
     }
 
-    if (text.includes("product") || text.includes("vegetable") || text.includes("fruit")) {
-        return "We currently have fresh tomatoes, potatoes, onions, carrots, bananas, and mangoes available from local farmers. You can browse them in the products section!";
-    }
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
 
-    if (text.includes("delivery")) {
-        return "FarmChain X delivers farm-fresh produce directly from farmers to your doorstep within 24–48 hours depending on your location.";
-    }
+    const body = {
+        contents: [
+            {
+                role: "user",
+                parts: [
+                    {
+                        text: `${SYSTEM_PROMPT}\n\nUser: ${userText}`
+                    }
+                ]
+            }
+        ],
+        generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+        }
+    };
 
-    if (text.includes("farm") || text.includes("farmer")) {
-        return "Our farmers come from local agricultural communities and list their produce directly on FarmChain X. This helps them earn fair prices without middlemen.";
-    }
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
 
-    if (text.includes("order") || text.includes("track")) {
-        return "You can track your order in the Orders section of the dashboard. Once dispatched, you'll also receive delivery updates.";
-    }
+        const data = await res.json();
+        console.log("Gemini response:", data);
 
-    if (text.includes("price") || text.includes("cost")) {
-        return "FarmChain X prices are set directly by farmers, ensuring fair pay while still keeping products affordable for customers.";
-    }
+        if (data.error) {
+            console.error(data.error);
+            return "Gemini API error: " + data.error.message;
+        }
 
-    return "That's a great question! FarmChain X connects farmers directly with customers so you can buy fresh produce without middlemen. You can explore products, learn about farms, or track orders from the dashboard.";
+        if (
+            data.candidates &&
+            data.candidates.length > 0 &&
+            data.candidates[0].content &&
+            data.candidates[0].content.parts &&
+            data.candidates[0].content.parts.length > 0
+        ) {
+            return data.candidates[0].content.parts[0].text.trim();
+        }
+
+        return "Hmm... the assistant didn't generate a reply.";
+
+    } catch (err) {
+        console.error("Fetch error:", err);
+        return "Connection error. Check your API key and internet.";
+    }
 }
+        async function handleChatSend() {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('chatSend');
+            const text = (input.value || '').trim();
+            if (!text) return;
+
+            if (!getGeminiApiKey() && (text.startsWith('AIza') || (text.length > 24 && !text.includes(' ')))) {
+                setGeminiApiKey(text);
+                appendChatMessage('user', '*** API key saved ***');
+                appendChatMessage('bot', 'Thanks! Your Gemini API key is saved. You can ask me anything about FarmChain X now.');
+                input.value = '';
+                lucide.createIcons();
+                return;
+            }
+
+            appendChatMessage('user', text);
+            input.value = '';
+            sendBtn.disabled = true;
+            appendChatMessage('bot', '', true);
+
+            chatHistory.push({ role: 'user', text });
+            let reply;
+            try {
+                reply = await sendToGemini(text);
+            } catch (e) {
+                reply = "Something went wrong. Check your connection and API key, then try again.";
+            }
+            chatHistory.push({ role: 'model', text: reply });
+            removeLastBotMessage();
+            appendChatMessage('bot', reply);
+            sendBtn.disabled = false;
+            lucide.createIcons();
+        }
 
         function toggleChat() {
             const panel = document.getElementById('chatPanel');
