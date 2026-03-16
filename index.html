@@ -129,6 +129,128 @@
             justify-content: center;
             border: 2px solid var(--bg-dark);
         }
+
+        /* Chatbot styles */
+        #chatToggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #059669, #10b981);
+            border: none;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        #chatToggle:hover { transform: scale(1.05); box-shadow: 0 12px 32px rgba(16, 185, 129, 0.5); }
+        #chatPanel {
+            position: fixed;
+            bottom: 96px;
+            right: 24px;
+            width: 400px;
+            max-width: calc(100vw - 48px);
+            height: 520px;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+            z-index: 99;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chatPanel.open {
+            display: flex;
+            animation: chatSlideUp 0.3s ease-out;
+        }
+        @keyframes chatSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #chatHeader {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+        }
+        #chatMessages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-msg {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .chat-msg.user {
+            align-self: flex-end;
+            background: rgba(16, 185, 129, 0.25);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .chat-msg.bot {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .chat-msg .typing-dots span {
+            animation: typingBounce 1.4s infinite ease-in-out;
+        }
+        .chat-msg .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .chat-msg .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
+        }
+        #chatInputRow {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+        }
+        #chatInput {
+            flex: 1;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        #chatInput:focus { border-color: rgba(16, 185, 129, 0.5); }
+        #chatInput::placeholder { color: #64748b; }
+        #chatSend {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: #059669;
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        #chatSend:hover { background: #10b981; }
+        #chatSend:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
 <body class="flex min-h-screen">
@@ -160,8 +282,13 @@
                     <i data-lucide="shopping-cart" class="w-5 h-5"></i> My Basket
                     <span id="basketCount" class="basket-badge hidden">0</span>
                 </button>
-                <button class="nav-link"><i data-lucide="heart" class="w-5 h-5"></i> Favorites</button>
-                <button class="nav-link"><i data-lucide="settings" class="w-5 h-5"></i> Settings</button>
+                <button onclick="showView('favorites')" class="nav-link relative" id="btn-favorites">
+                    <i data-lucide="heart" class="w-5 h-5"></i> Favorites
+                    <span id="favoritesCount" class="basket-badge hidden">0</span>
+                </button>
+                <button onclick="showView('settings')" class="nav-link" id="btn-settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Settings
+                </button>
             </div>
         </nav>
 
@@ -191,7 +318,13 @@
             
             <!-- HOME VIEW -->
             <section id="view-home" class="view-section active">
-                <h2 class="text-3xl font-black text-white mb-8">Fresh From The Field</h2>
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-white">Fresh From The Field</h2>
+                        <p class="text-slate-500 mt-1">Direct from verified farms • Delivery in 24–48 hrs</p>
+                    </div>
+                    <span class="verification-tag inline-flex items-center gap-1 w-fit"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> All prices in ₹ INR</span>
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="productGrid"></div>
             </section>
 
@@ -199,19 +332,19 @@
             <section id="view-categories" class="view-section">
                 <h2 class="text-3xl font-black text-white mb-8">Categories</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                    <div onclick="filterCategory('Vegetables')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-emerald-500/10 border-emerald-500/20">
+                    <div data-category="Vegetables" onclick="filterCategory('Vegetables')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-emerald-500/10 border-emerald-500/20 transition-all">
                         <i data-lucide="carrot" class="w-10 h-10 text-emerald-500 mx-auto mb-4"></i>
                         <span class="font-bold">Vegetables</span>
                     </div>
-                    <div onclick="filterCategory('Fruits')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-orange-500/10 border-orange-500/20">
+                    <div data-category="Fruits" onclick="filterCategory('Fruits')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-orange-500/10 border-orange-500/20 transition-all">
                         <i data-lucide="apple" class="w-10 h-10 text-orange-500 mx-auto mb-4"></i>
                         <span class="font-bold">Fruits</span>
                     </div>
-                    <div onclick="filterCategory('Animal')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-yellow-500/10 border-yellow-500/20">
+                    <div data-category="Animal" onclick="filterCategory('Animal')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-yellow-500/10 border-yellow-500/20 transition-all">
                         <i data-lucide="egg" class="w-10 h-10 text-yellow-500 mx-auto mb-4"></i>
                         <span class="font-bold">Dairy & Eggs</span>
                     </div>
-                    <div onclick="filterCategory('Meat')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-red-500/10 border-red-500/20">
+                    <div data-category="Meat" onclick="filterCategory('Meat')" class="glass-card p-6 rounded-3xl text-center cursor-pointer hover:bg-red-500/10 border-red-500/20 transition-all">
                         <i data-lucide="drumstick" class="w-10 h-10 text-red-500 mx-auto mb-4"></i>
                         <span class="font-bold">Fresh Meat</span>
                     </div>
@@ -261,20 +394,86 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="topFarmsList"></div>
             </section>
 
+            <!-- FAVORITES VIEW -->
+            <section id="view-favorites" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Your Favorites</h2>
+                <div id="favoritesContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+            </section>
+
+            <!-- SETTINGS VIEW -->
+            <section id="view-settings" class="view-section">
+                <h2 class="text-3xl font-black text-white mb-8">Settings</h2>
+                <div id="settingsContent" class="max-w-2xl space-y-8"></div>
+            </section>
+
         </div>
+
+        <!-- Footer -->
+        <footer class="max-w-6xl mx-auto mt-16 pt-12 pb-8 border-t border-slate-800/50">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center"><i data-lucide="sprout" class="w-4 h-4 text-white"></i></div>
+                    <span class="font-bold text-white">FarmChain X</span>
+                </div>
+                <div class="flex flex-wrap justify-center gap-6 text-sm">
+                    <a href="#" class="text-slate-500 hover:text-emerald-400 transition-colors">About</a>
+                    <a href="#" class="text-slate-500 hover:text-emerald-400 transition-colors">Contact</a>
+                    <a href="#" class="text-slate-500 hover:text-emerald-400 transition-colors">FAQ</a>
+                    <a href="#" class="text-slate-500 hover:text-emerald-400 transition-colors">Terms & Privacy</a>
+                </div>
+            </div>
+            <p class="text-center text-slate-600 text-xs mt-6">© FarmChain X. Direct from farm to you. All prices in ₹ INR.</p>
+        </footer>
     </main>
+
+    <!-- Chatbot -->
+    <button type="button" id="chatToggle" aria-label="Open chat">
+        <i data-lucide="message-circle" class="w-7 h-7"></i>
+    </button>
+    <div id="chatPanel">
+        <div id="chatHeader">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+                    <i data-lucide="sprout" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-white">FarmChain Assistant</p>
+                    <p class="text-[10px] text-slate-500">Powered by Gemini</p>
+                </div>
+            </div>
+            <button type="button" id="chatClose" class="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div id="chatMessages"></div>
+        <div id="chatInputRow">
+            <input type="text" id="chatInput" placeholder="Ask about products, orders, or farms..." autocomplete="off" />
+            <button type="button" id="chatSend" aria-label="Send message">
+                <i data-lucide="send" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
         // State Management
         let basket = [];
 
+        const CURRENCY = 'INR';
+        const DELIVERY_FEE = 40;
+
+        function formatPrice(amount) {
+            const n = Number(amount);
+            if (isNaN(n)) return '₹0';
+            return '₹' + (n % 1 === 0 ? n.toLocaleString('en-IN') : n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        }
+
         const products = [
-            { id: 1, name: "Heirloom Tomatoes", category: "Vegetables", price: 4.50, rating: 4.9, image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400", farmId: 101, unit: "kg" },
-            { id: 2, name: "Organic Russet Potatoes", category: "Vegetables", price: 2.30, rating: 4.7, image: "https://imgs.search.brave.com/ji35ltWn6P-ikFM2GtAsetVXl5RnzCUllKeVXKWMcUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9yYXct/b3JnYW5pYy1ydXNz/ZXQtcG90YXRvZXMt/YnVuY2gtMjQ0MzUz/MTY5LmpwZw", farmId: 102, unit: "kg" },
-            { id: 3, name: "Free Range Brown Eggs", category: "Animal", price: 6.00, rating: 5.0, image: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "doz" },
-            { id: 4, name: "Grass-Fed Ribeye", category: "Meat", price: 24.99, rating: 4.8, image: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "lb" },
-            { id: 5, name: "Bell Peppers Mix", category: "Vegetables", price: 3.20, rating: 4.6, image: "https://imgs.search.brave.com/cYQXFL0ujgoKuZlDf9BmisPGqWiQm23dL4ZxoJQQkPI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/OTI4MDEwNjIyMDEt/MDRmZDZjZjNkNWVk/P2ZtPWpwZyZxPTYw/Jnc9MzAwMCZpeGxp/Yj1yYi00LjAuMyZp/eGlkPU0zd3hNakEz/ZkRCOE1IeHpaV0Z5/WTJoOE5ueDhZbVZz/YkNVeU1IQmxjSEJs/Y25OOFpXNThNSHg4/TUh4OGZEQT0", farmId: 101, unit: "lb" },
-            { id: 6, name: "Honey Crisp Apples", category: "Fruits", price: 5.40, rating: 4.9, image:"https://imgs.search.brave.com/mp2uDl5G2I3HkD0edg3acKrmBJhlGyIwW4m2SNlBs6U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTE3/MDQ4OTYyNi9waG90/by9ob25leWNyaXNw/LWFwcGxlcy1zaW5n/bGUtYW5kLW11bHRp/cGxlLXVwLWNsb3Nl/LXJlZC5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9c2NyR3FY/dFlBMG9BQ1RCclhH/Zi15VVNveG9lSDA4/Yi1zcjV2cXZ4YU0y/TT0", farmId: 102, unit: "bag" },
+            { id: 1, name: "Heirloom Tomatoes", category: "Vegetables", price: 375, rating: 4.9, image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400", farmId: 101, unit: "kg" },
+            { id: 2, name: "Organic Russet Potatoes", category: "Vegetables", price: 190, rating: 4.7, image: "https://imgs.search.brave.com/ji35ltWn6P-ikFM2GtAsetVXl5RnzCUllKeVXKWMcUM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi9yYXct/b3JnYW5pYy1ydXNz/ZXQtcG90YXRvZXMt/YnVuY2gtMjQ0MzUz/MTY5LmpwZw", farmId: 102, unit: "kg" },
+            { id: 3, name: "Free Range Brown Eggs", category: "Animal", price: 500, rating: 5.0, image: "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "doz" },
+            { id: 4, name: "Grass-Fed Ribeye", category: "Meat", price: 2080, rating: 4.8, image: "https://images.unsplash.com/photo-1603048297172-c92544798d5a?auto=format&fit=crop&q=80&w=600", farmId: 103, unit: "kg" },
+            { id: 5, name: "Bell Peppers Mix", category: "Vegetables", price: 265, rating: 4.6, image: "https://imgs.search.brave.com/cYQXFL0ujgoKuZlDf9BmisPGqWiQm23dL4ZxoJQQkPI/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudW5zcGxhc2gu/Y29tL3Bob3RvLTE1/OTI4MDEwNjIyMDEt/MDRmZDZjZjNkNWVk/P2ZtPWpwZyZxPTYw/Jnc9MzAwMCZpeGxp/Yj1yYi00LjAuMyZp/eGlkPU0zd3hNakEz/ZkRCOE1IeHpaV0Z5/WTJoOE5ueDhZbVZz/YkNVeU1IQmxjSEJs/Y25OOFpXNThNSHg4/TUh4OGZEQT0", farmId: 101, unit: "kg" },
+            { id: 6, name: "Honey Crisp Apples", category: "Fruits", price: 450, rating: 4.9, image:"https://imgs.search.brave.com/mp2uDl5G2I3HkD0edg3acKrmBJhlGyIwW4m2SNlBs6U/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTE3/MDQ4OTYyNi9waG90/by9ob25leWNyaXNw/LWFwcGxlcy1zaW5n/bGUtYW5kLW11bHRp/cGxlLXVwLWNsb3Nl/LXJlZC5qcGc_cz02/MTJ4NjEyJnc9MCZr/PTIwJmM9c2NyR3FY/dFlBMG9BQ1RCclhH/Zi15VVNveG9lSDA4/Yi1zcjV2cXZ4YU0y/TT0", farmId: 102, unit: "bag" },
         ];
 
         const farms = {
@@ -296,23 +495,152 @@
                 id: "ORD-9921",
                 date: "Oct 24, 2023",
                 status: "Delivered",
-                total: 35.40,
+                total: 2240,
                 items: [
-                    { productId: 1, name: "Heirloom Tomatoes", qty: 2, unit: "kg", price: 4.50, img: products[0].image },
-                    { productId: 3, name: "Free Range Brown Eggs", qty: 2, unit: "doz", price: 6.00, img: products[2].image },
-                    { productId: 6, name: "Honey Crisp Apples", qty: 1, unit: "bag", price: 5.40, img: products[5].image }
+                    { productId: 1, name: "Heirloom Tomatoes", qty: 2, unit: "kg", price: 375, img: products[0].image },
+                    { productId: 3, name: "Free Range Brown Eggs", qty: 2, unit: "doz", price: 500, img: products[2].image },
+                    { productId: 6, name: "Honey Crisp Apples", qty: 1, unit: "bag", price: 450, img: products[5].image }
                 ]
             },
             {
                 id: "ORD-8812",
                 date: "Nov 02, 2023",
                 status: "In Transit",
-                total: 24.99,
+                total: 2120,
                 items: [
-                    { productId: 4, name: "Grass-Fed Ribeye", qty: 1, unit: "lb", price: 24.99, img: products[3].image }
+                    { productId: 4, name: "Grass-Fed Ribeye", qty: 1, unit: "kg", price: 2080, img: products[3].image }
                 ]
             }
         ];
+
+        let favorites = JSON.parse(localStorage.getItem('farmchain_favorites') || '[]');
+        let selectedCategory = null;
+
+        // --- Chatbot: Gemini API & UI ---
+        const CHAT_STORAGE_KEY = 'farmchain_chat_history';
+        const GEMINI_KEY_STORAGE = 'farmchain_gemini_api_key';
+        const GEMINI_MODEL = 'gemini-1.5-flash';
+        const SYSTEM_PROMPT = `You are the friendly assistant for FarmChain X, a direct farmer-to-buyer marketplace. You help users with:
+- Browsing products (vegetables, fruits, dairy/eggs, meat), categories, and farms
+- Understanding orders, delivery, and tracking
+- General questions about fresh produce, organic farming, and the platform
+
+All prices on the platform are in Indian Rupees (₹ INR). Keep replies concise and helpful. If they ask about specific products or orders, use this context when relevant:
+Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes ₹190/kg, Free Range Brown Eggs ₹500/doz, Grass-Fed Ribeye ₹2080/kg, Bell Peppers Mix ₹265/kg, Honey Crisp Apples ₹450/bag. Farms: Gloria's Sun Valley Farm (Napa Valley), Highland Root Farm (Asheville), Ethical Pastures (Lancaster).`;
+
+        let chatHistory = [];
+
+        function getGeminiApiKey() {
+            return localStorage.getItem(GEMINI_KEY_STORAGE) || '';
+        }
+
+        function setGeminiApiKey(key) {
+            if (key && key.trim()) localStorage.setItem(GEMINI_KEY_STORAGE, key.trim());
+        }
+
+        function appendChatMessage(role, text, isTyping = false) {
+            const el = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'chat-msg ' + (role === 'user' ? 'user' : 'bot');
+            if (isTyping) {
+                div.innerHTML = '<span class="typing-dots"><span>.</span><span>.</span><span>.</span></span>';
+            } else {
+                div.textContent = text;
+            }
+            el.appendChild(div);
+            el.scrollTop = el.scrollHeight;
+        }
+
+        function removeLastBotMessage() {
+            const el = document.getElementById('chatMessages');
+            const last = el.querySelector('.chat-msg.bot:last-child');
+            if (last) last.remove();
+        }
+
+        async function sendToGemini(userText) {
+            const apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                return "Please set your Gemini API key first. Paste it in the chat (it will be saved locally). Get a free key at https://aistudio.google.com/apikey";
+            }
+
+            const contents = chatHistory.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.text }]
+            }));
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+            const body = {
+                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+                contents: contents,
+                generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
+            };
+
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const err = await res.text();
+                if (res.status === 400 || res.status === 403) {
+                    return "Invalid or missing API key. Get a key at https://aistudio.google.com/apikey and set it in chat.";
+                }
+                return "Sorry, the assistant is temporarily unavailable. Try again in a moment.";
+            }
+
+            const data = await res.json();
+            const part = data.candidates?.[0]?.content?.parts?.[0];
+            return part?.text?.trim() || "I couldn't generate a response. Please try again.";
+        }
+
+        async function handleChatSend() {
+            const input = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('chatSend');
+            const text = (input.value || '').trim();
+            if (!text) return;
+
+            if (!getGeminiApiKey() && (text.startsWith('AIza') || (text.length > 24 && !text.includes(' ')))) {
+                setGeminiApiKey(text);
+                appendChatMessage('user', '*** API key saved ***');
+                appendChatMessage('bot', 'Thanks! Your Gemini API key is saved. You can ask me anything about FarmChain X now.');
+                input.value = '';
+                lucide.createIcons();
+                return;
+            }
+
+            appendChatMessage('user', text);
+            input.value = '';
+            sendBtn.disabled = true;
+            appendChatMessage('bot', '', true);
+
+            chatHistory.push({ role: 'user', text });
+            let reply;
+            try {
+                reply = await sendToGemini(text);
+            } catch (e) {
+                reply = "Something went wrong. Check your connection and API key, then try again.";
+            }
+            chatHistory.push({ role: 'model', text: reply });
+            removeLastBotMessage();
+            appendChatMessage('bot', reply);
+            sendBtn.disabled = false;
+            lucide.createIcons();
+        }
+
+        function toggleChat() {
+            const panel = document.getElementById('chatPanel');
+            const isOpen = panel.classList.toggle('open');
+            if (isOpen && document.getElementById('chatMessages').children.length === 0) {
+                appendChatMessage('bot', "Hi! I'm your FarmChain X assistant. Ask me about products, orders, farms, or delivery. If you haven't set your Gemini API key yet, paste it here once to save it (get one free at https://aistudio.google.com/apikey).");
+                lucide.createIcons();
+            }
+        }
+
+        document.getElementById('chatToggle').addEventListener('click', toggleChat);
+        document.getElementById('chatClose').addEventListener('click', () => document.getElementById('chatPanel').classList.remove('open'));
+        document.getElementById('chatSend').addEventListener('click', handleChatSend);
+        document.getElementById('chatInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') handleChatSend(); });
 
         function showView(viewName) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
@@ -326,9 +654,119 @@
             if(viewName === 'home') renderProducts(products, 'productGrid');
             if(viewName === 'top-farms') renderTopFarms();
             if(viewName === 'orders') renderOrders();
-            
+            if(viewName === 'favorites') renderFavorites();
+            if(viewName === 'settings') renderSettings();
+            if(viewName === 'categories') {
+                renderCategoryHighlights();
+                if (!selectedCategory) {
+                    const cr = document.getElementById('categoryResults');
+                    if (cr) cr.innerHTML = '<div class="col-span-full glass-card p-12 rounded-3xl text-center"><i data-lucide="layout-grid" class="w-14 h-14 text-slate-600 mx-auto mb-4"></i><p class="text-slate-400 font-medium">Select a category above to browse products</p></div>';
+                }
+            }
+
             window.scrollTo(0,0);
             lucide.createIcons();
+        }
+
+        function toggleFavorite(productId, e) {
+            if (e) e.stopPropagation();
+            const idx = favorites.indexOf(productId);
+            if (idx === -1) favorites.push(productId);
+            else favorites.splice(idx, 1);
+            localStorage.setItem('farmchain_favorites', JSON.stringify(favorites));
+            updateFavoritesUI();
+            const container = document.getElementById('favoritesContent');
+            if (container && container.innerHTML) renderFavorites();
+            const grid = document.getElementById('productGrid');
+            if (grid && grid.innerHTML) renderProducts(products, 'productGrid');
+            const catResults = document.getElementById('categoryResults');
+            if (catResults && catResults.innerHTML) renderProducts(products.filter(p => selectedCategory ? (p.category === selectedCategory || (selectedCategory === 'Animal' && p.category === 'Animal')) : true), 'categoryResults');
+        }
+
+        function updateFavoritesUI() {
+            const badge = document.getElementById('favoritesCount');
+            if (favorites.length > 0) {
+                badge.innerText = favorites.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('favoritesContent');
+            const list = products.filter(p => favorites.includes(p.id));
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full glass-card p-16 rounded-[32px] text-center">
+                        <i data-lucide="heart" class="w-16 h-16 text-slate-600 mx-auto mb-6"></i>
+                        <h3 class="text-xl font-black text-white mb-2">No favorites yet</h3>
+                        <p class="text-slate-500 mb-8">Tap the heart on any product to add it here.</p>
+                        <button onclick="showView('home')" class="bg-emerald-600 px-6 py-3 rounded-2xl font-bold text-white">Browse Products</button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = list.map(p => `
+                    <div class="glass-card p-4 rounded-3xl cursor-pointer group relative" onclick="viewProduct(${p.id})">
+                        <button onclick="toggleFavorite(${p.id}, event)" class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-red-500/80 flex items-center justify-center text-red-400 hover:text-white transition-all" aria-label="Remove from favorites">
+                            <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
+                        </button>
+                        <div class="relative overflow-hidden rounded-2xl mb-4 bg-slate-800">
+                            <img src="${p.image}" alt="${p.name}" class="product-img group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">★ ${p.rating}</div>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-white truncate pr-2">${p.name}</h3>
+                            <span class="text-emerald-400 font-extrabold">${formatPrice(p.price)}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">${p.category} • ${p.unit}</p>
+                    </div>
+                `).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function renderSettings() {
+            const container = document.getElementById('settingsContent');
+            const hasKey = !!getGeminiApiKey();
+            container.innerHTML = `
+                <div class="glass-card p-8 rounded-[32px]">
+                    <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="key" class="w-5 h-5 text-emerald-500"></i>
+                        Gemini API Key
+                    </h3>
+                    <p class="text-slate-400 text-sm mb-4">Used for the in-app chatbot. Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="text-emerald-400 hover:underline">Google AI Studio</a>.</p>
+                    <p class="text-sm text-slate-500 mb-4">${hasKey ? 'Key is saved. Clear it below to enter a new one.' : 'No key saved. Paste your key in the chat to save it.'}</p>
+                    ${hasKey ? '<button onclick="clearGeminiKey()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-bold text-white">Clear saved key</button>' : ''}
+                </div>
+                <div class="glass-card p-8 rounded-[32px]">
+                    <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="indian-rupee" class="w-5 h-5 text-emerald-500"></i>
+                        Currency
+                    </h3>
+                    <p class="text-slate-400 text-sm">All prices are displayed in Indian Rupees (₹ INR).</p>
+                </div>
+                <div class="glass-card p-8 rounded-[32px]">
+                    <h3 class="text-lg font-black text-white mb-4 flex items-center gap-2">
+                        <i data-lucide="user" class="w-5 h-5 text-emerald-500"></i>
+                        Account
+                    </h3>
+                    <p class="text-slate-400 text-sm">Logged in as <strong class="text-white">Athira K Jayan</strong> — Premium Buyer.</p>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        function clearGeminiKey() {
+            localStorage.removeItem(GEMINI_KEY_STORAGE);
+            renderSettings();
+        }
+
+        function renderCategoryHighlights() {
+            document.querySelectorAll('[data-category]').forEach(el => {
+                el.classList.toggle('ring-2', el.dataset.category === selectedCategory);
+                el.classList.toggle('ring-emerald-500', el.dataset.category === selectedCategory);
+            });
         }
 
         function addToBasket(productId, qty = 1) {
@@ -382,7 +820,7 @@
                 `;
             } else {
                 const subtotal = basket.reduce((acc, item) => acc + (item.price * item.qty), 0);
-                const delivery = 4.99;
+                const delivery = DELIVERY_FEE;
                 const total = subtotal + delivery;
 
                 container.innerHTML = `
@@ -403,7 +841,7 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-xl font-black text-emerald-500">$${(item.price * item.qty).toFixed(2)}</p>
+                                        <p class="text-xl font-black text-emerald-500">${formatPrice(item.price * item.qty)}</p>
                                         <button onclick="removeFromBasket(${item.id})" class="text-xs text-red-500 font-bold mt-2 hover:underline">Remove</button>
                                     </div>
                                 </div>
@@ -415,21 +853,21 @@
                                 <div class="space-y-4 mb-8">
                                     <div class="flex justify-between text-slate-400">
                                         <span>Subtotal</span>
-                                        <span class="text-white font-bold">$${subtotal.toFixed(2)}</span>
+                                        <span class="text-white font-bold">${formatPrice(subtotal)}</span>
                                     </div>
                                     <div class="flex justify-between text-slate-400">
                                         <span>Eco-Delivery</span>
-                                        <span class="text-white font-bold">$${delivery.toFixed(2)}</span>
+                                        <span class="text-white font-bold">${formatPrice(delivery)}</span>
                                     </div>
                                     <div class="pt-4 border-t border-slate-800 flex justify-between">
                                         <span class="text-lg font-black text-white">Total</span>
-                                        <span class="text-2xl font-black text-emerald-500">$${total.toFixed(2)}</span>
+                                        <span class="text-2xl font-black text-emerald-500">${formatPrice(total)}</span>
                                     </div>
                                 </div>
                                 <button onclick="completeOrder()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-5 rounded-2xl shadow-xl shadow-emerald-900/20 transition-all">
                                     Confirm & Pay
                                 </button>
-                                <p class="text-[10px] text-slate-600 text-center mt-4 uppercase tracking-widest">Secure Checkout Powered by FarmChain</p>
+                                <p class="text-[10px] text-slate-600 text-center mt-4 uppercase tracking-widest">Secure Checkout • All prices in INR (₹)</p>
                             </div>
                         </div>
                     </div>
@@ -456,9 +894,8 @@
         }
 
         function completeOrder() {
-            // Mock successful order
             const newId = "ORD-" + Math.floor(1000 + Math.random() * 9000);
-            const total = basket.reduce((acc, item) => acc + (item.price * item.qty), 0) + 4.99;
+            const total = basket.reduce((acc, item) => acc + (item.price * item.qty), 0) + DELIVERY_FEE;
             
             orders.unshift({
                 id: newId,
@@ -491,6 +928,18 @@
 
         function renderOrders() {
             const container = document.getElementById('ordersContainer');
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card p-16 rounded-[32px] text-center">
+                        <i data-lucide="package" class="w-16 h-16 text-slate-600 mx-auto mb-6"></i>
+                        <h3 class="text-xl font-black text-white mb-2">No orders yet</h3>
+                        <p class="text-slate-500 mb-8">Your order history will appear here after you place an order.</p>
+                        <button onclick="showView('home')" class="bg-emerald-600 px-6 py-3 rounded-2xl font-bold text-white">Start shopping</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
             container.innerHTML = orders.map(order => `
                 <div class="glass-card p-6 rounded-[32px] border border-white/5">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800/50 pb-4 mb-6">
@@ -516,14 +965,14 @@
                                         <p class="text-xs text-slate-500">Qty: ${item.qty} ${item.unit || ''}</p>
                                     </div>
                                 </div>
-                                <p class="font-bold text-slate-300 text-sm">$${(item.price * item.qty).toFixed(2)}</p>
+                                <p class="font-bold text-slate-300 text-sm">${formatPrice(item.price * item.qty)}</p>
                             </div>
                         `).join('')}
                     </div>
                     <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-900/40 p-5 rounded-2xl border border-white/5">
                         <div class="mb-4 sm:mb-0">
                             <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-black">Total Paid</p>
-                            <p class="text-2xl font-black text-emerald-500">$${order.total.toFixed(2)}</p>
+                            <p class="text-2xl font-black text-emerald-500">${formatPrice(order.total)}</p>
                         </div>
                         <div class="flex gap-3 w-full sm:w-auto">
                             <button onclick="trackOrder('${order.id}')" class="flex-1 sm:flex-initial px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-colors">Track Order</button>
@@ -602,37 +1051,55 @@
             lucide.createIcons();
         }
 
-        function renderProducts(items, containerId) {
+        function renderProducts(items, containerId, showHeart = true) {
             const container = document.getElementById(containerId);
             if (!container) return;
-            container.innerHTML = items.map(p => `
-                <div class="glass-card p-4 rounded-3xl cursor-pointer group" onclick="viewProduct(${p.id})">
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full glass-card p-16 rounded-[32px] text-center">
+                        <i data-lucide="search-x" class="w-16 h-16 text-slate-600 mx-auto mb-6"></i>
+                        <h3 class="text-xl font-black text-white mb-2">No products found</h3>
+                        <p class="text-slate-500 mb-8">Try a different search or category.</p>
+                        <button onclick="document.getElementById('searchInput').value=''; showView('home');" class="bg-emerald-600 px-6 py-3 rounded-2xl font-bold text-white">View all</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            container.innerHTML = items.map(p => {
+                const isFav = favorites.includes(p.id);
+                return `
+                <div class="glass-card p-4 rounded-3xl cursor-pointer group relative" onclick="viewProduct(${p.id})">
+                    ${showHeart ? `<button onclick="toggleFavorite(${p.id}, event)" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-all ${isFav ? 'text-red-400' : 'text-slate-400 hover:text-red-400'}" aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}"><i data-lucide="heart" class="w-4 h-4 ${isFav ? 'fill-current' : ''}"></i></button>` : ''}
                     <div class="relative overflow-hidden rounded-2xl mb-4 bg-slate-800">
                         <img src="${p.image}" alt="${p.name}" class="product-img group-hover:scale-105 transition-transform duration-500">
-                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">★ ${p.rating}</div>
+                        <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">★ ${p.rating}</div>
                     </div>
                     <div class="flex justify-between items-start mb-1">
                         <h3 class="font-bold text-white truncate pr-2">${p.name}</h3>
-                        <span class="text-emerald-400 font-extrabold">$${p.price.toFixed(2)}</span>
+                        <span class="text-emerald-400 font-extrabold">${formatPrice(p.price)}</span>
                     </div>
                     <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">${p.category} • ${p.unit}</p>
                 </div>
-            `).join('');
+            `}).join('');
+            lucide.createIcons();
         }
 
         function viewProduct(id) {
             const product = products.find(p => p.id === id);
             const farm = farms[product.farmId];
             const detailView = document.getElementById('productDetailContent');
+            const isFav = favorites.includes(product.id);
             detailView.innerHTML = `
                 <div class="lg:col-span-7">
-                    <div class="rounded-[40px] overflow-hidden bg-slate-900 border border-white/5 mb-6">
+                    <div class="rounded-[40px] overflow-hidden bg-slate-900 border border-white/5 mb-6 relative">
                         <img src="${product.image}" class="w-full h-[500px] object-cover">
+                        <button onclick="toggleFavorite(${product.id}); viewProduct(${product.id})" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 flex items-center justify-center transition-all ${isFav ? 'text-red-400' : 'text-white/80 hover:text-red-400'}" aria-label="Toggle favorite"><i data-lucide="heart" class="w-6 h-6 ${isFav ? 'fill-current' : ''}"></i></button>
                     </div>
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-4xl font-black text-white">${product.name}</h1>
                         <div class="text-right">
-                            <p class="text-3xl font-black text-emerald-500">$${product.price.toFixed(2)}</p>
+                            <p class="text-3xl font-black text-emerald-500">${formatPrice(product.price)}</p>
                             <p class="text-xs text-slate-500 uppercase font-bold tracking-widest">Per ${product.unit}</p>
                         </div>
                     </div>
@@ -659,20 +1126,24 @@
         function viewFarm(id) {
             const farm = farms[id];
             const farmView = document.getElementById('farmDetailContent');
+            const tagsHtml = (farm.tags && farm.tags.length) ? farm.tags.map(t => `<span class="verification-tag">${t}</span>`).join('') : '';
             farmView.innerHTML = `
-                <div class="relative rounded-[48px] overflow-hidden h-[400px] mb-12 bg-slate-900">
+                <div class="relative rounded-[48px] overflow-hidden h-[400px] mb-8 bg-slate-900">
                     <img src="${farm.image}" class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
-                    <div class="absolute bottom-10 left-10"><h1 class="text-6xl font-black text-white mb-2">${farm.name}</h1><span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white font-bold flex items-center gap-2">★ ${farm.rating} (Verified)</span></div>
+                    <div class="absolute bottom-10 left-10"><h1 class="text-4xl md:text-6xl font-black text-white mb-2">${farm.name}</h1><span class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-full text-white font-bold inline-flex items-center gap-2">★ ${farm.rating} (Verified)</span></div>
                 </div>
-                <p class="text-slate-400 text-lg leading-relaxed mb-10">${farm.description}</p>
+                <div class="flex flex-wrap gap-2 mb-6">${tagsHtml}</div>
+                <p class="text-slate-400 text-lg leading-relaxed mb-6">${farm.description}</p>
+                <p class="text-slate-500 text-sm flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i>${farm.location}</p>
             `;
             showView('farm-detail');
         }
 
         function filterCategory(cat) {
+            selectedCategory = cat;
             const filtered = products.filter(p => p.category.includes(cat) || (cat === 'Animal' && p.category === 'Animal'));
-            renderProducts(filtered, 'categoryResults');
+            renderProducts(filtered, 'categoryResults', true);
             showView('categories');
         }
 
@@ -680,7 +1151,7 @@
             const list = document.getElementById('topFarmsList');
             list.innerHTML = Object.keys(farms).map(id => {
                 const f = farms[id];
-                return `<div class="glass-card p-6 rounded-[32px] cursor-pointer" onclick="viewFarm(${id})"><div class="flex gap-6"><img src="${f.image}" class="w-32 h-32 rounded-3xl object-cover bg-slate-800"><div class="flex-1"><h3 class="text-xl font-bold text-white mb-2">${f.name}</h3><p class="text-slate-500 text-sm line-clamp-2">${f.description}</p></div></div></div>`;
+                return `<div class="glass-card p-6 rounded-[32px] cursor-pointer hover:border-emerald-500/30 transition-colors" onclick="viewFarm(${id})"><div class="flex gap-6"><img src="${f.image}" class="w-32 h-32 rounded-3xl object-cover bg-slate-800"><div class="flex-1"><h3 class="text-xl font-bold text-white mb-2">${f.name}</h3><p class="text-yellow-500 text-sm font-bold mb-1">★ ${f.rating}</p><p class="text-slate-500 text-sm line-clamp-2">${f.description}</p><p class="text-slate-600 text-xs mt-2">${f.location}</p></div></div></div>`;
             }).join('');
         }
 
@@ -692,6 +1163,7 @@
         });
 
         window.onload = () => {
+            updateFavoritesUI();
             showView('home');
             lucide.createIcons();
         };
