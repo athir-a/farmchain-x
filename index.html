@@ -535,7 +535,6 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
 }
 
         function setGeminiApiKey(key) {
-            const apiKey = "AIzaSyAH-tnMBNNWvp827vlkBN8T1BiopA8aOCU";
             if (key && key.trim()) localStorage.setItem(GEMINI_KEY_STORAGE, key.trim());
         }
 
@@ -655,7 +654,7 @@ async function sendToGemini(userText) {
             const panel = document.getElementById('chatPanel');
             const isOpen = panel.classList.toggle('open');
             if (isOpen && document.getElementById('chatMessages').children.length === 0) {
-                appendChatMessage('bot', "Hi! I'm your FarmChain X assistant. Ask me about products, orders, farms, or delivery. If you haven't set your Gemini API key yet, paste it here once to save it (get one free at https://aistudio.google.com/apikey).");
+                appendChatMessage('bot', "Hi! I'm your FarmChain X assistant. Ask me about products, orders, farms, or delivery!");
                 lucide.createIcons();
             }
         }
