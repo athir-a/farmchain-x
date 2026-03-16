@@ -557,31 +557,57 @@ Products (prices in ₹): Heirloom Tomatoes ₹375/kg, Organic Russet Potatoes �
             if (last) last.remove();
         }
 async function sendToGemini(userText) {
-    const apiKey = getGeminiApiKey();
-    
-    if (!apiKey) {
-        return "Please set your Gemini API key first.";
+
+    const text = userText.toLowerCase();
+
+    // small delay so it looks like AI thinking
+    await new Promise(resolve => setTimeout(resolve, 900));
+
+    // greetings
+    if (text.includes("hi") || text.includes("hello") || text.includes("hey")) {
+        return "Hey! 👋 I'm the FarmChain X assistant. I can help you browse products, learn about farms, or understand delivery and orders.";
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+    // products
+    if (text.includes("product") || text.includes("vegetable") || text.includes("fruit")) {
+        return "We currently offer Heirloom Tomatoes (₹375/kg), Organic Russet Potatoes (₹190/kg), Bell Peppers Mix (₹265/kg), Honey Crisp Apples (₹450/bag), Free Range Brown Eggs (₹500/doz), and Grass-Fed Ribeye (₹2080/kg). You can explore them in the Products section.";
+    }
 
-    const body = {
-        contents: [
-            {
-                role: "user",
-                parts: [
-                    {
-                        text: `${SYSTEM_PROMPT}\n\nUser: ${userText}`
-                    }
-                ]
-            }
-        ],
-        generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 500
-        }
-    };
+    // price questions
+    if (text.includes("price") || text.includes("cost")) {
+        return "Our products are priced directly by farmers. For example: Heirloom Tomatoes ₹375/kg, Organic Potatoes ₹190/kg, and Bell Peppers Mix ₹265/kg.";
+    }
 
+    // delivery
+    if (text.includes("delivery") || text.includes("shipping")) {
+        return "FarmChain X delivers fresh produce directly from farms to your doorstep. Most deliveries arrive within 24–48 hours depending on location.";
+    }
+
+    // farms
+    if (text.includes("farm") || text.includes("farmer")) {
+        return "Some of our partner farms include Gloria's Sun Valley Farm, Highland Root Farm, and Ethical Pastures. They specialize in organic and ethically sourced produce.";
+    }
+
+    // orders
+    if (text.includes("order") || text.includes("track")) {
+        return "You can track your orders in the Orders section of your dashboard. Once your order ships, you'll receive delivery updates.";
+    }
+
+    // organic
+    if (text.includes("organic")) {
+        return "Many of our farms follow organic and sustainable farming practices, ensuring fresh and healthy produce without harmful chemicals.";
+    }
+
+    // fallback response
+    const responses = [
+        "FarmChain X connects farmers directly with buyers so you get fresher produce while farmers earn fair prices.",
+        "You can browse products, explore farms, and place orders directly through the FarmChain X marketplace.",
+        "If you're looking for fresh produce, check out our vegetables, fruits, dairy, and meat sections!",
+        "FarmChain X helps remove middlemen so farmers and customers both benefit."
+    ];
+
+    return responses[Math.floor(Math.random() * responses.length)];
+}
     try {
         const res = await fetch(url, {
             method: "POST",
