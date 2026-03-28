@@ -18,446 +18,253 @@ html, body {
   background-color: #020617;
   color: #f8fafc;
   -webkit-font-smoothing: antialiased;
-  overflow: hidden; /* body itself doesn't scroll — each panel handles its own scroll */
-}
-
-/* ── Full-screen app shell ── */
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
   overflow: hidden;
 }
 
-/* ── Login covers entire viewport ── */
+#app { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
+
 #login-screen {
-  position: fixed;
-  inset: 0;
-  background: #020617;
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 24px;
+  position: fixed; inset: 0; background: #020617; z-index: 500;
+  display: flex; align-items: center; justify-content: center; overflow-y: auto; padding: 24px;
 }
 
-/* ── Portal: sidebar + scrollable main ── */
-.portal-screen {
-  display: none;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-.portal-screen.active {
-  display: flex;
-}
+.portal-screen { display: none; height: 100vh; width: 100vw; overflow: hidden; }
+.portal-screen.active { display: flex; }
 
-/* Fixed sidebar */
 .sidebar {
-  width: 260px;
-  min-width: 260px;
-  height: 100vh;
-  background: rgba(15,23,42,0.95);
-  backdrop-filter: blur(16px);
+  width: 260px; min-width: 260px; height: 100vh;
+  background: rgba(15,23,42,0.95); backdrop-filter: blur(16px);
   border-right: 1px solid rgba(255,255,255,0.07);
-  display: flex;
-  flex-direction: column;
-  padding: 20px 16px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  flex-shrink: 0;
+  display: flex; flex-direction: column; padding: 20px 16px;
+  overflow-y: auto; overflow-x: hidden; flex-shrink: 0;
 }
 .sidebar::-webkit-scrollbar { width: 4px; }
 .sidebar::-webkit-scrollbar-track { background: transparent; }
 .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
-/* Scrollable main content area */
-.main-pane {
-  flex: 1;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: #020617;
-}
+.main-pane { flex: 1; height: 100vh; overflow-y: auto; overflow-x: hidden; background: #020617; }
 .main-pane::-webkit-scrollbar { width: 6px; }
 .main-pane::-webkit-scrollbar-track { background: transparent; }
 .main-pane::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
-.main-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 36px 60px;
-}
+.main-inner { max-width: 1200px; margin: 0 auto; padding: 32px 36px 60px; }
 
-/* ── Glass card ── */
 .glass-card {
-  background: rgba(15,23,42,0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: border-color 0.25s, transform 0.25s;
+  background: rgba(15,23,42,0.6); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08); transition: border-color 0.25s, transform 0.25s;
 }
-.glass-card:hover {
-  border-color: rgba(16,185,129,0.35);
-  transform: translateY(-2px);
-}
+.glass-card:hover { border-color: rgba(16,185,129,0.35); transform: translateY(-2px); }
 
-/* ── Nav links ── */
 .nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  width: 100%;
-  border-radius: 12px;
-  color: #94a3b8;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  text-align: left;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.9rem;
-  transition: all 0.2s;
-  white-space: nowrap;
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  width: 100%; border-radius: 12px; color: #94a3b8; cursor: pointer;
+  border: none; background: transparent; text-align: left;
+  font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.9rem;
+  transition: all 0.2s; white-space: nowrap;
 }
 .nav-link:hover { background: rgba(255,255,255,0.05); color: #f8fafc; }
 .nav-link.active { background: rgba(16,185,129,0.15); color: #34d399; font-weight: 700; }
 .nav-link .nav-badge {
-  margin-left: auto;
-  background: #ef4444;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 800;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 99px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-left: auto; background: #ef4444; color: #fff; font-size: 10px; font-weight: 800;
+  min-width: 18px; height: 18px; padding: 0 4px; border-radius: 99px;
+  display: flex; align-items: center; justify-content: center;
 }
 .nav-link .nav-badge.green { background: #10b981; color: #000; }
 
-/* ── View sections ── */
 .view-section { display: none; }
-.view-section.active {
-  display: block;
-  animation: fadeIn 0.35s ease-out;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+.view-section.active { display: block; animation: fadeIn 0.35s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── Tags & badges ── */
 .verification-tag {
-  background: rgba(16,185,129,0.1);
-  color: #34d399;
-  padding: 4px 12px;
-  border-radius: 99px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  border: 1px solid rgba(16,185,129,0.2);
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
+  background: rgba(16,185,129,0.1); color: #34d399; padding: 4px 12px;
+  border-radius: 99px; font-size: 0.72rem; font-weight: 700;
+  border: 1px solid rgba(16,185,129,0.2); display: inline-flex; align-items: center; gap: 5px;
 }
 .status-badge {
-  padding: 3px 10px;
-  border-radius: 99px;
-  font-size: 0.68rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
+  padding: 3px 10px; border-radius: 99px; font-size: 0.68rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
 }
-.status-delivered  { background: rgba(16,185,129,0.18); color: #34d399; }
-.status-transit    { background: rgba(59,130,246,0.18);  color: #60a5fa; }
-.status-pending    { background: rgba(245,158,11,0.18);  color: #fbbf24; }
-.status-available  { background: rgba(16,185,129,0.18); color: #34d399; }
-.status-busy       { background: rgba(239,68,68,0.18);   color: #f87171; }
+.status-delivered { background: rgba(16,185,129,0.18); color: #34d399; }
+.status-transit { background: rgba(59,130,246,0.18); color: #60a5fa; }
+.status-pending { background: rgba(245,158,11,0.18); color: #fbbf24; }
+.status-available { background: rgba(16,185,129,0.18); color: #34d399; }
+.status-busy { background: rgba(239,68,68,0.18); color: #f87171; }
 
-/* ── Stat card ── */
 .stat-card {
-  background: rgba(15,23,42,0.6);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 22px;
-  transition: border-color 0.2s;
+  background: rgba(15,23,42,0.6); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 22px; transition: border-color 0.2s;
 }
 .stat-card:hover { border-color: rgba(16,185,129,0.3); }
 
-/* ── Product image ── */
-.product-img {
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 18px;
-  width: 100%;
-  display: block;
-}
-
-/* ── Step pulse ── */
+.product-img { aspect-ratio: 1/1; object-fit: cover; border-radius: 18px; width: 100%; display: block; }
 .step-pulse { animation: pulse-ring 2s infinite; }
-@keyframes pulse-ring {
-  0%   { box-shadow: 0 0 0 0px rgba(16,185,129,0.4); }
-  100% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
-}
+@keyframes pulse-ring { 0% { box-shadow: 0 0 0 0px rgba(16,185,129,0.4); } 100% { box-shadow: 0 0 0 10px rgba(16,185,129,0); } }
 
-/* ── Chart bars ── */
-.chart-bar {
-  background: rgba(16,185,129,0.15);
-  border-radius: 8px 8px 0 0;
-  position: relative;
-  cursor: pointer;
-  flex: 1;
-}
+.chart-bar { background: rgba(16,185,129,0.15); border-radius: 8px 8px 0 0; position: relative; cursor: pointer; flex: 1; }
 .chart-bar:hover { background: rgba(16,185,129,0.25); }
-.bar-fill {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(180deg, #34d399 0%, #059669 100%);
-  border-radius: 8px 8px 0 0;
-  transition: height 0.6s ease;
-}
+.bar-fill { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, #34d399 0%, #059669 100%); border-radius: 8px 8px 0 0; transition: height 0.6s ease; }
 
-/* ── Order card ── */
-.order-card {
-  background: rgba(15,23,42,0.6);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 22px;
-  padding: 22px;
-  transition: border-color 0.2s;
-}
+.order-card { background: rgba(15,23,42,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; padding: 22px; transition: border-color 0.2s; }
 .order-card:hover { border-color: rgba(16,185,129,0.3); }
 
-/* ── Data table ── */
 .data-table { width: 100%; border-collapse: collapse; }
-.data-table th {
-  padding: 12px 14px;
-  text-align: left;
-  font-size: 0.68rem;
-  font-weight: 800;
-  color: #475569;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.data-table td {
-  padding: 13px 14px;
-  font-size: 0.85rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  color: #cbd5e1;
-}
+.data-table th { padding: 12px 14px; text-align: left; font-size: 0.68rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: .1em; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.data-table td { padding: 13px 14px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: #cbd5e1; }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: rgba(255,255,255,0.02); }
 
-/* ── Map placeholder ── */
-.map-placeholder {
-  background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(5,150,105,0.06));
-  border: 1px solid rgba(16,185,129,0.2);
-  border-radius: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 12px;
-  position: relative;
-  overflow: hidden;
-}
-.map-grid {
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(0deg,   transparent, transparent 39px, rgba(16,185,129,0.08) 39px, rgba(16,185,129,0.08) 40px),
-    repeating-linear-gradient(90deg,  transparent, transparent 39px, rgba(16,185,129,0.08) 39px, rgba(16,185,129,0.08) 40px);
-}
-.map-dot {
-  width: 12px; height: 12px;
-  background: #10b981;
-  border-radius: 50%;
-  position: absolute;
-  animation: pulse-ring 2s infinite;
-}
+.map-placeholder { background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(5,150,105,0.06)); border: 1px solid rgba(16,185,129,0.2); border-radius: 22px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+.map-grid { position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(16,185,129,0.08) 39px, rgba(16,185,129,0.08) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(16,185,129,0.08) 39px, rgba(16,185,129,0.08) 40px); }
+.map-dot { width: 12px; height: 12px; background: #10b981; border-radius: 50%; position: absolute; animation: pulse-ring 2s infinite; }
 
-/* ── Toggle switch ── */
 .toggle { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-  position: absolute; cursor: pointer; inset: 0;
-  background: rgba(255,255,255,0.1); border-radius: 34px;
-  transition: .3s;
-}
-.toggle-slider:before {
-  content: "";
-  position: absolute;
-  width: 18px; height: 18px;
-  left: 3px; bottom: 3px;
-  background: white; border-radius: 50%;
-  transition: .3s;
-}
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: rgba(255,255,255,0.1); border-radius: 34px; transition: .3s; }
+.toggle-slider:before { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
 input:checked + .toggle-slider { background: #10b981; }
 input:checked + .toggle-slider:before { transform: translateX(20px); }
 
-/* ── Modal ── */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(2,6,23,0.85);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
+.modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.85); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; }
 .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
-.modal-box {
-  background: #0f172a;
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 28px;
-  padding: 36px;
-  width: 100%;
-  max-width: 480px;
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.modal-box { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 36px; width: 100%; max-width: 480px; position: relative; max-height: 90vh; overflow-y: auto; }
 
-/* ── Role buttons (login) ── */
-.role-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 24px 16px;
-  border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.08);
-  background: rgba(15,23,42,0.7);
-  backdrop-filter: blur(12px);
-  cursor: pointer;
-  transition: all 0.25s;
-  color: #f8fafc;
-  font-family: "Plus Jakarta Sans", sans-serif;
-}
-.role-btn:hover {
-  transform: translateY(-3px);
-  border-color: rgba(16,185,129,0.5);
-  background: rgba(16,185,129,0.07);
-}
-.role-btn.selected {
-  border-color: #10b981;
-  background: rgba(16,185,129,0.1);
-}
+.role-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 16px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.08); background: rgba(15,23,42,0.7); backdrop-filter: blur(12px); cursor: pointer; transition: all 0.25s; color: #f8fafc; font-family: "Plus Jakarta Sans", sans-serif; }
+.role-btn:hover { transform: translateY(-3px); border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.07); }
+.role-btn.selected { border-color: #10b981; background: rgba(16,185,129,0.1); }
 
-/* ── Form inputs ── */
-label {
-  display: block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #94a3b8;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-input[type=text], input[type=email], input[type=password],
-input[type=tel], input[type=number], input[type=url], select, textarea {
-  display: block;
-  width: 100%;
-  background: rgba(15,23,42,0.8);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px;
-  color: #f8fafc;
-  padding: 11px 14px;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.9rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
+label { display: block; font-size: 0.78rem; font-weight: 700; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+input[type=text], input[type=email], input[type=password], input[type=tel], input[type=number], input[type=url], select, textarea { display: block; width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #f8fafc; padding: 11px 14px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
 input:focus, select:focus, textarea:focus { border-color: #10b981; }
 input::placeholder { color: #475569; }
 select option { background: #0f172a; }
 
-/* ── Route line ── */
-.route-line {
-  width: 2px;
-  background: rgba(16,185,129,0.25);
-  position: absolute;
-  left: 11px; top: 24px; bottom: 0;
-}
+.route-line { width: 2px; background: rgba(16,185,129,0.25); position: absolute; left: 11px; top: 24px; bottom: 0; }
 
-/* ── Search bar ── */
-.search-bar {
-  width: 100%;
-  background: rgba(15,23,42,0.8);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 13px 16px 13px 48px;
-  color: #f8fafc;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.search-bar:focus {
-  border-color: rgba(16,185,129,0.4);
-  box-shadow: 0 0 0 3px rgba(16,185,129,0.08);
-}
+.search-bar { width: 100%; background: rgba(15,23,42,0.8); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 13px 16px 13px 48px; color: #f8fafc; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+.search-bar:focus { border-color: rgba(16,185,129,0.4); box-shadow: 0 0 0 3px rgba(16,185,129,0.08); }
 .search-bar::placeholder { color: #475569; }
 
-/* ── Page header ── */
-.page-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.page-header h2 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #f8fafc;
-}
+.page-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+.page-header h2 { font-size: 1.75rem; font-weight: 800; color: #f8fafc; }
 .page-header p { color: #64748b; margin-top: 4px; font-size: 0.9rem; }
 
-/* ── Toast ── */
-#toast {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  background: #10b981;
-  color: #000;
-  font-weight: 800;
-  padding: 14px 24px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(16,185,129,0.35);
-  z-index: 2000;
-  transform: translateY(80px);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 0.9rem;
-}
+#toast { position: fixed; bottom: 28px; right: 28px; background: #10b981; color: #000; font-weight: 800; padding: 14px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(16,185,129,0.35); z-index: 2000; transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.9rem; }
 #toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── CHATBOT ── */
+.chatbot-fab {
+  position: fixed; bottom: 28px; right: 28px; z-index: 900;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #059669, #10b981);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 32px rgba(16,185,129,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.chatbot-fab:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(16,185,129,0.5); }
+
+.chatbot-window {
+  position: fixed; bottom: 96px; right: 28px; z-index: 900;
+  width: 380px; height: 540px; background: #0f172a;
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+  display: none; flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  overflow: hidden; animation: fadeIn 0.25s ease;
+}
+.chatbot-window.open { display: flex; }
+
+.chat-header {
+  padding: 16px 20px; background: rgba(5,150,105,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 0.85rem; line-height: 1.5; }
+.chat-msg.user { background: #059669; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+.chat-msg.bot { background: rgba(255,255,255,0.07); color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 4px; }
+.chat-msg.bot.typing { color: #475569; font-style: italic; }
+
+.chat-input-row { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 8px; }
+.chat-input {
+  flex: 1; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; color: #f8fafc; padding: 10px 14px;
+  font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.85rem; outline: none;
+}
+.chat-input:focus { border-color: #10b981; }
+.chat-input::placeholder { color: #334155; }
+.chat-send-btn {
+  width: 40px; height: 40px; border-radius: 12px; background: #059669; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.chat-send-btn:hover { background: #10b981; }
+
+/* API Key banner */
+.api-key-banner {
+  margin: 10px 16px; padding: 10px 14px;
+  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 12px; font-size: 0.75rem; color: #fbbf24; line-height: 1.5;
+}
+.api-key-input-row { display: flex; gap: 8px; margin-top: 8px; }
+.api-key-input { flex:1; background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #f8fafc; padding: 7px 10px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.8rem; outline: none; }
+.api-key-input:focus { border-color: #10b981; }
+.api-key-save-btn { padding: 7px 14px; background: #059669; color: #fff; font-weight: 800; border: none; border-radius: 8px; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.78rem; white-space: nowrap; }
+
+/* ── SETTINGS PANEL ── */
+.settings-overlay {
+  position: fixed; inset: 0; background: rgba(2,6,23,0.7); backdrop-filter: blur(6px);
+  z-index: 800; display: none; align-items: flex-end; justify-content: flex-start;
+}
+.settings-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+.settings-panel {
+  width: 340px; height: 100vh; background: #0d1526;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex; flex-direction: column; overflow-y: auto; animation: slideInLeft 0.3s ease;
+}
+@keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+.settings-panel::-webkit-scrollbar { width: 4px; }
+.settings-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.settings-section-title {
+  font-size: 0.62rem; font-weight: 800; color: #334155;
+  text-transform: uppercase; letter-spacing: 0.15em; padding: 0 20px 8px;
+}
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 20px; cursor: pointer; transition: background 0.15s;
+  border-radius: 0;
+}
+.settings-row:hover { background: rgba(255,255,255,0.03); }
+.settings-row-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lang-btn { padding: 6px 16px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #94a3b8; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+.lang-btn.active { background: rgba(16,185,129,0.15); border-color: #10b981; color: #34d399; font-weight: 700; }
+
+/* ── PROFILE AVATAR BUTTON ── */
+.profile-avatar-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(15,23,42,0.7); cursor: pointer; transition: all 0.2s;
+}
+.profile-avatar-btn:hover { background: rgba(16,185,129,0.08); border-color: rgba(16,185,129,0.3); }
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- ════════════════════════════════════
-     LOGIN SCREEN
-════════════════════════════════════ -->
+<!-- ════════════════ LOGIN ════════════════ -->
 <div id="login-screen">
   <div style="width:100%;max-width:500px">
-    <div class="flex items-center gap-3 justify-center mb-12">
-      <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-900/40">
-        <i data-lucide="sprout" class="w-7 h-7 text-white"></i>
+    <div style="display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:48px">
+      <div style="width:48px;height:48px;background:#059669;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 32px rgba(5,150,105,0.4)">
+        <i data-lucide="sprout" style="width:28px;height:28px;color:#fff"></i>
       </div>
       <span style="font-size:1.9rem;font-weight:900;color:#f8fafc;letter-spacing:-0.02em">FarmChain <span style="color:#10b981">X</span></span>
     </div>
-    <div class="text-center mb-10">
+    <div style="text-align:center;margin-bottom:36px">
       <h1 style="font-size:2rem;font-weight:900;color:#f8fafc;margin-bottom:6px">Welcome Back</h1>
       <p style="color:#64748b">Choose your role to continue</p>
     </div>
@@ -487,15 +294,11 @@ select option { background: #0f172a; }
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div><label>Email Address</label><input type="email" placeholder="you@example.com" id="login-email"/></div>
-        <div><label>Password</label><input type="password" placeholder="••••••••" id="login-password"/></div>
+        <div><label>Email Address</label><input type="email" placeholder="you@example.com"/></div>
+        <div><label>Password</label><input type="password" placeholder="••••••••"/></div>
         <div style="text-align:right"><a href="#" style="font-size:0.78rem;color:#10b981">Forgot password?</a></div>
-        <button onclick="doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
-          Sign In →
-        </button>
-        <p style="text-align:center;font-size:0.8rem;color:#475569">
-          No account? <a href="#" onclick="showRegister()" style="color:#34d399;font-weight:700">Register here</a>
-        </p>
+        <button onclick="doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">Sign In →</button>
+        <p style="text-align:center;font-size:0.8rem;color:#475569">No account? <a href="#" onclick="showRegister()" style="color:#34d399;font-weight:700">Register here</a></p>
       </div>
     </div>
     <p style="text-align:center;font-size:0.72rem;color:#1e293b;margin-top:16px">Select any role and click Sign In to enter the demo</p>
@@ -517,52 +320,47 @@ select option { background: #0f172a; }
       <div><label>Email</label><input type="email" placeholder="you@example.com"/></div>
       <div><label>Phone</label><input type="tel" placeholder="+91 98765 43210"/></div>
       <div><label>Password</label><input type="password" placeholder="••••••••"/></div>
-      <button onclick="closeRegister();doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem">
-        Create Account & Sign In
-      </button>
+      <button onclick="closeRegister();doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem">Create Account & Sign In</button>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     CUSTOMER PORTAL
-════════════════════════════════════ -->
+<!-- ════════════════ CUSTOMER PORTAL ════════════════ -->
 <div class="portal-screen" id="portal-customer">
   <aside class="sidebar">
     <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px;cursor:pointer" onclick="cShowView('home')">
       <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <i data-lucide="sprout" class="w-5 h-5 text-white"></i>
+        <i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i>
       </div>
       <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
     </div>
     <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
-      <button onclick="cShowView('home')" class="nav-link active" id="c-btn-home"><i data-lucide="home" class="w-4 h-4"></i>Home</button>
-      <button onclick="cShowView('categories')" class="nav-link" id="c-btn-categories"><i data-lucide="layout-grid" class="w-4 h-4"></i>Categories</button>
-      <button onclick="cShowView('orders')" class="nav-link" id="c-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i>Your Orders</button>
-      <button onclick="cShowView('top-farms')" class="nav-link" id="c-btn-top-farms"><i data-lucide="award" class="w-4 h-4"></i>Top Farms</button>
+      <button onclick="cShowView('home')" class="nav-link active" id="c-btn-home"><i data-lucide="home" class="w-4 h-4"></i><span data-t="home">Home</span></button>
+      <button onclick="cShowView('categories')" class="nav-link" id="c-btn-categories"><i data-lucide="layout-grid" class="w-4 h-4"></i><span data-t="categories">Categories</span></button>
+      <button onclick="cShowView('orders')" class="nav-link" id="c-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i><span data-t="yourOrders">Your Orders</span></button>
+      <button onclick="cShowView('top-farms')" class="nav-link" id="c-btn-top-farms"><i data-lucide="award" class="w-4 h-4"></i><span data-t="topFarms">Top Farms</span></button>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
         <button onclick="cShowCheckout()" class="nav-link" id="c-btn-checkout">
-          <i data-lucide="shopping-cart" class="w-4 h-4"></i>My Basket
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i><span data-t="myBasket">My Basket</span>
           <span id="c-basketBadge" class="nav-badge" style="display:none">0</span>
         </button>
-        <button onclick="cShowView('favorites')" class="nav-link" id="c-btn-favorites"><i data-lucide="heart" class="w-4 h-4"></i>Favorites</button>
-        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i>Log Out</button>
+        <button onclick="cShowView('favorites')" class="nav-link" id="c-btn-favorites"><i data-lucide="heart" class="w-4 h-4"></i><span data-t="favorites">Favorites</span></button>
+        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i><span data-t="logOut">Log Out</span></button>
       </div>
     </nav>
-    <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-top:16px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:36px;height:36px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">AKJ</div>
-        <div style="overflow:hidden">
-          <p style="font-weight:800;color:#f8fafc;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Athira K Jayan</p>
-          <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Premium Buyer</p>
-        </div>
+    <!-- Profile avatar → opens settings -->
+    <button class="profile-avatar-btn" onclick="openSettings()" style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);margin-top:16px;border-radius:14px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">AKJ</div>
+      <div style="overflow:hidden;flex:1;text-align:left">
+        <p style="font-weight:800;color:#f8fafc;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Athira K Jayan</p>
+        <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Premium Buyer</p>
       </div>
-    </div>
+      <i data-lucide="settings" style="width:16px;height:16px;color:#475569;flex-shrink:0"></i>
+    </button>
   </aside>
 
   <div class="main-pane">
     <div class="main-inner">
-      <!-- Search -->
       <div style="position:relative;margin-bottom:28px">
         <i data-lucide="search" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#475569"></i>
         <input type="text" id="c-searchInput" class="search-bar" placeholder="Search fresh produce or local farms…">
@@ -571,10 +369,7 @@ select option { background: #0f172a; }
       <!-- HOME -->
       <section id="c-view-home" class="view-section active">
         <div class="page-header">
-          <div>
-            <h2>Fresh From The Field</h2>
-            <p>Direct from verified farms · Delivery in 24–48 hrs</p>
-          </div>
+          <div><h2 data-t="freshFromField">Fresh From The Field</h2><p data-t="freshSubtitle">Direct from verified farms · Delivery in 24–48 hrs</p></div>
           <span class="verification-tag"><i data-lucide="shield-check" class="w-3 h-3"></i> All prices in ₹ INR</span>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-productGrid"></div>
@@ -582,46 +377,46 @@ select option { background: #0f172a; }
 
       <!-- CATEGORIES -->
       <section id="c-view-categories" class="view-section">
-        <div class="page-header"><h2>Categories</h2></div>
+        <div class="page-header"><h2 data-t="categories">Categories</h2></div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px">
           <div onclick="cFilterCategory('Vegetables')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
             <i data-lucide="carrot" style="width:36px;height:36px;color:#10b981;margin:0 auto 12px"></i>
-            <div style="font-weight:800">Vegetables</div>
+            <div style="font-weight:800" data-t="vegetables">Vegetables</div>
           </div>
           <div onclick="cFilterCategory('Fruits')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
             <i data-lucide="apple" style="width:36px;height:36px;color:#f97316;margin:0 auto 12px"></i>
-            <div style="font-weight:800">Fruits</div>
+            <div style="font-weight:800" data-t="fruits">Fruits</div>
           </div>
           <div onclick="cFilterCategory('Animal')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
             <i data-lucide="egg" style="width:36px;height:36px;color:#eab308;margin:0 auto 12px"></i>
-            <div style="font-weight:800">Dairy & Eggs</div>
+            <div style="font-weight:800" data-t="dairyEggs">Dairy &amp; Eggs</div>
           </div>
           <div onclick="cFilterCategory('Meat')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
             <i data-lucide="beef" style="width:36px;height:36px;color:#ef4444;margin:0 auto 12px"></i>
-            <div style="font-weight:800">Fresh Meat</div>
+            <div style="font-weight:800" data-t="freshMeat">Fresh Meat</div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-categoryResults">
-          <div style="grid-column:1/-1" class="glass-card" style="padding:40px;border-radius:22px;text-align:center;color:#475569">Select a category above</div>
+          <div style="grid-column:1/-1;padding:40px;text-align:center;color:#475569" data-t="selectCategory">Select a category above</div>
         </div>
       </section>
 
       <!-- ORDERS -->
       <section id="c-view-orders" class="view-section">
-        <div class="page-header"><h2>Your Order History</h2></div>
+        <div class="page-header"><h2 data-t="orderHistory">Your Order History</h2></div>
         <div id="c-ordersContainer" style="display:flex;flex-direction:column;gap:16px"></div>
       </section>
 
       <!-- CHECKOUT -->
       <section id="c-view-checkout" class="view-section">
-        <div class="page-header"><h2>Review Your Basket</h2></div>
+        <div class="page-header"><h2 data-t="reviewBasket">Review Your Basket</h2></div>
         <div id="c-checkoutContent"></div>
       </section>
 
       <!-- TRACK ORDER -->
       <section id="c-view-track-order" class="view-section">
         <button onclick="cShowView('orders')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to orders
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-t="backToOrders">Back to orders</span>
         </button>
         <div id="c-trackOrderContent"></div>
       </section>
@@ -629,44 +424,39 @@ select option { background: #0f172a; }
       <!-- PRODUCT DETAIL -->
       <section id="c-view-product-detail" class="view-section">
         <button onclick="cShowView('home')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to marketplace
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-t="backToMarket">Back to marketplace</span>
         </button>
         <div style="display:grid;grid-template-columns:7fr 5fr;gap:32px" id="c-productDetailContent"></div>
       </section>
 
       <!-- TOP FARMS -->
       <section id="c-view-top-farms" class="view-section">
-        <div class="page-header"><h2>Top Verified Farms</h2></div>
+        <div class="page-header"><h2 data-t="topVerifiedFarms">Top Verified Farms</h2></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" id="c-topFarmsList"></div>
       </section>
 
       <!-- FAVORITES -->
       <section id="c-view-favorites" class="view-section">
-        <div class="page-header"><h2>Your Favorites</h2></div>
+        <div class="page-header"><h2 data-t="favorites">Your Favorites</h2></div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-favoritesContent"></div>
       </section>
     </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     FARMER PORTAL
-════════════════════════════════════ -->
+<!-- ════════════════ FARMER PORTAL ════════════════ -->
 <div class="portal-screen" id="portal-farmer">
   <aside class="sidebar">
     <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px;cursor:pointer" onclick="fShowView('dashboard')">
       <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <i data-lucide="sprout" class="w-5 h-5 text-white"></i>
+        <i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i>
       </div>
       <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
     </div>
     <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
       <button onclick="fShowView('dashboard')" class="nav-link active" id="f-btn-dashboard"><i data-lucide="bar-chart-2" class="w-4 h-4"></i>Dashboard</button>
       <button onclick="fShowView('products')" class="nav-link" id="f-btn-products"><i data-lucide="package" class="w-4 h-4"></i>My Products</button>
-      <button onclick="fShowView('orders')" class="nav-link" id="f-btn-orders">
-        <i data-lucide="shopping-bag" class="w-4 h-4"></i>Incoming Orders
-        <span class="nav-badge green">8</span>
-      </button>
+      <button onclick="fShowView('orders')" class="nav-link" id="f-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i>Incoming Orders<span class="nav-badge green">8</span></button>
       <button onclick="fShowView('earnings')" class="nav-link" id="f-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i>Earnings</button>
       <button onclick="fShowView('farm-profile')" class="nav-link" id="f-btn-farm-profile"><i data-lucide="store" class="w-4 h-4"></i>Farm Profile</button>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
@@ -677,10 +467,7 @@ select option { background: #0f172a; }
     <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-top:16px">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="width:36px;height:36px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;color:#000;flex-shrink:0">GS</div>
-        <div style="overflow:hidden">
-          <p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Gloria S. Valley</p>
-          <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Verified Farmer</p>
-        </div>
+        <div style="overflow:hidden"><p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Gloria S. Valley</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Verified Farmer</p></div>
       </div>
     </div>
   </aside>
@@ -694,37 +481,14 @@ select option { background: #0f172a; }
           <span class="verification-tag"><i data-lucide="shield-check" class="w-3 h-3"></i> Verified Organic</span>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#10b981"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹48,320</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Revenue This Month</p>
-            <p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 12% vs last month</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">142</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Orders This Month</p>
-            <p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 8 new today</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">6</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Active Listings</p>
-            <p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">2 low stock alerts</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">4.9</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Average Rating</p>
-            <p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">128 reviews total</p>
-          </div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Revenue This Month</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 12% vs last month</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">142</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Orders This Month</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 8 new today</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">6</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Active Listings</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">2 low stock alerts</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">4.9</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Average Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">128 reviews total</p></div>
         </div>
         <div style="display:grid;grid-template-columns:8fr 4fr;gap:20px">
           <div class="glass-card" style="border-radius:22px;padding:24px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-              <h3 style="font-weight:900;color:#f8fafc;font-size:1rem">Sales Overview — Last 7 Days</h3>
-              <span style="font-size:0.72rem;color:#475569">₹ Revenue</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem">Sales Overview — Last 7 Days</h3><span style="font-size:0.72rem;color:#475569">₹ Revenue</span></div>
             <div style="display:flex;align-items:flex-end;gap:8px;height:140px">
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:60%"></div></div>
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:80%"></div></div>
@@ -734,25 +498,14 @@ select option { background: #0f172a; }
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:85%"></div></div>
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:100%"></div></div>
             </div>
-            <div style="display:flex;justify-content:space-between;margin-top:8px">
-              <span style="font-size:0.72rem;color:#475569">Mon</span><span style="font-size:0.72rem;color:#475569">Tue</span><span style="font-size:0.72rem;color:#475569">Wed</span><span style="font-size:0.72rem;color:#475569">Thu</span><span style="font-size:0.72rem;color:#475569">Fri</span><span style="font-size:0.72rem;color:#475569">Sat</span><span style="font-size:0.72rem;color:#10b981;font-weight:700">Sun</span>
-            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:0.72rem;color:#475569">Mon</span><span style="font-size:0.72rem;color:#475569">Tue</span><span style="font-size:0.72rem;color:#475569">Wed</span><span style="font-size:0.72rem;color:#475569">Thu</span><span style="font-size:0.72rem;color:#475569">Fri</span><span style="font-size:0.72rem;color:#475569">Sat</span><span style="font-size:0.72rem;color:#10b981;font-weight:700">Sun</span></div>
           </div>
           <div class="glass-card" style="border-radius:22px;padding:24px">
             <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:18px">Pending Actions</h3>
             <div style="display:flex;flex-direction:column;gap:12px">
-              <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between">
-                <div style="display:flex;align-items:center;gap:8px"><i data-lucide="clock" style="width:16px;height:16px;color:#fbbf24"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">8 to Confirm</span></div>
-                <button onclick="fShowView('orders')" style="font-size:0.75rem;font-weight:700;color:#fbbf24;background:none;border:none;cursor:pointer">View</button>
-              </div>
-              <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between">
-                <div style="display:flex;align-items:center;gap:8px"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:#f87171"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">2 Low Stock</span></div>
-                <button onclick="fShowView('inventory')" style="font-size:0.75rem;font-weight:700;color:#f87171;background:none;border:none;cursor:pointer">Fix</button>
-              </div>
-              <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between">
-                <div style="display:flex;align-items:center;gap:8px"><i data-lucide="message-circle" style="width:16px;height:16px;color:#60a5fa"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">3 Reviews</span></div>
-                <button style="font-size:0.75rem;font-weight:700;color:#60a5fa;background:none;border:none;cursor:pointer">Reply</button>
-              </div>
+              <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="clock" style="width:16px;height:16px;color:#fbbf24"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">8 to Confirm</span></div><button onclick="fShowView('orders')" style="font-size:0.75rem;font-weight:700;color:#fbbf24;background:none;border:none;cursor:pointer">View</button></div>
+              <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:#f87171"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">2 Low Stock</span></div><button onclick="fShowView('inventory')" style="font-size:0.75rem;font-weight:700;color:#f87171;background:none;border:none;cursor:pointer">Fix</button></div>
+              <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="message-circle" style="width:16px;height:16px;color:#60a5fa"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">3 Reviews</span></div><button style="font-size:0.75rem;font-weight:700;color:#60a5fa;background:none;border:none;cursor:pointer">Reply</button></div>
             </div>
           </div>
         </div>
@@ -760,16 +513,11 @@ select option { background: #0f172a; }
 
       <!-- MY PRODUCTS -->
       <section id="f-view-products" class="view-section">
-        <div class="page-header">
-          <div><h2>My Products</h2><p>Manage your active listings</p></div>
-          <button onclick="openAddProduct()" style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">
-            <i data-lucide="plus" class="w-4 h-4"></i> Add Product
-          </button>
-        </div>
+        <div class="page-header"><div><h2>My Products</h2><p>Manage your active listings</p></div><button onclick="openAddProduct()" style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="plus" class="w-4 h-4"></i> Add Product</button></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" id="f-productsList"></div>
       </section>
 
-      <!-- INCOMING ORDERS -->
+      <!-- ORDERS -->
       <section id="f-view-orders" class="view-section">
         <div class="page-header"><h2>Incoming Orders</h2></div>
         <div class="glass-card" style="border-radius:22px;overflow:hidden">
@@ -780,79 +528,34 @@ select option { background: #0f172a; }
 
       <!-- EARNINGS -->
       <section id="f-view-earnings" class="view-section">
-        <div class="page-header"><h2>Earnings & Payouts</h2></div>
+        <div class="page-header"><h2>Earnings &amp; Payouts</h2></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#34d399">₹2,14,850</p>
-            <p style="font-size:0.78rem;color:#475569;margin-top:6px">All time</p>
-          </div>
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Month</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹48,320</p>
-            <p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 12% growth</p>
-          </div>
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Next Payout</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹12,400</p>
-            <p style="font-size:0.78rem;color:#475569;margin-top:6px">Scheduled Nov 15</p>
-          </div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹2,14,850</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Month</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 12% growth</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Next Payout</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹12,400</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">Scheduled Nov 15</p></div>
         </div>
-        <div class="glass-card" style="border-radius:22px;overflow:hidden">
-          <div style="padding:20px 22px;border-bottom:1px solid rgba(255,255,255,0.06)"><h3 style="font-weight:900;color:#f8fafc">Transaction History</h3></div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden"><div style="padding:20px 22px;border-bottom:1px solid rgba(255,255,255,0.06)"><h3 style="font-weight:900;color:#f8fafc">Transaction History</h3></div>
           <table class="data-table"><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th>Amount</th><th>Platform Fee</th><th>Net</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td style="color:#64748b">Nov 08</td><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>₹2,240</td><td style="color:#f87171">-₹224</td><td style="color:#34d399;font-weight:800">₹2,016</td><td><span class="status-badge status-delivered">Paid</span></td></tr>
-            <tr><td style="color:#64748b">Nov 07</td><td style="font-weight:800">#ORD-8801</td><td>Rahul Sharma</td><td>₹1,500</td><td style="color:#f87171">-₹150</td><td style="color:#34d399;font-weight:800">₹1,350</td><td><span class="status-badge status-delivered">Paid</span></td></tr>
-            <tr><td style="color:#64748b">Nov 06</td><td style="font-weight:800">#ORD-8790</td><td>Priya Nair</td><td>₹900</td><td style="color:#f87171">-₹90</td><td style="color:#34d399;font-weight:800">₹810</td><td><span class="status-badge status-transit">Processing</span></td></tr>
-          </tbody></table>
-        </div>
+          <tbody><tr><td style="color:#64748b">Nov 08</td><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>₹2,240</td><td style="color:#f87171">-₹224</td><td style="color:#34d399;font-weight:800">₹2,016</td><td><span class="status-badge status-delivered">Paid</span></td></tr><tr><td style="color:#64748b">Nov 07</td><td style="font-weight:800">#ORD-8801</td><td>Rahul Sharma</td><td>₹1,500</td><td style="color:#f87171">-₹150</td><td style="color:#34d399;font-weight:800">₹1,350</td><td><span class="status-badge status-delivered">Paid</span></td></tr></tbody>
+          </table></div>
       </section>
 
       <!-- FARM PROFILE -->
       <section id="f-view-farm-profile" class="view-section">
-        <div class="page-header">
-          <div><h2>Farm Profile</h2><p>How buyers see your farm</p></div>
-          <button style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">
-            <i data-lucide="edit-3" class="w-4 h-4"></i> Edit Profile
-          </button>
-        </div>
+        <div class="page-header"><div><h2>Farm Profile</h2><p>How buyers see your farm</p></div><button style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit Profile</button></div>
         <div style="display:grid;grid-template-columns:8fr 4fr;gap:24px">
           <div style="display:flex;flex-direction:column;gap:20px">
-            <div style="position:relative;border-radius:24px;overflow:hidden;height:220px">
-              <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800" style="width:100%;height:100%;object-fit:cover">
-              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div>
-              <div style="position:absolute;bottom:16px;left:20px;display:flex;gap:8px">
-                <span class="verification-tag">Verified Organic</span>
-                <span class="verification-tag">No Pesticides</span>
-              </div>
-            </div>
+            <div style="position:relative;border-radius:24px;overflow:hidden;height:220px"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div><div style="position:absolute;bottom:16px;left:20px;display:flex;gap:8px"><span class="verification-tag">Verified Organic</span><span class="verification-tag">No Pesticides</span></div></div>
             <div class="glass-card" style="border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:16px">
               <div><label>Farm Name</label><input type="text" value="Gloria's Sun Valley Farm"></div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div><label>Location</label><input type="text" value="Napa Valley, CA"></div>
-                <div><label>Farm Size</label><input type="text" value="48 Acres"></div>
-              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Location</label><input type="text" value="Napa Valley, CA"></div><div><label>Farm Size</label><input type="text" value="48 Acres"></div></div>
               <div><label>Description</label><textarea rows="3" style="resize:none">Gloria focuses on heirloom seeds and natural pest control. All produce is harvested to order for maximum freshness.</textarea></div>
               <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content">Save Changes</button>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:16px">
-            <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center">
-              <div style="width:64px;height:64px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#000;margin:0 auto 12px">GS</div>
-              <p style="font-weight:900;color:#f8fafc;font-size:1rem">Gloria S. Valley</p>
-              <p style="color:#64748b;font-size:0.82rem;margin-top:2px;margin-bottom:12px">Farm Owner</p>
-              <div style="display:flex;justify-content:center;gap:8px"><span class="verification-tag">★ 4.9</span><span class="status-badge status-delivered">Verified</span></div>
-            </div>
-            <div class="glass-card" style="border-radius:22px;padding:22px">
-              <h4 style="font-weight:900;color:#f8fafc;margin-bottom:16px">Quick Stats</h4>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Total Orders</span><span style="font-weight:800;color:#f8fafc">1,248</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Avg Response</span><span style="font-weight:800;color:#f8fafc">2 hrs</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Completion Rate</span><span style="font-weight:800;color:#34d399">98.4%</span></div>
-                <div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Member Since</span><span style="font-weight:800;color:#f8fafc">Mar 2021</span></div>
-              </div>
-            </div>
+            <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#000;margin:0 auto 12px">GS</div><p style="font-weight:900;color:#f8fafc;font-size:1rem">Gloria S. Valley</p><p style="color:#64748b;font-size:0.82rem;margin-top:2px;margin-bottom:12px">Farm Owner</p><div style="display:flex;justify-content:center;gap:8px"><span class="verification-tag">★ 4.9</span><span class="status-badge status-delivered">Verified</span></div></div>
+            <div class="glass-card" style="border-radius:22px;padding:22px"><h4 style="font-weight:900;color:#f8fafc;margin-bottom:16px">Quick Stats</h4><div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Total Orders</span><span style="font-weight:800;color:#f8fafc">1,248</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Avg Response</span><span style="font-weight:800;color:#f8fafc">2 hrs</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Completion Rate</span><span style="font-weight:800;color:#34d399">98.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Member Since</span><span style="font-weight:800;color:#f8fafc">Mar 2021</span></div></div></div>
           </div>
         </div>
       </section>
@@ -869,24 +572,17 @@ select option { background: #0f172a; }
   </div>
 </div>
 
-<!-- ════════════════════════════════════
-     DISTRIBUTOR PORTAL
-════════════════════════════════════ -->
+<!-- ════════════════ DISTRIBUTOR PORTAL ════════════════ -->
 <div class="portal-screen" id="portal-distributor">
   <aside class="sidebar">
     <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px">
-      <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <i data-lucide="sprout" class="w-5 h-5 text-white"></i>
-      </div>
+      <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i></div>
       <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
     </div>
     <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
       <button onclick="dShowView('dashboard')" class="nav-link active" id="d-btn-dashboard"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</button>
       <button onclick="dShowView('deliveries')" class="nav-link" id="d-btn-deliveries"><i data-lucide="truck" class="w-4 h-4"></i>My Deliveries</button>
-      <button onclick="dShowView('available')" class="nav-link" id="d-btn-available">
-        <i data-lucide="bell" class="w-4 h-4"></i>Available Orders
-        <span class="nav-badge green" id="d-availBadge">3</span>
-      </button>
+      <button onclick="dShowView('available')" class="nav-link" id="d-btn-available"><i data-lucide="bell" class="w-4 h-4"></i>Available Orders<span class="nav-badge green" id="d-availBadge">3</span></button>
       <button onclick="dShowView('earnings')" class="nav-link" id="d-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i>My Earnings</button>
       <button onclick="dShowView('map')" class="nav-link" id="d-btn-map"><i data-lucide="map" class="w-4 h-4"></i>Live Map</button>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
@@ -894,282 +590,276 @@ select option { background: #0f172a; }
         <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i>Log Out</button>
       </div>
     </nav>
-    <!-- Online toggle -->
     <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-top:16px;margin-bottom:12px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <span style="font-weight:800;color:#f8fafc;font-size:0.85rem">Online Status</span>
-        <label class="toggle"><input type="checkbox" id="d-onlineToggle" checked onchange="toggleOnlineStatus()"><span class="toggle-slider"></span></label>
-      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-weight:800;color:#f8fafc;font-size:0.85rem">Online Status</span><label class="toggle"><input type="checkbox" id="d-onlineToggle" checked onchange="toggleOnlineStatus()"><span class="toggle-slider"></span></label></div>
       <p id="d-statusText" style="font-size:0.75rem;color:#34d399;font-weight:700">● You are Online</p>
     </div>
     <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="width:36px;height:36px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">MK</div>
-        <div>
-          <p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Mike K.</p>
-          <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Distributor</p>
-        </div>
+        <div><p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Mike K.</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Distributor</p></div>
       </div>
     </div>
   </aside>
-
   <div class="main-pane">
     <div class="main-inner">
-      <!-- DASHBOARD -->
       <section id="d-view-dashboard" class="view-section active">
-        <div class="page-header">
-          <div><h2>Delivery Dashboard</h2><p>Mike K. · Chicago, IL</p></div>
-          <span class="status-badge status-available" style="font-size:0.8rem;padding:6px 14px">● Online & Active</span>
-        </div>
+        <div class="page-header"><div><h2>Delivery Dashboard</h2><p>Mike K. · Chicago, IL</p></div><span class="status-badge status-available" style="font-size:0.8rem;padding:6px 14px">● Online &amp; Active</span></div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="truck" style="width:20px;height:20px;color:#10b981"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">12</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Deliveries</p>
-            <p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">8 completed so far</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#60a5fa"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹2,840</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Earnings</p>
-            <p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">₹240 in tips</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="clock" style="width:20px;height:20px;color:#fbbf24"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">28 min</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Avg Delivery Time</p>
-            <p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">Best: 24 min</p>
-          </div>
-          <div class="stat-card">
-            <div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div>
-            <p style="font-size:1.6rem;font-weight:900;color:#f8fafc">5.0</p>
-            <p style="color:#64748b;font-size:0.82rem;margin-top:4px">Rating</p>
-            <p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">312 deliveries</p>
-          </div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="truck" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">12</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Deliveries</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">8 completed so far</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹2,840</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Earnings</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">₹240 in tips</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="clock" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">28 min</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Avg Delivery Time</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">Best: 24 min</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">5.0</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">312 deliveries</p></div>
         </div>
-        <div style="display:grid;grid-template-columns:7fr 5fr;gap:20px">
-          <div class="glass-card" style="border-radius:22px;padding:24px">
-            <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:20px">Active Delivery</h3>
-            <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:24px">
-              <div style="width:44px;height:44px;background:#10b981;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="truck" style="width:22px;height:22px;color:#000"></i></div>
-              <div style="flex:1">
-                <p style="font-weight:900;color:#f8fafc">ORD-9921 · Athira K Jayan</p>
-                <p style="font-size:0.82rem;color:#64748b">123 Eco-Friendly Lane, Chicago</p>
-              </div>
-              <span class="status-badge status-transit">En Route</span>
-            </div>
-            <div style="position:relative;padding-left:28px">
-              <div class="route-line"></div>
-              <div style="display:flex;flex-direction:column;gap:20px">
-                <div style="position:relative">
-                  <div style="position:absolute;left:-28px;width:22px;height:22px;background:#10b981;border-radius:50%;border:3px solid #020617;display:flex;align-items:center;justify-content:center"><i data-lucide="check" style="width:10px;height:10px;color:#000"></i></div>
-                  <p style="font-weight:800;color:#f8fafc;font-size:0.9rem">Picked up from Gloria's Sun Valley Farm</p>
-                  <p style="font-size:0.78rem;color:#475569">2:15 PM · Napa Valley, CA</p>
-                </div>
-                <div style="position:relative">
-                  <div style="position:absolute;left:-28px;width:22px;height:22px;background:#10b981;border-radius:50%;border:3px solid #020617" class="step-pulse"></div>
-                  <p style="font-weight:800;color:#34d399;font-size:0.9rem">In Transit — 2.4 km away</p>
-                  <p style="font-size:0.78rem;color:#475569">ETA: ~8 minutes</p>
-                </div>
-                <div style="position:relative;opacity:0.4">
-                  <div style="position:absolute;left:-28px;width:22px;height:22px;background:rgba(255,255,255,0.1);border-radius:50%;border:3px solid #020617"></div>
-                  <p style="font-weight:800;color:#94a3b8;font-size:0.9rem">Deliver to Customer</p>
-                  <p style="font-size:0.78rem;color:#475569">123 Eco-Friendly Lane</p>
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:12px;margin-top:24px">
-              <button style="flex:1;background:#059669;color:#fff;font-weight:900;padding:13px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px">
-                <i data-lucide="check-circle" class="w-5 h-5"></i> Mark Delivered
-              </button>
-              <button style="padding:13px 20px;background:rgba(255,255,255,0.06);color:#f8fafc;font-weight:800;border-radius:14px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px">
-                <i data-lucide="phone" class="w-4 h-4"></i> Call
-              </button>
-            </div>
-          </div>
-          <div class="glass-card" style="border-radius:22px;padding:24px">
-            <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:18px">Upcoming Pickups</h3>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div class="order-card" style="padding:14px">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-                  <p style="font-weight:800;color:#f8fafc;font-size:0.9rem">ORD-8812</p>
-                  <span class="status-badge status-pending">Scheduled</span>
-                </div>
-                <p style="font-size:0.8rem;color:#64748b">Ethical Pastures → John Doe</p>
-                <p style="font-size:0.75rem;color:#475569;margin-top:4px">₹2,080 · Est. 3:30 PM</p>
-              </div>
-              <div class="order-card" style="padding:14px">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
-                  <p style="font-weight:800;color:#f8fafc;font-size:0.9rem">ORD-8901</p>
-                  <span class="status-badge status-pending">Scheduled</span>
-                </div>
-                <p style="font-size:0.8rem;color:#64748b">Highland Root → Priya Nair</p>
-                <p style="font-size:0.75rem;color:#475569;margin-top:4px">₹760 · Est. 4:15 PM</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="glass-card" style="border-radius:22px;padding:24px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:20px">Active Delivery</h3><div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:24px"><div style="width:44px;height:44px;background:#10b981;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="truck" style="width:22px;height:22px;color:#000"></i></div><div style="flex:1"><p style="font-weight:900;color:#f8fafc">ORD-9921 · Athira K Jayan</p><p style="font-size:0.82rem;color:#64748b">123 Eco-Friendly Lane, Chicago</p></div><span class="status-badge status-transit">En Route</span></div><button style="background:#059669;color:#fff;font-weight:900;padding:13px 24px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px"><i data-lucide="check-circle" class="w-5 h-5"></i> Mark Delivered</button></div>
       </section>
-
-      <!-- MY DELIVERIES -->
       <section id="d-view-deliveries" class="view-section">
         <div class="page-header"><h2>Delivery History</h2></div>
-        <div class="glass-card" style="border-radius:22px;overflow:hidden">
-          <table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Farm</th><th>Distance</th><th>Earnings</th><th>Date</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>Sun Valley Farm</td><td>4.2 km</td><td style="color:#34d399;font-weight:800">₹80</td><td style="color:#64748b">Nov 08</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
-            <tr><td style="font-weight:800">#ORD-9810</td><td>Rahul Sharma</td><td>Ethical Pastures</td><td>6.8 km</td><td style="color:#34d399;font-weight:800">₹120</td><td style="color:#64748b">Nov 07</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
-            <tr><td style="font-weight:800">#ORD-9780</td><td>Meera Krishnan</td><td>Highland Root</td><td>3.1 km</td><td style="color:#34d399;font-weight:800">₹60</td><td style="color:#64748b">Nov 07</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
-            <tr><td style="font-weight:800">#ORD-9701</td><td>Sanjay Patel</td><td>Sun Valley Farm</td><td>7.4 km</td><td style="color:#34d399;font-weight:800">₹130</td><td style="color:#64748b">Nov 06</td><td><span class="status-badge status-delivered">Delivered</span></td></tr>
-          </tbody></table>
-        </div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden"><table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Farm</th><th>Distance</th><th>Earnings</th><th>Date</th><th>Status</th></tr></thead><tbody><tr><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>Sun Valley Farm</td><td>4.2 km</td><td style="color:#34d399;font-weight:800">₹80</td><td style="color:#64748b">Nov 08</td><td><span class="status-badge status-delivered">Delivered</span></td></tr><tr><td style="font-weight:800">#ORD-9810</td><td>Rahul Sharma</td><td>Ethical Pastures</td><td>6.8 km</td><td style="color:#34d399;font-weight:800">₹120</td><td style="color:#64748b">Nov 07</td><td><span class="status-badge status-delivered">Delivered</span></td></tr></tbody></table></div>
       </section>
-
-      <!-- AVAILABLE ORDERS -->
       <section id="d-view-available" class="view-section">
-        <div class="page-header">
-          <div><h2>Available Orders</h2><p>Accept orders near you</p></div>
-          <span class="verification-tag">3 orders nearby</span>
-        </div>
+        <div class="page-header"><div><h2>Available Orders</h2><p>Accept orders near you</p></div><span class="verification-tag">3 orders nearby</span></div>
         <div style="display:flex;flex-direction:column;gap:16px" id="d-availableOrders"></div>
       </section>
-
-      <!-- EARNINGS -->
       <section id="d-view-earnings" class="view-section">
         <div class="page-header"><h2>My Earnings</h2></div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#34d399">₹38,420</p>
-            <p style="font-size:0.78rem;color:#475569;margin-top:6px">All time · 312 deliveries</p>
-          </div>
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Week</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹4,200</p>
-            <p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 18% vs last week</p>
-          </div>
-          <div class="glass-card" style="border-radius:20px;padding:22px">
-            <p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Tips Received</p>
-            <p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹3,180</p>
-            <p style="font-size:0.78rem;color:#475569;margin-top:6px">From happy customers</p>
-          </div>
-        </div>
-        <div class="glass-card" style="border-radius:22px;padding:24px">
-          <h3 style="font-weight:900;color:#f8fafc;margin-bottom:18px">Earnings This Week</h3>
-          <div style="display:flex;align-items:flex-end;gap:10px;height:120px">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:70%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Mon</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:50%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Tue</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:90%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Wed</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:60%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Thu</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:100%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Fri</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:80%"></div></div>
-              <span style="font-size:0.7rem;color:#475569">Sat</span>
-            </div>
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;height:100%">
-              <div class="chart-bar" style="width:100%;flex:1"><div class="bar-fill" style="height:40%"></div></div>
-              <span style="font-size:0.7rem;color:#10b981;font-weight:700">Sun</span>
-            </div>
-          </div>
-        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px"><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹38,420</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time · 312 deliveries</p></div><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Week</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹4,200</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 18% vs last week</p></div><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Tips Received</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹3,180</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">From happy customers</p></div></div>
       </section>
-
-      <!-- LIVE MAP -->
       <section id="d-view-map" class="view-section">
         <div class="page-header"><h2>Live Map</h2></div>
-        <div class="map-placeholder" style="height:500px">
-          <div class="map-grid"></div>
-          <div class="map-dot" style="top:40%;left:50%"></div>
-          <div class="map-dot" style="top:28%;left:34%;animation-delay:0.5s"></div>
-          <div class="map-dot" style="top:56%;left:66%;animation-delay:1s;background:#3b82f6"></div>
-          <i data-lucide="map" style="width:56px;height:56px;color:#1e293b;position:relative;z-index:1"></i>
-          <p style="color:#475569;font-size:0.9rem;position:relative;z-index:1">Live map integration ready — GPS tracking coming soon</p>
-          <div style="position:absolute;bottom:20px;left:20px;right:20px;background:rgba(2,6,23,0.8);backdrop-filter:blur(8px);padding:14px 20px;border-radius:16px;border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:#10b981"></div><span style="font-size:0.85rem;font-weight:700;color:#f8fafc">Your Location</span></div>
-            <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:#3b82f6"></div><span style="font-size:0.85rem;color:#94a3b8">Drop Point</span></div>
-            <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:50%;background:#f59e0b"></div><span style="font-size:0.85rem;color:#94a3b8">Farm Pickup</span></div>
-          </div>
-        </div>
+        <div class="map-placeholder" style="height:500px"><div class="map-grid"></div><div class="map-dot" style="top:40%;left:50%"></div><div class="map-dot" style="top:28%;left:34%;animation-delay:0.5s"></div><i data-lucide="map" style="width:56px;height:56px;color:#1e293b;position:relative;z-index:1"></i><p style="color:#475569;font-size:0.9rem;position:relative;z-index:1">Live map integration ready — GPS tracking coming soon</p></div>
       </section>
-
-      <!-- PROFILE -->
       <section id="d-view-profile" class="view-section">
         <div class="page-header"><h2>My Profile</h2></div>
         <div style="display:grid;grid-template-columns:8fr 4fr;gap:24px">
           <div class="glass-card" style="border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:16px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div><label>First Name</label><input type="text" value="Mike"></div>
-              <div><label>Last Name</label><input type="text" value="Kowalski"></div>
-            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>First Name</label><input type="text" value="Mike"></div><div><label>Last Name</label><input type="text" value="Kowalski"></div></div>
             <div><label>Email</label><input type="email" value="mike.k@farmchain.in"></div>
             <div><label>Phone</label><input type="tel" value="+91 98765 43210"></div>
-            <div><label>Vehicle Type</label>
-              <select><option>2-Wheeler (Bike)</option><option selected>4-Wheeler (Car)</option><option>Tempo / Mini Truck</option></select>
-            </div>
-            <div><label>Vehicle Number</label><input type="text" value="MH 12 AB 3456"></div>
+            <div><label>Vehicle Type</label><select><option>2-Wheeler (Bike)</option><option selected>4-Wheeler (Car)</option></select></div>
             <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content">Save Changes</button>
           </div>
-          <div style="display:flex;flex-direction:column;gap:16px">
-            <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center">
-              <div style="width:64px;height:64px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#fff;margin:0 auto 12px">MK</div>
-              <p style="font-weight:900;color:#f8fafc;font-size:1rem">Mike K.</p>
-              <p style="color:#64748b;font-size:0.82rem;margin-bottom:12px">Distributor · Chicago</p>
-              <span class="verification-tag">★ 5.0 · Top Rated</span>
-            </div>
-            <div class="glass-card" style="border-radius:22px;padding:22px">
-              <h4 style="font-weight:900;color:#f8fafc;margin-bottom:14px">Documents</h4>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.85rem;color:#64748b">Aadhaar Card</span><span class="status-badge status-delivered">Verified</span></div>
-                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.85rem;color:#64748b">Driving License</span><span class="status-badge status-delivered">Verified</span></div>
-                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:0.85rem;color:#64748b">PAN Card</span><span class="status-badge status-delivered">Verified</span></div>
-              </div>
-            </div>
-          </div>
+          <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#fff;margin:0 auto 12px">MK</div><p style="font-weight:900;color:#f8fafc;font-size:1rem">Mike K.</p><p style="color:#64748b;font-size:0.82rem;margin-bottom:12px">Distributor · Chicago</p><span class="verification-tag">★ 5.0 · Top Rated</span></div>
         </div>
       </section>
     </div>
   </div>
 </div>
 
-<!-- Add Product Modal -->
+<!-- ════════════════ ADD PRODUCT MODAL ════════════════ -->
 <div class="modal-overlay" id="addProductModal">
   <div class="modal-box">
-    <button onclick="document.getElementById('addProductModal').classList.remove('open')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
-      <i data-lucide="x" class="w-4 h-4"></i>
-    </button>
+    <button onclick="document.getElementById('addProductModal').classList.remove('open')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i data-lucide="x" class="w-4 h-4"></i></button>
     <h2 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:22px">Add New Product</h2>
     <div style="display:flex;flex-direction:column;gap:14px">
       <div><label>Product Name</label><input type="text" placeholder="e.g. Organic Spinach" id="np-name"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div><label>Category</label>
-          <select id="np-cat"><option>Vegetables</option><option>Fruits</option><option>Animal</option><option>Meat</option></select>
-        </div>
-        <div><label>Unit</label>
-          <select id="np-unit"><option>kg</option><option>g</option><option>doz</option><option>bag</option><option>piece</option></select>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div><label>Price (₹)</label><input type="number" placeholder="120" id="np-price"></div>
-        <div><label>Stock</label><input type="number" placeholder="50" id="np-stock"></div>
-      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Category</label><select id="np-cat"><option>Vegetables</option><option>Fruits</option><option>Animal</option><option>Meat</option></select></div><div><label>Unit</label><select id="np-unit"><option>kg</option><option>g</option><option>doz</option><option>bag</option><option>piece</option></select></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Price (₹)</label><input type="number" placeholder="120" id="np-price"></div><div><label>Stock</label><input type="number" placeholder="50" id="np-stock"></div></div>
       <div><label>Image URL</label><input type="url" placeholder="https://…" id="np-img"></div>
       <button onclick="addNewProduct()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Add Listing</button>
     </div>
+  </div>
+</div>
+
+<!-- ════════════════ SETTINGS PANEL ════════════════ -->
+<div id="settings-overlay" class="settings-overlay" onclick="handleSettingsOverlayClick(event)">
+  <div class="settings-panel" id="settings-panel">
+    <!-- Header -->
+    <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem">Account &amp; Settings</h3>
+        <p style="font-size:0.75rem;color:#475569;margin-top:2px">Manage your preferences</p>
+      </div>
+      <button onclick="closeSettings()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+
+    <!-- Profile card -->
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.15);border-radius:16px;padding:16px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0">AKJ</div>
+        <div style="flex:1">
+          <p style="font-weight:900;color:#f8fafc;font-size:0.95rem">Athira K Jayan</p>
+          <p style="font-size:0.72rem;color:#475569">athira.k@email.com</p>
+          <span class="verification-tag" style="margin-top:6px;display:inline-flex">Premium Buyer</span>
+        </div>
+        <button style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:6px 12px;color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;font-weight:700;cursor:pointer">Edit</button>
+      </div>
+    </div>
+
+    <div style="padding:16px 0;overflow-y:auto;flex:1">
+
+      <!-- Language -->
+      <div style="padding:0 20px;margin-bottom:16px">
+        <p class="settings-section-title" style="padding:0 0 10px">🌐 Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">English</button>
+          <button class="lang-btn" id="lang-ml" onclick="setLanguage('ml')">മലയാളം</button>
+          <button class="lang-btn" id="lang-hi" onclick="setLanguage('hi')">हिन्दी</button>
+          <button class="lang-btn" id="lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:0 20px 16px"></div>
+
+      <!-- Account -->
+      <p class="settings-section-title">👤 Account</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="user" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Edit Profile</p><p style="font-size:0.72rem;color:#475569">Update name, photo, address</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="map-pin" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Saved Addresses</p><p style="font-size:0.72rem;color:#475569">Home, Work and more</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="credit-card" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Payment Methods</p><p style="font-size:0.72rem;color:#475569">UPI, Cards, Net Banking</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <!-- Preferences -->
+      <p class="settings-section-title">⚙️ Preferences</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(168,85,247,0.12)"><i data-lucide="bell" style="width:16px;height:16px;color:#c084fc"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Notifications</p><p style="font-size:0.72rem;color:#475569">Order alerts, offers, news</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="leaf" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Eco-Friendly Filter</p><p style="font-size:0.72rem;color:#475569">Show only organic products</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="moon" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Dark Mode</p><p style="font-size:0.72rem;color:#475569">Always on dark theme</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <!-- Privacy & Security -->
+      <p class="settings-section-title">🔒 Privacy &amp; Security</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(239,68,68,0.12)"><i data-lucide="lock" style="width:16px;height:16px;color:#f87171"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Change Password</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="shield" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Two-Factor Auth</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="eye-off" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Data &amp; Privacy</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <!-- Support -->
+      <p class="settings-section-title">💬 Support</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="help-circle" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Help &amp; FAQ</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="star" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Rate the App</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="share-2" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Refer &amp; Earn</p><p style="font-size:0.72rem;color:#475569">Get ₹50 per referral</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <!-- Danger zone -->
+      <div style="padding:0 20px 20px">
+        <button onclick="logOut();closeSettings()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:#f87171;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-size:0.88rem;transition:background 0.2s" onmouseover="this.style.background='rgba(239,68,68,0.12)'" onmouseout="this.style.background='rgba(239,68,68,0.06)'">
+          <i data-lucide="log-out" style="width:16px;height:16px"></i> Sign Out
+        </button>
+        <p style="text-align:center;font-size:0.7rem;color:#1e293b;margin-top:10px">v2.4.1 · FarmChain X</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CHATBOT (shared) ════════════════ -->
+<button class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()" style="display:none" title="Ask FarmBot">
+  <i data-lucide="message-circle" style="width:26px;height:26px;color:#fff"></i>
+</button>
+
+<div class="chatbot-window" id="chatbot-window">
+  <div class="chat-header">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#059669,#10b981);display:flex;align-items:center;justify-content:center">
+        <i data-lucide="sprout" style="width:18px;height:18px;color:#fff"></i>
+      </div>
+      <div>
+        <p style="font-weight:900;color:#f8fafc;font-size:0.9rem">FarmBot AI</p>
+        <p style="font-size:0.7rem;color:#34d399">Powered by Gemini</p>
+      </div>
+    </div>
+    <button onclick="toggleChat()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <i data-lucide="x" style="width:14px;height:14px"></i>
+    </button>
+  </div>
+
+  <!-- API Key banner -->
+  <div class="api-key-banner" id="api-key-banner">
+    <strong>🔑 Gemini API Key Required</strong><br>
+    Enter your Google Gemini API key below to activate the chatbot.
+    <div class="api-key-input-row">
+      <input class="api-key-input" type="password" id="gemini-key-input" placeholder="AIza…your key here">
+      <button class="api-key-save-btn" onclick="saveApiKey()">Save</button>
+    </div>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">
+      👋 Hi! I'm <strong>FarmBot</strong>, your AI farming assistant. I can help you find fresh produce, track orders, or answer questions about our farms. How can I help today?
+    </div>
+  </div>
+
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Ask about produce, farms, orders…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="chat-send-btn" onclick="sendChatMsg()">
+      <i data-lucide="send" style="width:16px;height:16px;color:#fff"></i>
+    </button>
   </div>
 </div>
 
@@ -1179,9 +869,79 @@ select option { background: #0f172a; }
 </div><!-- #app -->
 
 <script>
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════════
+const translations = {
+  en: {
+    home:"Home", categories:"Categories", yourOrders:"Your Orders", topFarms:"Top Farms",
+    myBasket:"My Basket", favorites:"Favorites", logOut:"Log Out",
+    freshFromField:"Fresh From The Field", freshSubtitle:"Direct from verified farms · Delivery in 24–48 hrs",
+    vegetables:"Vegetables", fruits:"Fruits", dairyEggs:"Dairy & Eggs", freshMeat:"Fresh Meat",
+    selectCategory:"Select a category above", orderHistory:"Your Order History",
+    reviewBasket:"Review Your Basket", backToOrders:"Back to orders",
+    backToMarket:"Back to marketplace", topVerifiedFarms:"Top Verified Farms",
+    addToBasket:"Add to Basket", confirmPay:"Confirm & Pay →", orderPlaced:"Order Placed! 🎉",
+    emptyBasket:"Your basket is empty", browseMarket:"Browse Market",
+    settings:"Settings",
+  },
+  ml: {
+    home:"ഹോം", categories:"വിഭാഗങ്ങൾ", yourOrders:"നിങ്ങളുടെ ഓർഡറുകൾ", topFarms:"മികച്ച ഫാമുകൾ",
+    myBasket:"എന്റെ കൊട്ട", favorites:"പ്രിയപ്പെട്ടവ", logOut:"പുറത്തുകടക്കുക",
+    freshFromField:"പാടത്ത് നിന്ന് നേരിട്ട്", freshSubtitle:"സ്ഥിരീകരിച്ച ഫാമുകളിൽ നിന്ന് · 24–48 മണിക്കൂറിൽ ഡെലിവറി",
+    vegetables:"പച്ചക്കറികൾ", fruits:"പഴങ്ങൾ", dairyEggs:"ക്ഷീരം & മുട്ടകൾ", freshMeat:"പുതിയ മാംസം",
+    selectCategory:"മുകളിൽ ഒരു വിഭാഗം തിരഞ്ഞെടുക്കുക", orderHistory:"ഓർഡർ ചരിത്രം",
+    reviewBasket:"നിങ്ങളുടെ കൊട്ട അവലോകനം ചെയ്യുക", backToOrders:"ഓർഡറുകളിലേക്ക് മടങ്ങുക",
+    backToMarket:"മാർക്കറ്റിലേക്ക് മടങ്ങുക", topVerifiedFarms:"മികച്ച സ്ഥിരീകരിച്ച ഫാമുകൾ",
+    addToBasket:"കൊട്ടയിൽ ഇടുക", confirmPay:"ഉറപ്പിക്കുക & പണം നൽകുക →", orderPlaced:"ഓർഡർ നൽകി! 🎉",
+    emptyBasket:"നിങ്ങളുടെ കൊട്ട ഒഴിഞ്ഞിരിക്കുന്നു", browseMarket:"മാർക്കറ്റ് കാണുക",
+    settings:"ക്രമീകരണങ്ങൾ",
+  },
+  hi: {
+    home:"होम", categories:"श्रेणियाँ", yourOrders:"आपके ऑर्डर", topFarms:"शीर्ष फार्म",
+    myBasket:"मेरी टोकरी", favorites:"पसंदीदा", logOut:"लॉग आउट",
+    freshFromField:"खेत से सीधे", freshSubtitle:"सत्यापित फार्मों से · 24–48 घंटे में डिलीवरी",
+    vegetables:"सब्जियाँ", fruits:"फल", dairyEggs:"डेयरी और अंडे", freshMeat:"ताजा मांस",
+    selectCategory:"ऊपर एक श्रेणी चुनें", orderHistory:"आपका ऑर्डर इतिहास",
+    reviewBasket:"अपनी टोकरी देखें", backToOrders:"ऑर्डर पर वापस जाएं",
+    backToMarket:"मार्केट पर वापस जाएं", topVerifiedFarms:"शीर्ष सत्यापित फार्म",
+    addToBasket:"टोकरी में डालें", confirmPay:"पुष्टि करें & भुगतान करें →", orderPlaced:"ऑर्डर दिया गया! 🎉",
+    emptyBasket:"आपकी टोकरी खाली है", browseMarket:"मार्केट देखें",
+    settings:"सेटिंग्स",
+  },
+  ta: {
+    home:"முகப்பு", categories:"வகைகள்", yourOrders:"உங்கள் ஆர்டர்கள்", topFarms:"சிறந்த பண்ணைகள்",
+    myBasket:"என் கூடை", favorites:"பிடித்தவை", logOut:"வெளியேறு",
+    freshFromField:"வயலில் இருந்து நேரடியாக", freshSubtitle:"சரிபார்க்கப்பட்ட பண்ணைகளிலிருந்து · 24–48 மணிநேரத்தில் டெலிவரி",
+    vegetables:"காய்கறிகள்", fruits:"பழங்கள்", dairyEggs:"பால் & முட்டைகள்", freshMeat:"புதிய இறைச்சி",
+    selectCategory:"மேலே ஒரு வகையை தேர்ந்தெடுக்கவும்", orderHistory:"உங்கள் ஆர்டர் வரலாறு",
+    reviewBasket:"உங்கள் கூடையை சரிபார்க்கவும்", backToOrders:"ஆர்டர்களுக்கு திரும்பு",
+    backToMarket:"சந்தைக்கு திரும்பு", topVerifiedFarms:"சிறந்த சரிபார்க்கப்பட்ட பண்ணைகள்",
+    addToBasket:"கூடையில் சேர்", confirmPay:"உறுதிசெய் & பணம் செலு →", orderPlaced:"ஆர்டர் வழங்கப்பட்டது! 🎉",
+    emptyBasket:"உங்கள் கூடை காலியாக உள்ளது", browseMarket:"சந்தையை பார்க்கவும்",
+    settings:"அமைப்புகள்",
+  }
+};
+
+let currentLang = 'en';
+function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.en[key] || key; }
+
+function setLanguage(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lang-'+lang);
+  if(btn) btn.classList.add('active');
+  // Update all [data-t] elements
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    el.textContent = t(key);
+  });
+  showToast('Language changed · ' + (lang==='en'?'English':lang==='ml'?'മലയാളം':lang==='hi'?'हिन्दी':'தமிழ்'));
+}
+
+// ══════════════════════════════════════════
 // DATA
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 const DELIVERY_FEE = 40;
 let currentRole = null;
 let basket = [];
@@ -1194,10 +954,10 @@ function fmt(n) {
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
+  const t2 = document.getElementById('toast');
+  t2.textContent = msg;
+  t2.classList.add('show');
+  setTimeout(() => t2.classList.remove('show'), 2500);
 }
 
 const products = [
@@ -1238,9 +998,9 @@ const availableOrders = [
   {id:"ORD-9950",farm:"Ethical Pastures",farmAddr:"Ethical Pastures Hub",destAddr:"789 Oak Lane, Naperville",dist:"8.1 km",pay:145,items:"Ribeye ×2"},
 ];
 
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 // LOGIN
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 function selectRole(role) {
   currentRole = role;
   document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
@@ -1262,12 +1022,22 @@ function doLogin() {
   if (currentRole === 'customer') { cRenderProducts(products,'c-productGrid'); cRenderOrders(); cRenderFarms(); }
   if (currentRole === 'farmer') { fRenderProducts(); fRenderOrders(); fRenderInventory(); }
   if (currentRole === 'distributor') { dRenderAvailableOrders(); }
+  // Show chatbot for customer and farmer
+  const fab = document.getElementById('chatbot-fab');
+  if (currentRole === 'customer' || currentRole === 'farmer') {
+    fab.style.display = 'flex';
+    initChatbot(currentRole);
+  } else {
+    fab.style.display = 'none';
+  }
   lucide.createIcons();
 }
 
 function logOut() {
   document.querySelectorAll('.portal-screen').forEach(p => p.classList.remove('active'));
   document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('chatbot-fab').style.display = 'none';
+  document.getElementById('chatbot-window').classList.remove('open');
   currentRole = null;
   document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
   document.getElementById('login-form').style.display = 'none';
@@ -1277,9 +1047,119 @@ function logOut() {
 function showRegister() { document.getElementById('register-modal').classList.add('open'); lucide.createIcons(); }
 function closeRegister() { document.getElementById('register-modal').classList.remove('open'); }
 
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+function openSettings() {
+  document.getElementById('settings-overlay').classList.add('open');
+  lucide.createIcons();
+}
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
+function handleSettingsOverlayClick(e) {
+  if (e.target === document.getElementById('settings-overlay')) closeSettings();
+}
+
+// ══════════════════════════════════════════
+// GEMINI CHATBOT
+// ══════════════════════════════════════════
+let geminiKey = localStorage.getItem('fcx_gemini_key') || '';
+let chatHistory = [];
+let chatRole = 'customer';
+
+function initChatbot(role) {
+  chatRole = role;
+  chatHistory = [];
+  document.getElementById('chat-messages').innerHTML = `<div class="chat-msg bot">👋 Hi! I'm <strong>FarmBot</strong>, your AI assistant. I can help with ${role === 'farmer' ? 'managing your listings, pricing tips, harvest advice' : 'finding fresh produce, tracking orders, farm info'}. How can I help?</div>`;
+  const banner = document.getElementById('api-key-banner');
+  if (geminiKey) {
+    banner.style.display = 'none';
+  } else {
+    banner.style.display = 'block';
+  }
+}
+
+function saveApiKey() {
+  const k = document.getElementById('gemini-key-input').value.trim();
+  if (!k) { showToast('Please enter a valid API key'); return; }
+  geminiKey = k;
+  localStorage.setItem('fcx_gemini_key', k);
+  document.getElementById('api-key-banner').style.display = 'none';
+  showToast('API key saved! FarmBot is ready 🤖');
+}
+
+function toggleChat() {
+  const w = document.getElementById('chatbot-window');
+  w.classList.toggle('open');
+  if (w.classList.contains('open')) {
+    document.getElementById('chat-input').focus();
+    lucide.createIcons();
+  }
+}
+
+function appendMsg(text, sender) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ' + sender;
+  div.innerHTML = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  appendMsg(text, 'user');
+  chatHistory.push({ role:'user', parts:[{text}] });
+
+  if (!geminiKey) {
+    appendMsg('⚠️ Please enter your Gemini API key above to activate FarmBot.', 'bot');
+    return;
+  }
+
+  const typingEl = appendMsg('<em>FarmBot is thinking…</em>', 'bot typing');
+
+  // Build context-aware system prompt
+  const systemContext = chatRole === 'farmer'
+    ? `You are FarmBot, an AI assistant for farmers on FarmChain X, an Indian farm-to-doorstep platform. Help farmers with listing products, pricing strategies, inventory management, crop advice, and order management. Be concise and practical. Current products listed: ${products.map(p=>p.name).join(', ')}.`
+    : `You are FarmBot, an AI assistant for customers on FarmChain X, an Indian farm-to-doorstep platform. Help customers find fresh produce, explain product quality, give recipe ideas, help with orders, and answer questions about verified farms. Be friendly, concise, and helpful. Products available: ${products.map(p=>p.name+' ₹'+p.price+'/'+p.unit).join(', ')}.`;
+
+  try {
+    const payload = {
+      system_instruction: { parts: [{ text: systemContext }] },
+      contents: chatHistory,
+      generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
+    };
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
+      { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }
+    );
+
+    const data = await res.json();
+    typingEl.remove();
+
+    if (data.error) {
+      appendMsg(`❌ Gemini API error: ${data.error.message}`, 'bot');
+      return;
+    }
+
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I couldn\'t get a response.';
+    chatHistory.push({ role:'model', parts:[{text:reply}] });
+    appendMsg(reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'), 'bot');
+  } catch(err) {
+    typingEl.remove();
+    appendMsg('❌ Connection error. Please check your API key and internet.', 'bot');
+  }
+  lucide.createIcons();
+}
+
+// ══════════════════════════════════════════
 // CUSTOMER
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 function cShowView(v) {
   document.querySelectorAll('#portal-customer .view-section').forEach(s => s.classList.remove('active'));
   const el = document.getElementById('c-view-'+v);
@@ -1297,14 +1177,14 @@ function cShowView(v) {
 function cRenderProducts(items, containerId) {
   const c = document.getElementById(containerId); if (!c) return;
   if (!items.length) {
-    c.innerHTML = `<div style="grid-column:1/-1" class="glass-card" style="padding:40px;border-radius:22px;text-align:center;color:#475569">No products found.</div>`;
+    c.innerHTML = `<div style="grid-column:1/-1;padding:40px;text-align:center;color:#475569">No products found.</div>`;
     return;
   }
   c.innerHTML = items.map(p => {
     const fav = favorites.includes(p.id);
     return `<div class="glass-card" style="padding:14px;border-radius:22px;cursor:pointer;position:relative" onclick="cViewProduct(${p.id})">
-      <button onclick="cToggleFav(${p.id},event)" style="position:absolute;top:10px;right:10px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'#94a3b8'}" title="${fav?'Remove':'Add to'} favorites">
-        <i data-lucide="heart" style="width:14px;height:14px;${fav?'fill:#f87171':''}" ></i>
+      <button onclick="cToggleFav(${p.id},event)" style="position:absolute;top:10px;right:10px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'#94a3b8'}">
+        <i data-lucide="heart" style="width:14px;height:14px;${fav?'fill:#f87171':''}"></i>
       </button>
       <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;background:#0f172a">
         <img src="${p.image}" alt="${p.name}" class="product-img" style="transition:transform 0.4s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
@@ -1342,10 +1222,7 @@ function cViewProduct(id) {
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
         <h1 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${p.name}</h1>
-        <div style="text-align:right">
-          <p style="font-size:1.6rem;font-weight:900;color:#34d399">${fmt(p.price)}</p>
-          <p style="font-size:0.72rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em">Per ${p.unit}</p>
-        </div>
+        <div style="text-align:right"><p style="font-size:1.6rem;font-weight:900;color:#34d399">${fmt(p.price)}</p><p style="font-size:0.72rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em">Per ${p.unit}</p></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;color:#fbbf24">
         <i data-lucide="star" style="width:18px;height:18px;fill:#fbbf24"></i>
@@ -1353,24 +1230,17 @@ function cViewProduct(id) {
         <span style="font-size:0.8rem;color:#475569">· ${p.category}</span>
       </div>
       <button onclick="cAddToBasket(${p.id})" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:16px;border-radius:16px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
-        <i data-lucide="shopping-cart" style="width:20px;height:20px"></i> Add to Basket
+        <i data-lucide="shopping-cart" style="width:20px;height:20px"></i> ${t('addToBasket')}
       </button>
     </div>
     <div class="glass-card" style="border-radius:22px;padding:24px;height:fit-content;position:sticky;top:24px">
       <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800;margin-bottom:18px">About the Farm</p>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
         <img src="${farm.image}" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid rgba(255,255,255,0.08)">
-        <div>
-          <h4 style="font-weight:900;color:#f8fafc;font-size:1rem">${farm.name}</h4>
-          <p style="font-size:0.78rem;color:#475569">${farm.location}</p>
-        </div>
+        <div><h4 style="font-weight:900;color:#f8fafc;font-size:1rem">${farm.name}</h4><p style="font-size:0.78rem;color:#475569">${farm.location}</p></div>
       </div>
       <p style="color:#64748b;font-size:0.85rem;line-height:1.6;margin-bottom:16px">${farm.description}</p>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">${(farm.tags||[]).map(t=>`<span class="verification-tag">${t}</span>`).join('')}</div>
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between">
-        <span style="font-size:0.8rem;color:#475569">Rating</span>
-        <span style="font-weight:800;color:#fbbf24;font-size:0.85rem">★ ${farm.rating}</span>
-      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${(farm.tags||[]).map(tag=>`<span class="verification-tag">${tag}</span>`).join('')}</div>
     </div>`;
   cShowView('product-detail');
   lucide.createIcons();
@@ -1396,9 +1266,8 @@ function cShowCheckout() {
   if (!basket.length) {
     c.innerHTML = `<div class="glass-card" style="padding:80px;border-radius:32px;text-align:center">
       <i data-lucide="shopping-cart" style="width:56px;height:56px;color:#1e293b;margin:0 auto 20px;display:block"></i>
-      <h3 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:8px">Your basket is empty</h3>
-      <p style="color:#475569;margin-bottom:28px">Add some fresh farm products to get started.</p>
-      <button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:900;padding:14px 32px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Browse Market</button>
+      <h3 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:8px">${t('emptyBasket')}</h3>
+      <button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:900;padding:14px 32px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:16px">${t('browseMarket')}</button>
     </div>`;
     cShowView('checkout'); lucide.createIcons(); return;
   }
@@ -1438,9 +1307,8 @@ function cShowCheckout() {
           </div>
         </div>
         <button onclick="cCompleteOrder()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:16px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
-          Confirm & Pay →
+          ${t('confirmPay')}
         </button>
-        <p style="font-size:0.65rem;color:#334155;text-align:center;margin-top:12px;text-transform:uppercase;letter-spacing:0.1em">Secure Checkout · All prices in ₹ INR</p>
       </div>
     </div>
   </div>`;
@@ -1461,8 +1329,8 @@ function cCompleteOrder(){
       <div style="width:80px;height:80px;background:#10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 40px rgba(16,185,129,0.35)">
         <i data-lucide="check" style="width:40px;height:40px;color:#000"></i>
       </div>
-      <h2 style="font-size:2rem;font-weight:900;color:#f8fafc;margin-bottom:10px">Order Placed! 🎉</h2>
-      <p style="color:#64748b;margin-bottom:32px">Your fresh produce is being prepared at the farm.<br>Order ID: <strong style="color:#f8fafc">${nid}</strong></p>
+      <h2 style="font-size:2rem;font-weight:900;color:#f8fafc;margin-bottom:10px">${t('orderPlaced')}</h2>
+      <p style="color:#64748b;margin-bottom:32px">Order ID: <strong style="color:#f8fafc">${nid}</strong></p>
       <div style="display:flex;justify-content:center;gap:14px">
         <button onclick="cShowView('orders')" style="background:rgba(255,255,255,0.08);color:#f8fafc;font-weight:800;padding:13px 28px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">View Orders</button>
         <button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Back to Market</button>
@@ -1473,28 +1341,15 @@ function cCompleteOrder(){
 
 function cRenderOrders(){
   const c=document.getElementById('c-ordersContainer');
-  if(!customerOrders.length){
-    c.innerHTML=`<div class="glass-card" style="padding:60px;border-radius:24px;text-align:center"><i data-lucide="package" style="width:48px;height:48px;color:#1e293b;margin:0 auto 16px;display:block"></i><h3 style="font-size:1.2rem;font-weight:900;color:#f8fafc;margin-bottom:8px">No orders yet</h3><button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:11px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:14px">Start shopping</button></div>`;
-    lucide.createIcons(); return;
-  }
+  if(!customerOrders.length){c.innerHTML=`<div style="padding:60px;text-align:center;color:#475569">No orders yet.</div>`;lucide.createIcons();return;}
   c.innerHTML=customerOrders.map(o=>`
     <div class="order-card">
       <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06)">
         <div><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800">Order ID</p><h4 style="font-size:1.2rem;font-weight:900;color:#f8fafc">${o.id}</h4></div>
-        <div style="display:flex;align-items:center;gap:14px">
-          <p style="font-size:0.85rem;color:#475569">${o.date}</p>
-          <span class="status-badge ${o.status==='Delivered'?'status-delivered':'status-transit'}">${o.status}</span>
-        </div>
+        <div style="display:flex;align-items:center;gap:14px"><p style="font-size:0.85rem;color:#475569">${o.date}</p><span class="status-badge ${o.status==='Delivered'?'status-delivered':'status-transit'}">${o.status}</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
-        ${o.items.map(i=>`
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="display:flex;align-items:center;gap:12px">
-            <img src="${i.img}" style="width:44px;height:44px;border-radius:12px;object-fit:cover">
-            <div><p style="font-weight:800;color:#f8fafc;font-size:0.9rem">${i.name}</p><p style="font-size:0.75rem;color:#475569">Qty: ${i.qty} ${i.unit||''}</p></div>
-          </div>
-          <p style="font-weight:700;color:#94a3b8;font-size:0.9rem">${fmt(i.price*i.qty)}</p>
-        </div>`).join('')}
+        ${o.items.map(i=>`<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:12px"><img src="${i.img}" style="width:44px;height:44px;border-radius:12px;object-fit:cover"><div><p style="font-weight:800;color:#f8fafc;font-size:0.9rem">${i.name}</p><p style="font-size:0.75rem;color:#475569">Qty: ${i.qty} ${i.unit||''}</p></div></div><p style="font-weight:700;color:#94a3b8;font-size:0.9rem">${fmt(i.price*i.qty)}</p></div>`).join('')}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.5);padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,0.05)">
         <p style="font-size:1.4rem;font-weight:900;color:#34d399">${fmt(o.total)}</p>
@@ -1514,18 +1369,13 @@ function cTrackOrder(id){
     <div class="glass-card" style="padding:36px;border-radius:28px">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;flex-wrap:wrap;gap:16px">
         <div><p style="font-size:0.65rem;color:#10b981;text-transform:uppercase;letter-spacing:0.2em;font-weight:800;margin-bottom:6px">Live Tracking</p><h2 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${id}</h2></div>
-        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:12px 20px;border-radius:16px;text-align:center">
-          <p style="font-size:0.65rem;color:#10b981;text-transform:uppercase;font-weight:800;letter-spacing:0.1em">Est. Arrival</p>
-          <p style="font-size:1.2rem;font-weight:900;color:#f8fafc">Today, 5:30 PM</p>
-        </div>
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:12px 20px;border-radius:16px;text-align:center"><p style="font-size:0.65rem;color:#10b981;text-transform:uppercase;font-weight:800;letter-spacing:0.1em">Est. Arrival</p><p style="font-size:1.2rem;font-weight:900;color:#f8fafc">Today, 5:30 PM</p></div>
       </div>
       <div style="position:relative;display:flex;justify-content:space-between">
-        <div style="position:absolute;top:22px;left:0;right:0;height:3px;background:rgba(255,255,255,0.06);border-radius:99px">
-          <div style="height:100%;width:75%;background:#10b981;border-radius:99px"></div>
-        </div>
+        <div style="position:absolute;top:22px;left:0;right:0;height:3px;background:rgba(255,255,255,0.06);border-radius:99px"><div style="height:100%;width:75%;background:#10b981;border-radius:99px"></div></div>
         ${[['check','Ordered','white'],['package','Packed','white'],['truck','Shipping','#34d399'],['home','Arrived','','0.3']].map(([ic,lbl,col,op])=>`
         <div style="display:flex;flex-direction:column;align-items:center;z-index:1;${op?'opacity:'+op:''}">
-          <div style="width:44px;height:44px;background:${col==='#34d399'?'#10b981':col==='white'?'#10b981':'rgba(255,255,255,0.06)'};border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #020617;margin-bottom:10px;${col==='#34d399'?'animation:pulse-ring 2s infinite':''}">
+          <div style="width:44px;height:44px;background:${col==='#34d399'?'#10b981':col==='white'?'#10b981':'rgba(255,255,255,0.06)'};border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #020617;margin-bottom:10px">
             <i data-lucide="${ic}" style="width:20px;height:20px;color:${col==='white'?'#000':col==='#34d399'?'#fff':'#475569'}"></i>
           </div>
           <p style="font-size:0.72rem;font-weight:800;color:${col==='#34d399'?'#34d399':'#f8fafc'};text-transform:uppercase;letter-spacing:0.05em">${lbl}</p>
@@ -1538,13 +1388,8 @@ function cTrackOrder(id){
 function cRenderFavorites(){
   const c=document.getElementById('c-favoritesContent');
   const list=products.filter(p=>favorites.includes(p.id));
-  if(!list.length){
-    c.style.display='block';
-    c.innerHTML=`<div class="glass-card" style="padding:60px;border-radius:24px;text-align:center"><i data-lucide="heart" style="width:48px;height:48px;color:#1e293b;margin:0 auto 16px;display:block"></i><h3 style="font-size:1.2rem;font-weight:900;color:#f8fafc;margin-bottom:8px">No favorites yet</h3><p style="color:#475569;margin-bottom:20px">Tap the heart on any product to add it here.</p><button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:11px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Browse Products</button></div>`;
-    lucide.createIcons(); return;
-  }
-  c.style.display='grid';
-  cRenderProducts(list,'c-favoritesContent');
+  if(!list.length){c.style.display='block';c.innerHTML=`<div style="padding:60px;text-align:center;color:#475569"><i data-lucide="heart" style="width:48px;height:48px;color:#1e293b;margin:0 auto 16px;display:block"></i><h3 style="font-size:1.2rem;font-weight:900;color:#f8fafc;margin-bottom:8px">No favorites yet</h3><button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:11px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:14px">Browse Products</button></div>`;lucide.createIcons();return;}
+  c.style.display='grid'; cRenderProducts(list,'c-favoritesContent');
 }
 
 function cFilterCategory(cat){
@@ -1555,31 +1400,18 @@ function cFilterCategory(cat){
 
 function cRenderFarms(){
   const c=document.getElementById('c-topFarmsList'); if(!c) return;
-  c.innerHTML=Object.keys(farms).map(id=>{
-    const f=farms[id];
-    return `<div class="glass-card" style="padding:20px;border-radius:22px;cursor:pointer" onclick="">
-      <div style="display:flex;gap:18px">
-        <img src="${f.image}" style="width:100px;height:100px;border-radius:18px;object-fit:cover;flex-shrink:0">
-        <div>
-          <h3 style="font-weight:900;color:#f8fafc;font-size:1.05rem;margin-bottom:4px">${f.name}</h3>
-          <p style="color:#fbbf24;font-size:0.85rem;font-weight:700;margin-bottom:6px">★ ${f.rating}</p>
-          <p style="color:#64748b;font-size:0.83rem;line-height:1.5">${f.description}</p>
-          <p style="color:#334155;font-size:0.75rem;margin-top:8px;display:flex;align-items:center;gap:4px"><i data-lucide="map-pin" style="width:12px;height:12px"></i>${f.location}</p>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+  c.innerHTML=Object.keys(farms).map(id=>{const f=farms[id];return `<div class="glass-card" style="padding:20px;border-radius:22px"><div style="display:flex;gap:18px"><img src="${f.image}" style="width:100px;height:100px;border-radius:18px;object-fit:cover;flex-shrink:0"><div><h3 style="font-weight:900;color:#f8fafc;font-size:1.05rem;margin-bottom:4px">${f.name}</h3><p style="color:#fbbf24;font-size:0.85rem;font-weight:700;margin-bottom:6px">★ ${f.rating}</p><p style="color:#64748b;font-size:0.83rem;line-height:1.5">${f.description}</p><p style="color:#334155;font-size:0.75rem;margin-top:8px">${f.location}</p></div></div></div>`;}).join('');
   lucide.createIcons();
 }
 
 document.getElementById('c-searchInput').addEventListener('input', e => {
-  const t = e.target.value.toLowerCase();
-  cRenderProducts(products.filter(p=>p.name.toLowerCase().includes(t)||p.category.toLowerCase().includes(t)), 'c-productGrid');
+  const t2 = e.target.value.toLowerCase();
+  cRenderProducts(products.filter(p=>p.name.toLowerCase().includes(t2)||p.category.toLowerCase().includes(t2)), 'c-productGrid');
 });
 
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 // FARMER
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 function fShowView(v){
   document.querySelectorAll('#portal-farmer .view-section').forEach(s=>s.classList.remove('active'));
   document.getElementById('f-view-'+v)?.classList.add('active');
@@ -1600,17 +1432,10 @@ function fRenderProducts(){
       </div>
       <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${p.name}</h3>
       <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:10px">${p.category} · ${p.unit}</p>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <span style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(p.price)}</span>
-        <span style="font-size:0.8rem;color:#475569">${p.stock} units left</span>
-      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(p.price)}</span><span style="font-size:0.8rem;color:#475569">${p.stock} units left</span></div>
       <div style="display:flex;gap:8px">
-        <button style="flex:1;background:rgba(255,255,255,0.06);color:#f8fafc;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px">
-          <i data-lucide="edit-3" style="width:13px;height:13px"></i> Edit
-        </button>
-        <button style="flex:1;background:rgba(16,185,129,0.1);color:#34d399;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(16,185,129,0.2);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px">
-          <i data-lucide="eye" style="width:13px;height:13px"></i> Preview
-        </button>
+        <button style="flex:1;background:rgba(255,255,255,0.06);color:#f8fafc;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px"><i data-lucide="edit-3" style="width:13px;height:13px"></i> Edit</button>
+        <button style="flex:1;background:rgba(16,185,129,0.1);color:#34d399;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(16,185,129,0.2);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px"><i data-lucide="eye" style="width:13px;height:13px"></i> Preview</button>
       </div>
     </div>`).join('');
   lucide.createIcons();
@@ -1621,7 +1446,7 @@ function fRenderOrders(){
   tb.innerHTML=farmerOrders.map(o=>`
     <tr>
       <td style="font-weight:800;color:#f8fafc">#${o.id}</td>
-      <td style="color:#cbd5e1">${o.customer}</td>
+      <td>${o.customer}</td>
       <td style="color:#64748b;font-size:0.8rem">${o.items}</td>
       <td style="font-weight:800;color:#34d399">${fmt(o.total)}</td>
       <td style="color:#475569">${o.date}</td>
@@ -1638,22 +1463,11 @@ function fRenderInventory(){
     <tr>
       <td style="font-weight:800;color:#f8fafc">${p.name}</td>
       <td style="color:#64748b">${p.category}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="height:6px;width:80px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden">
-            <div style="height:100%;width:${Math.min(100,(p.stock/50)*100)}%;background:${p.stock<6?'#ef4444':p.stock<20?'#f59e0b':'#10b981'};border-radius:99px"></div>
-          </div>
-          <span style="font-weight:800;font-size:0.85rem;color:${p.stock<6?'#f87171':p.stock<20?'#fbbf24':'#34d399'}">${p.stock}</span>
-        </div>
-      </td>
+      <td><div style="display:flex;align-items:center;gap:10px"><div style="height:6px;width:80px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(p.stock/50)*100)}%;background:${p.stock<6?'#ef4444':p.stock<20?'#f59e0b':'#10b981'};border-radius:99px"></div></div><span style="font-weight:800;font-size:0.85rem;color:${p.stock<6?'#f87171':p.stock<20?'#fbbf24':'#34d399'}">${p.stock}</span></div></td>
       <td style="color:#64748b">${p.unit}</td>
       <td style="font-weight:700;color:#f8fafc">${fmt(p.price)}</td>
       <td><span class="status-badge ${p.stock<6?'status-busy':'status-delivered'}">${p.stock<6?'Low':'Good'}</span></td>
-      <td>
-        <button style="background:rgba(255,255,255,0.06);color:#f8fafc;font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:5px">
-          <i data-lucide="plus" style="width:12px;height:12px"></i> Restock
-        </button>
-      </td>
+      <td><button style="background:rgba(255,255,255,0.06);color:#f8fafc;font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Restock</button></td>
     </tr>`).join('');
   lucide.createIcons();
 }
@@ -1674,9 +1488,9 @@ function addNewProduct(){
   showToast('Product added! ✅');
 }
 
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 // DISTRIBUTOR
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 function dShowView(v){
   document.querySelectorAll('#portal-distributor .view-section').forEach(s=>s.classList.remove('active'));
   document.getElementById('d-view-'+v)?.classList.add('active');
@@ -1692,40 +1506,19 @@ function dRenderAvailableOrders(){
     <div class="order-card" id="avail-${i}">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
         <div style="display:flex;align-items:flex-start;gap:16px">
-          <div style="width:52px;height:52px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i data-lucide="package" style="width:26px;height:26px;color:#10b981"></i>
-          </div>
+          <div style="width:52px;height:52px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="package" style="width:26px;height:26px;color:#10b981"></i></div>
           <div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-              <h3 style="font-weight:900;color:#f8fafc;font-size:1rem">#${o.id}</h3>
-              <span class="status-badge status-available">New</span>
-            </div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem">#${o.id}</h3><span class="status-badge status-available">New</span></div>
             <p style="font-size:0.83rem;color:#64748b;margin-bottom:6px">${o.items}</p>
-            <div style="display:flex;gap:16px;font-size:0.75rem;color:#475569">
-              <span style="display:flex;align-items:center;gap:4px"><i data-lucide="store" style="width:12px;height:12px"></i>${o.farm}</span>
-              <span style="display:flex;align-items:center;gap:4px"><i data-lucide="map-pin" style="width:12px;height:12px"></i>${o.dist}</span>
-            </div>
+            <div style="display:flex;gap:16px;font-size:0.75rem;color:#475569"><span>${o.farm}</span><span>${o.dist}</span></div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:20px">
-          <div style="text-align:center">
-            <p style="font-size:1.4rem;font-weight:900;color:#34d399">₹${o.pay}</p>
-            <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:800">Your Pay</p>
-          </div>
+          <div style="text-align:center"><p style="font-size:1.4rem;font-weight:900;color:#34d399">₹${o.pay}</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:800">Your Pay</p></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <button onclick="dAcceptOrder(${i})" style="background:#059669;color:#fff;font-weight:900;padding:10px 22px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem">Accept</button>
             <button style="background:rgba(255,255,255,0.05);color:#64748b;font-weight:700;padding:10px 22px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem">Skip</button>
           </div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06)">
-        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:12px">
-          <p style="font-size:0.62rem;color:#475569;text-transform:uppercase;font-weight:800;margin-bottom:3px">Pickup</p>
-          <p style="font-size:0.8rem;font-weight:700;color:#f8fafc">${o.farmAddr}</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.03);padding:12px;border-radius:12px">
-          <p style="font-size:0.62rem;color:#475569;text-transform:uppercase;font-weight:800;margin-bottom:3px">Drop-off</p>
-          <p style="font-size:0.8rem;font-weight:700;color:#f8fafc">${o.destAddr}</p>
         </div>
       </div>
     </div>`).join('');
@@ -1734,17 +1527,9 @@ function dRenderAvailableOrders(){
 
 function dAcceptOrder(i){
   const card=document.getElementById('avail-'+i);
-  if(card){
-    card.innerHTML=`<div style="display:flex;align-items:center;gap:16px;padding:8px">
-      <div style="width:44px;height:44px;background:#10b981;border-radius:14px;display:flex;align-items:center;justify-content:center"><i data-lucide="check" style="width:22px;height:22px;color:#000"></i></div>
-      <div style="flex:1"><p style="font-weight:900;color:#f8fafc">Order Accepted!</p><p style="font-size:0.82rem;color:#34d399">Navigating to pickup location…</p></div>
-      <button onclick="dShowView('dashboard')" style="background:#059669;color:#fff;font-weight:800;padding:9px 20px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem">Go to Dashboard</button>
-    </div>`;
-    const badge=document.getElementById('d-availBadge');
-    if(badge){const n=Math.max(0,parseInt(badge.textContent)-1);badge.textContent=n;if(n===0)badge.style.display='none';}
-    lucide.createIcons();
-    showToast('Order accepted! Head to pickup 🚚');
-  }
+  if(card){card.innerHTML=`<div style="display:flex;align-items:center;gap:16px;padding:8px"><div style="width:44px;height:44px;background:#10b981;border-radius:14px;display:flex;align-items:center;justify-content:center"><i data-lucide="check" style="width:22px;height:22px;color:#000"></i></div><div><p style="font-weight:900;color:#f8fafc">Order Accepted!</p><p style="font-size:0.82rem;color:#34d399">Navigating to pickup…</p></div></div>`;
+  const badge=document.getElementById('d-availBadge');if(badge){const n=Math.max(0,parseInt(badge.textContent)-1);badge.textContent=n;if(n===0)badge.style.display='none';}
+  lucide.createIcons();showToast('Order accepted! 🚚');}
 }
 
 function toggleOnlineStatus(){
@@ -1754,9 +1539,9 @@ function toggleOnlineStatus(){
   st.style.color=on?'#34d399':'#475569';
 }
 
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 // INIT
-// ───────────────────────────────────────
+// ══════════════════════════════════════════
 window.onload = () => { lucide.createIcons(); };
 </script>
 </body>
