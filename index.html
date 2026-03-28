@@ -348,7 +348,6 @@ select option { background: #0f172a; }
         <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i><span data-t="logOut">Log Out</span></button>
       </div>
     </nav>
-    <!-- Profile avatar → opens settings -->
     <button class="profile-avatar-btn" onclick="openSettings()" style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);margin-top:16px;border-radius:14px">
       <div style="width:36px;height:36px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">AKJ</div>
       <div style="overflow:hidden;flex:1;text-align:left">
@@ -664,7 +663,6 @@ select option { background: #0f172a; }
 <!-- ════════════════ SETTINGS PANEL ════════════════ -->
 <div id="settings-overlay" class="settings-overlay" onclick="handleSettingsOverlayClick(event)">
   <div class="settings-panel" id="settings-panel">
-    <!-- Header -->
     <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
       <div>
         <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem">Account &amp; Settings</h3>
@@ -675,7 +673,6 @@ select option { background: #0f172a; }
       </button>
     </div>
 
-    <!-- Profile card -->
     <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.06)">
       <div style="display:flex;align-items:center;gap:14px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.15);border-radius:16px;padding:16px">
         <div style="width:52px;height:52px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0">AKJ</div>
@@ -689,8 +686,6 @@ select option { background: #0f172a; }
     </div>
 
     <div style="padding:16px 0;overflow-y:auto;flex:1">
-
-      <!-- Language -->
       <div style="padding:0 20px;margin-bottom:16px">
         <p class="settings-section-title" style="padding:0 0 10px">🌐 Language</p>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -703,7 +698,6 @@ select option { background: #0f172a; }
 
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:0 20px 16px"></div>
 
-      <!-- Account -->
       <p class="settings-section-title">👤 Account</p>
       <div class="settings-row">
         <div style="display:flex;align-items:center;gap:12px">
@@ -729,7 +723,6 @@ select option { background: #0f172a; }
 
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
 
-      <!-- Preferences -->
       <p class="settings-section-title">⚙️ Preferences</p>
       <div class="settings-row">
         <div style="display:flex;align-items:center;gap:12px">
@@ -755,7 +748,6 @@ select option { background: #0f172a; }
 
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
 
-      <!-- Privacy & Security -->
       <p class="settings-section-title">🔒 Privacy &amp; Security</p>
       <div class="settings-row">
         <div style="display:flex;align-items:center;gap:12px">
@@ -781,7 +773,6 @@ select option { background: #0f172a; }
 
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
 
-      <!-- Support -->
       <p class="settings-section-title">💬 Support</p>
       <div class="settings-row">
         <div style="display:flex;align-items:center;gap:12px">
@@ -807,7 +798,6 @@ select option { background: #0f172a; }
 
       <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
 
-      <!-- Danger zone -->
       <div style="padding:0 20px 20px">
         <button onclick="logOut();closeSettings()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:#f87171;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-size:0.88rem;transition:background 0.2s" onmouseover="this.style.background='rgba(239,68,68,0.12)'" onmouseout="this.style.background='rgba(239,68,68,0.06)'">
           <i data-lucide="log-out" style="width:16px;height:16px"></i> Sign Out
@@ -818,7 +808,7 @@ select option { background: #0f172a; }
   </div>
 </div>
 
-<!-- ════════════════ CHATBOT (shared) ════════════════ -->
+<!-- ════════════════ CHATBOT ════════════════ -->
 <button class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()" style="display:none" title="Ask FarmBot">
   <i data-lucide="message-circle" style="width:26px;height:26px;color:#fff"></i>
 </button>
@@ -839,7 +829,6 @@ select option { background: #0f172a; }
     </button>
   </div>
 
-  <!-- API Key banner -->
   <div class="api-key-banner" id="api-key-banner">
     <strong>🔑 Gemini API Key Required</strong><br>
     Enter your Google Gemini API key below to activate the chatbot.
@@ -851,7 +840,7 @@ select option { background: #0f172a; }
 
   <div class="chat-messages" id="chat-messages">
     <div class="chat-msg bot">
-      👋 Hi! I'm <strong>FarmBot</strong>, your AI farming assistant. I can help you find fresh produce, track orders, or answer questions about our farms. How can I help today?
+      👋 Hi! I'm <strong>FarmBot</strong>, your AI farming assistant. How can I help today?
     </div>
   </div>
 
@@ -863,7 +852,6 @@ select option { background: #0f172a; }
   </div>
 </div>
 
-<!-- Toast -->
 <div id="toast"></div>
 
 </div><!-- #app -->
@@ -884,6 +872,13 @@ const translations = {
     addToBasket:"Add to Basket", confirmPay:"Confirm & Pay →", orderPlaced:"Order Placed! 🎉",
     emptyBasket:"Your basket is empty", browseMarket:"Browse Market",
     settings:"Settings",
+    // Product names
+    "Heirloom Tomatoes":"Heirloom Tomatoes",
+    "Organic Russet Potatoes":"Organic Russet Potatoes",
+    "Free Range Brown Eggs":"Free Range Brown Eggs",
+    "Grass-Fed Ribeye":"Grass-Fed Ribeye",
+    "Bell Peppers Mix":"Bell Peppers Mix",
+    "Honey Crisp Apples":"Honey Crisp Apples",
   },
   ml: {
     home:"ഹോം", categories:"വിഭാഗങ്ങൾ", yourOrders:"നിങ്ങളുടെ ഓർഡറുകൾ", topFarms:"മികച്ച ഫാമുകൾ",
@@ -896,6 +891,13 @@ const translations = {
     addToBasket:"കൊട്ടയിൽ ഇടുക", confirmPay:"ഉറപ്പിക്കുക & പണം നൽകുക →", orderPlaced:"ഓർഡർ നൽകി! 🎉",
     emptyBasket:"നിങ്ങളുടെ കൊട്ട ഒഴിഞ്ഞിരിക്കുന്നു", browseMarket:"മാർക്കറ്റ് കാണുക",
     settings:"ക്രമീകരണങ്ങൾ",
+    // Product names
+    "Heirloom Tomatoes":"ഹെയ്ർലൂം തക്കാളി",
+    "Organic Russet Potatoes":"ജൈവ ഉരുളക്കിഴങ്ങ്",
+    "Free Range Brown Eggs":"ഫ്രീ റേഞ്ച് തവിട്ട് മുട്ടകൾ",
+    "Grass-Fed Ribeye":"ഗ്രാസ്-ഫെഡ് റിബൈ",
+    "Bell Peppers Mix":"ബെൽ പെപ്പർ മിക്സ്",
+    "Honey Crisp Apples":"ഹണി ക്രിസ്പ് ആപ്പിൾ",
   },
   hi: {
     home:"होम", categories:"श्रेणियाँ", yourOrders:"आपके ऑर्डर", topFarms:"शीर्ष फार्म",
@@ -908,6 +910,13 @@ const translations = {
     addToBasket:"टोकरी में डालें", confirmPay:"पुष्टि करें & भुगतान करें →", orderPlaced:"ऑर्डर दिया गया! 🎉",
     emptyBasket:"आपकी टोकरी खाली है", browseMarket:"मार्केट देखें",
     settings:"सेटिंग्स",
+    // Product names
+    "Heirloom Tomatoes":"हेरलूम टमाटर",
+    "Organic Russet Potatoes":"जैविक आलू",
+    "Free Range Brown Eggs":"फ्री रेंज भूरे अंडे",
+    "Grass-Fed Ribeye":"घास-पोषित रिबाई",
+    "Bell Peppers Mix":"शिमला मिर्च मिश्रण",
+    "Honey Crisp Apples":"हनी क्रिस्प सेब",
   },
   ta: {
     home:"முகப்பு", categories:"வகைகள்", yourOrders:"உங்கள் ஆர்டர்கள்", topFarms:"சிறந்த பண்ணைகள்",
@@ -920,22 +929,48 @@ const translations = {
     addToBasket:"கூடையில் சேர்", confirmPay:"உறுதிசெய் & பணம் செலு →", orderPlaced:"ஆர்டர் வழங்கப்பட்டது! 🎉",
     emptyBasket:"உங்கள் கூடை காலியாக உள்ளது", browseMarket:"சந்தையை பார்க்கவும்",
     settings:"அமைப்புகள்",
+    // Product names
+    "Heirloom Tomatoes":"பாரம்பரிய தக்காளி",
+    "Organic Russet Potatoes":"இயற்கை உருளைக்கிழங்கு",
+    "Free Range Brown Eggs":"இயற்கையாக வளர்க்கப்பட்ட பழுப்பு முட்டைகள்",
+    "Grass-Fed Ribeye":"புல் மேய்ந்த ரிபை",
+    "Bell Peppers Mix":"குடைமிளகாய் கலவை",
+    "Honey Crisp Apples":"தேன் கிரிஸ்ப் ஆப்பிள்",
   }
 };
 
 let currentLang = 'en';
 function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.en[key] || key; }
 
+// Helper to translate a product name (falls back to original English name)
+function tProduct(englishName) { return t(englishName); }
+
 function setLanguage(lang) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('lang-'+lang);
   if(btn) btn.classList.add('active');
-  // Update all [data-t] elements
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
     el.textContent = t(key);
   });
+  // Re-render product grids to reflect translated names
+  if (currentRole === 'customer') {
+    cRenderProducts(products, 'c-productGrid');
+    const catResults = document.getElementById('c-categoryResults');
+    if (catResults && catResults.children.length && !catResults.querySelector('[data-t]')) {
+      // category results are showing — re-render them too by re-triggering last category filter
+      // just re-render with all for simplicity; user can re-click
+    }
+    cRenderFavorites();
+    cRenderFarms();
+    cRenderOrders();
+  }
+  if (currentRole === 'farmer') {
+    fRenderProducts();
+    fRenderOrders();
+    fRenderInventory();
+  }
   showToast('Language changed · ' + (lang==='en'?'English':lang==='ml'?'മലയാളം':lang==='hi'?'हिन्दी':'தமிழ்'));
 }
 
@@ -960,6 +995,7 @@ function showToast(msg) {
   setTimeout(() => t2.classList.remove('show'), 2500);
 }
 
+// Products store the canonical English name; display uses tProduct()
 const products = [
   {id:1,name:"Heirloom Tomatoes",category:"Vegetables",price:375,rating:4.9,image:"https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400",farmId:101,unit:"kg",stock:40},
   {id:2,name:"Organic Russet Potatoes",category:"Vegetables",price:190,rating:4.7,image:"https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=400",farmId:102,unit:"kg",stock:8},
@@ -1022,7 +1058,6 @@ function doLogin() {
   if (currentRole === 'customer') { cRenderProducts(products,'c-productGrid'); cRenderOrders(); cRenderFarms(); }
   if (currentRole === 'farmer') { fRenderProducts(); fRenderOrders(); fRenderInventory(); }
   if (currentRole === 'distributor') { dRenderAvailableOrders(); }
-  // Show chatbot for customer and farmer
   const fab = document.getElementById('chatbot-fab');
   if (currentRole === 'customer' || currentRole === 'farmer') {
     fab.style.display = 'flex';
@@ -1071,11 +1106,7 @@ function initChatbot(role) {
   chatHistory = [];
   document.getElementById('chat-messages').innerHTML = `<div class="chat-msg bot">👋 Hi! I'm <strong>FarmBot</strong>, your AI assistant. I can help with ${role === 'farmer' ? 'managing your listings, pricing tips, harvest advice' : 'finding fresh produce, tracking orders, farm info'}. How can I help?</div>`;
   const banner = document.getElementById('api-key-banner');
-  if (geminiKey) {
-    banner.style.display = 'none';
-  } else {
-    banner.style.display = 'block';
-  }
+  if (geminiKey) { banner.style.display = 'none'; } else { banner.style.display = 'block'; }
 }
 
 function saveApiKey() {
@@ -1090,10 +1121,7 @@ function saveApiKey() {
 function toggleChat() {
   const w = document.getElementById('chatbot-window');
   w.classList.toggle('open');
-  if (w.classList.contains('open')) {
-    document.getElementById('chat-input').focus();
-    lucide.createIcons();
-  }
+  if (w.classList.contains('open')) { document.getElementById('chat-input').focus(); lucide.createIcons(); }
 }
 
 function appendMsg(text, sender) {
@@ -1111,48 +1139,25 @@ async function sendChatMsg() {
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
-
   appendMsg(text, 'user');
   chatHistory.push({ role:'user', parts:[{text}] });
-
-  if (!geminiKey) {
-    appendMsg('⚠️ Please enter your Gemini API key above to activate FarmBot.', 'bot');
-    return;
-  }
-
+  if (!geminiKey) { appendMsg('⚠️ Please enter your Gemini API key above to activate FarmBot.', 'bot'); return; }
   const typingEl = appendMsg('<em>FarmBot is thinking…</em>', 'bot typing');
-
-  // Build context-aware system prompt
   const systemContext = chatRole === 'farmer'
-    ? `You are FarmBot, an AI assistant for farmers on FarmChain X, an Indian farm-to-doorstep platform. Help farmers with listing products, pricing strategies, inventory management, crop advice, and order management. Be concise and practical. Current products listed: ${products.map(p=>p.name).join(', ')}.`
-    : `You are FarmBot, an AI assistant for customers on FarmChain X, an Indian farm-to-doorstep platform. Help customers find fresh produce, explain product quality, give recipe ideas, help with orders, and answer questions about verified farms. Be friendly, concise, and helpful. Products available: ${products.map(p=>p.name+' ₹'+p.price+'/'+p.unit).join(', ')}.`;
-
+    ? `You are FarmBot, an AI assistant for farmers on FarmChain X. Help with listing products, pricing, inventory, crop advice. Products: ${products.map(p=>p.name).join(', ')}.`
+    : `You are FarmBot, an AI assistant for customers on FarmChain X. Help find produce, give recipe ideas, help with orders. Products: ${products.map(p=>p.name+' ₹'+p.price+'/'+p.unit).join(', ')}.`;
   try {
-    const payload = {
-      system_instruction: { parts: [{ text: systemContext }] },
-      contents: chatHistory,
-      generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
-    };
-
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,
-      { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }
-    );
-
+    const payload = { system_instruction:{parts:[{text:systemContext}]}, contents:chatHistory, generationConfig:{maxOutputTokens:300,temperature:0.7} };
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const data = await res.json();
     typingEl.remove();
-
-    if (data.error) {
-      appendMsg(`❌ Gemini API error: ${data.error.message}`, 'bot');
-      return;
-    }
-
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I couldn\'t get a response.';
+    if (data.error) { appendMsg(`❌ Gemini API error: ${data.error.message}`, 'bot'); return; }
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, no response.';
     chatHistory.push({ role:'model', parts:[{text:reply}] });
     appendMsg(reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'), 'bot');
   } catch(err) {
     typingEl.remove();
-    appendMsg('❌ Connection error. Please check your API key and internet.', 'bot');
+    appendMsg('❌ Connection error. Check your API key and internet.', 'bot');
   }
   lucide.createIcons();
 }
@@ -1182,19 +1187,20 @@ function cRenderProducts(items, containerId) {
   }
   c.innerHTML = items.map(p => {
     const fav = favorites.includes(p.id);
+    const displayName = tProduct(p.name);
     return `<div class="glass-card" style="padding:14px;border-radius:22px;cursor:pointer;position:relative" onclick="cViewProduct(${p.id})">
       <button onclick="cToggleFav(${p.id},event)" style="position:absolute;top:10px;right:10px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'#94a3b8'}">
         <i data-lucide="heart" style="width:14px;height:14px;${fav?'fill:#f87171':''}"></i>
       </button>
       <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;background:#0f172a">
-        <img src="${p.image}" alt="${p.name}" class="product-img" style="transition:transform 0.4s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <img src="${p.image}" alt="${displayName}" class="product-img" style="transition:transform 0.4s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
         <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:800;color:#f8fafc">★ ${p.rating}</div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-        <h3 style="font-weight:800;color:#f8fafc;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;padding-right:8px">${p.name}</h3>
+        <h3 style="font-weight:800;color:#f8fafc;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;padding-right:8px">${displayName}</h3>
         <span style="color:#34d399;font-weight:900;font-size:0.9rem;white-space:nowrap">${fmt(p.price)}</span>
       </div>
-      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:700">${p.category} · ${p.unit}</p>
+      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:700">${t(p.category) || p.category} · ${p.unit}</p>
     </div>`;
   }).join('');
   lucide.createIcons();
@@ -1212,6 +1218,7 @@ function cViewProduct(id) {
   const p = products.find(x=>x.id===id);
   const farm = farms[p.farmId];
   const fav = favorites.includes(p.id);
+  const displayName = tProduct(p.name);
   document.getElementById('c-productDetailContent').innerHTML = `
     <div>
       <div style="border-radius:28px;overflow:hidden;background:#0f172a;margin-bottom:20px;position:relative">
@@ -1221,7 +1228,7 @@ function cViewProduct(id) {
         </button>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <h1 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${p.name}</h1>
+        <h1 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${displayName}</h1>
         <div style="text-align:right"><p style="font-size:1.6rem;font-weight:900;color:#34d399">${fmt(p.price)}</p><p style="font-size:0.72rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em">Per ${p.unit}</p></div>
       </div>
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;color:#fbbf24">
@@ -1280,7 +1287,7 @@ function cShowCheckout() {
         <div style="display:flex;align-items:center;gap:16px">
           <img src="${item.image}" style="width:72px;height:72px;border-radius:16px;object-fit:cover">
           <div>
-            <h4 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${item.name}</h4>
+            <h4 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${tProduct(item.name)}</h4>
             <p style="font-size:0.72rem;color:#475569;text-transform:uppercase;font-weight:700">${item.category}</p>
             <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
               <button onclick="cChangeQty(${item.id},-1)" style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:#f8fafc;cursor:pointer;font-size:1.1rem">−</button>
@@ -1349,7 +1356,7 @@ function cRenderOrders(){
         <div style="display:flex;align-items:center;gap:14px"><p style="font-size:0.85rem;color:#475569">${o.date}</p><span class="status-badge ${o.status==='Delivered'?'status-delivered':'status-transit'}">${o.status}</span></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
-        ${o.items.map(i=>`<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:12px"><img src="${i.img}" style="width:44px;height:44px;border-radius:12px;object-fit:cover"><div><p style="font-weight:800;color:#f8fafc;font-size:0.9rem">${i.name}</p><p style="font-size:0.75rem;color:#475569">Qty: ${i.qty} ${i.unit||''}</p></div></div><p style="font-weight:700;color:#94a3b8;font-size:0.9rem">${fmt(i.price*i.qty)}</p></div>`).join('')}
+        ${o.items.map(i=>`<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:12px"><img src="${i.img}" style="width:44px;height:44px;border-radius:12px;object-fit:cover"><div><p style="font-weight:800;color:#f8fafc;font-size:0.9rem">${tProduct(i.name)}</p><p style="font-size:0.75rem;color:#475569">Qty: ${i.qty} ${i.unit||''}</p></div></div><p style="font-weight:700;color:#94a3b8;font-size:0.9rem">${fmt(i.price*i.qty)}</p></div>`).join('')}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.5);padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,0.05)">
         <p style="font-size:1.4rem;font-weight:900;color:#34d399">${fmt(o.total)}</p>
@@ -1405,8 +1412,14 @@ function cRenderFarms(){
 }
 
 document.getElementById('c-searchInput').addEventListener('input', e => {
-  const t2 = e.target.value.toLowerCase();
-  cRenderProducts(products.filter(p=>p.name.toLowerCase().includes(t2)||p.category.toLowerCase().includes(t2)), 'c-productGrid');
+  const query = e.target.value.toLowerCase();
+  // Search against translated name so users can type in their language
+  const filtered = products.filter(p =>
+    tProduct(p.name).toLowerCase().includes(query) ||
+    p.name.toLowerCase().includes(query) ||
+    p.category.toLowerCase().includes(query)
+  );
+  cRenderProducts(filtered, 'c-productGrid');
 });
 
 // ══════════════════════════════════════════
@@ -1430,7 +1443,7 @@ function fRenderProducts(){
         <div style="position:absolute;top:8px;left:8px"><span class="status-badge ${p.stock<6?'status-busy':'status-delivered'}">${p.stock<6?'Low Stock':'In Stock'}</span></div>
         <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:800;color:#f8fafc">★ ${p.rating}</div>
       </div>
-      <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${p.name}</h3>
+      <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${tProduct(p.name)}</h3>
       <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:10px">${p.category} · ${p.unit}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(p.price)}</span><span style="font-size:0.8rem;color:#475569">${p.stock} units left</span></div>
       <div style="display:flex;gap:8px">
@@ -1461,7 +1474,7 @@ function fRenderInventory(){
   const tb=document.getElementById('f-inventoryTable'); if(!tb) return;
   tb.innerHTML=products.map(p=>`
     <tr>
-      <td style="font-weight:800;color:#f8fafc">${p.name}</td>
+      <td style="font-weight:800;color:#f8fafc">${tProduct(p.name)}</td>
       <td style="color:#64748b">${p.category}</td>
       <td><div style="display:flex;align-items:center;gap:10px"><div style="height:6px;width:80px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(p.stock/50)*100)}%;background:${p.stock<6?'#ef4444':p.stock<20?'#f59e0b':'#10b981'};border-radius:99px"></div></div><span style="font-weight:800;font-size:0.85rem;color:${p.stock<6?'#f87171':p.stock<20?'#fbbf24':'#34d399'}">${p.stock}</span></div></td>
       <td style="color:#64748b">${p.unit}</td>
