@@ -164,7 +164,7 @@ select option { background: #0f172a; }
 
 .chatbot-window {
   position: fixed; bottom: 96px; right: 28px; z-index: 900;
-  width: 380px; height: 540px; background: #0f172a;
+  width: 380px; height: 520px; background: #0f172a;
   border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
   display: none; flex-direction: column;
   box-shadow: 0 32px 80px rgba(0,0,0,0.6);
@@ -183,7 +183,7 @@ select option { background: #0f172a; }
 .chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
-.chat-msg { max-width: 80%; padding: 10px 14px; border-radius: 16px; font-size: 0.85rem; line-height: 1.5; }
+.chat-msg { max-width: 82%; padding: 10px 14px; border-radius: 16px; font-size: 0.85rem; line-height: 1.5; }
 .chat-msg.user { background: #059669; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
 .chat-msg.bot { background: rgba(255,255,255,0.07); color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 4px; }
 .chat-msg.bot.typing { color: #475569; font-style: italic; }
@@ -203,17 +203,6 @@ select option { background: #0f172a; }
 }
 .chat-send-btn:hover { background: #10b981; }
 
-/* API Key banner */
-.api-key-banner {
-  margin: 10px 16px; padding: 10px 14px;
-  background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
-  border-radius: 12px; font-size: 0.75rem; color: #fbbf24; line-height: 1.5;
-}
-.api-key-input-row { display: flex; gap: 8px; margin-top: 8px; }
-.api-key-input { flex:1; background: rgba(15,23,42,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #f8fafc; padding: 7px 10px; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.8rem; outline: none; }
-.api-key-input:focus { border-color: #10b981; }
-.api-key-save-btn { padding: 7px 14px; background: #059669; color: #fff; font-weight: 800; border: none; border-radius: 8px; cursor: pointer; font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.78rem; white-space: nowrap; }
-
 /* ── SETTINGS PANEL ── */
 .settings-overlay {
   position: fixed; inset: 0; background: rgba(2,6,23,0.7); backdrop-filter: blur(6px);
@@ -229,6 +218,18 @@ select option { background: #0f172a; }
 .settings-panel::-webkit-scrollbar { width: 4px; }
 .settings-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
+/* ── FARMER LANGUAGE PANEL ── */
+.farmer-lang-overlay {
+  position: fixed; inset: 0; background: rgba(2,6,23,0.7); backdrop-filter: blur(6px);
+  z-index: 800; display: none; align-items: flex-end; justify-content: flex-start;
+}
+.farmer-lang-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+.farmer-lang-panel {
+  width: 300px; height: 100vh; background: #0d1526;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex; flex-direction: column; overflow-y: auto; animation: slideInLeft 0.3s ease;
+}
+
 .settings-section-title {
   font-size: 0.62rem; font-weight: 800; color: #334155;
   text-transform: uppercase; letter-spacing: 0.15em; padding: 0 20px 8px;
@@ -236,7 +237,6 @@ select option { background: #0f172a; }
 .settings-row {
   display: flex; align-items: center; justify-content: space-between;
   padding: 13px 20px; cursor: pointer; transition: background 0.15s;
-  border-radius: 0;
 }
 .settings-row:hover { background: rgba(255,255,255,0.03); }
 .settings-row-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -453,22 +453,25 @@ select option { background: #0f172a; }
       <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
     </div>
     <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
-      <button onclick="fShowView('dashboard')" class="nav-link active" id="f-btn-dashboard"><i data-lucide="bar-chart-2" class="w-4 h-4"></i>Dashboard</button>
-      <button onclick="fShowView('products')" class="nav-link" id="f-btn-products"><i data-lucide="package" class="w-4 h-4"></i>My Products</button>
-      <button onclick="fShowView('orders')" class="nav-link" id="f-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i>Incoming Orders<span class="nav-badge green">8</span></button>
-      <button onclick="fShowView('earnings')" class="nav-link" id="f-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i>Earnings</button>
-      <button onclick="fShowView('farm-profile')" class="nav-link" id="f-btn-farm-profile"><i data-lucide="store" class="w-4 h-4"></i>Farm Profile</button>
+      <button onclick="fShowView('dashboard')" class="nav-link active" id="f-btn-dashboard"><i data-lucide="bar-chart-2" class="w-4 h-4"></i><span data-ft="dashboard">Dashboard</span></button>
+      <button onclick="fShowView('products')" class="nav-link" id="f-btn-products"><i data-lucide="package" class="w-4 h-4"></i><span data-ft="myProducts">My Products</span></button>
+      <button onclick="fShowView('orders')" class="nav-link" id="f-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i><span data-ft="incomingOrders">Incoming Orders</span><span class="nav-badge green">8</span></button>
+      <button onclick="fShowView('earnings')" class="nav-link" id="f-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i><span data-ft="earnings">Earnings</span></button>
+      <button onclick="fShowView('farm-profile')" class="nav-link" id="f-btn-farm-profile"><i data-lucide="store" class="w-4 h-4"></i><span data-ft="farmProfile">Farm Profile</span></button>
       <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
-        <button onclick="fShowView('inventory')" class="nav-link" id="f-btn-inventory"><i data-lucide="boxes" class="w-4 h-4"></i>Inventory</button>
-        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i>Log Out</button>
+        <button onclick="fShowView('inventory')" class="nav-link" id="f-btn-inventory"><i data-lucide="boxes" class="w-4 h-4"></i><span data-ft="inventory">Inventory</span></button>
+        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i><span data-ft="logOut">Log Out</span></button>
       </div>
     </nav>
-    <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-top:16px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:36px;height:36px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;color:#000;flex-shrink:0">GS</div>
-        <div style="overflow:hidden"><p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Gloria S. Valley</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Verified Farmer</p></div>
+    <!-- Farmer Language + Profile -->
+    <button class="profile-avatar-btn" onclick="openFarmerLang()" style="margin-top:auto;margin-top:16px;border-radius:14px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;color:#000;flex-shrink:0">GS</div>
+      <div style="overflow:hidden;flex:1;text-align:left">
+        <p style="font-weight:800;color:#f8fafc;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Gloria S. Valley</p>
+        <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Verified Farmer</p>
       </div>
-    </div>
+      <i data-lucide="settings" style="width:16px;height:16px;color:#475569;flex-shrink:0"></i>
+    </button>
   </aside>
 
   <div class="main-pane">
@@ -476,18 +479,18 @@ select option { background: #0f172a; }
       <!-- DASHBOARD -->
       <section id="f-view-dashboard" class="view-section active">
         <div class="page-header">
-          <div><h2>Farm Dashboard</h2><p>Gloria's Sun Valley Farm · Napa Valley, CA</p></div>
+          <div><h2 data-ft="farmDashboard">Farm Dashboard</h2><p>Gloria's Sun Valley Farm · Napa Valley, CA</p></div>
           <span class="verification-tag"><i data-lucide="shield-check" class="w-3 h-3"></i> Verified Organic</span>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Revenue This Month</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 12% vs last month</p></div>
-          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">142</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Orders This Month</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 8 new today</p></div>
-          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">6</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Active Listings</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">2 low stock alerts</p></div>
-          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">4.9</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Average Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">128 reviews total</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="revenueMonth">Revenue This Month</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 12% vs last month</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">142</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="ordersMonth">Orders This Month</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 8 new today</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">6</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="activeListings">Active Listings</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">2 low stock alerts</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">4.9</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="avgRating">Average Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">128 reviews total</p></div>
         </div>
         <div style="display:grid;grid-template-columns:8fr 4fr;gap:20px">
           <div class="glass-card" style="border-radius:22px;padding:24px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem">Sales Overview — Last 7 Days</h3><span style="font-size:0.72rem;color:#475569">₹ Revenue</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem" data-ft="salesOverview">Sales Overview — Last 7 Days</h3><span style="font-size:0.72rem;color:#475569">₹ Revenue</span></div>
             <div style="display:flex;align-items:flex-end;gap:8px;height:140px">
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:60%"></div></div>
               <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:80%"></div></div>
@@ -500,7 +503,7 @@ select option { background: #0f172a; }
             <div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:0.72rem;color:#475569">Mon</span><span style="font-size:0.72rem;color:#475569">Tue</span><span style="font-size:0.72rem;color:#475569">Wed</span><span style="font-size:0.72rem;color:#475569">Thu</span><span style="font-size:0.72rem;color:#475569">Fri</span><span style="font-size:0.72rem;color:#475569">Sat</span><span style="font-size:0.72rem;color:#10b981;font-weight:700">Sun</span></div>
           </div>
           <div class="glass-card" style="border-radius:22px;padding:24px">
-            <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:18px">Pending Actions</h3>
+            <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:18px" data-ft="pendingActions">Pending Actions</h3>
             <div style="display:flex;flex-direction:column;gap:12px">
               <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="clock" style="width:16px;height:16px;color:#fbbf24"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">8 to Confirm</span></div><button onclick="fShowView('orders')" style="font-size:0.75rem;font-weight:700;color:#fbbf24;background:none;border:none;cursor:pointer">View</button></div>
               <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:#f87171"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">2 Low Stock</span></div><button onclick="fShowView('inventory')" style="font-size:0.75rem;font-weight:700;color:#f87171;background:none;border:none;cursor:pointer">Fix</button></div>
@@ -512,13 +515,13 @@ select option { background: #0f172a; }
 
       <!-- MY PRODUCTS -->
       <section id="f-view-products" class="view-section">
-        <div class="page-header"><div><h2>My Products</h2><p>Manage your active listings</p></div><button onclick="openAddProduct()" style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="plus" class="w-4 h-4"></i> Add Product</button></div>
+        <div class="page-header"><div><h2 data-ft="myProducts">My Products</h2><p data-ft="manageListings">Manage your active listings</p></div><button onclick="openAddProduct()" style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="plus" class="w-4 h-4"></i> <span data-ft="addProduct">Add Product</span></button></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" id="f-productsList"></div>
       </section>
 
       <!-- ORDERS -->
       <section id="f-view-orders" class="view-section">
-        <div class="page-header"><h2>Incoming Orders</h2></div>
+        <div class="page-header"><h2 data-ft="incomingOrders">Incoming Orders</h2></div>
         <div class="glass-card" style="border-radius:22px;overflow:hidden">
           <table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="f-ordersTable"></tbody></table>
@@ -527,13 +530,13 @@ select option { background: #0f172a; }
 
       <!-- EARNINGS -->
       <section id="f-view-earnings" class="view-section">
-        <div class="page-header"><h2>Earnings &amp; Payouts</h2></div>
+        <div class="page-header"><h2 data-ft="earningsPayouts">Earnings &amp; Payouts</h2></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
-          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹2,14,850</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time</p></div>
-          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Month</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 12% growth</p></div>
-          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Next Payout</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹12,400</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">Scheduled Nov 15</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="totalEarned">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹2,14,850</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="thisMonth">This Month</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 12% growth</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="nextPayout">Next Payout</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹12,400</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">Scheduled Nov 15</p></div>
         </div>
-        <div class="glass-card" style="border-radius:22px;overflow:hidden"><div style="padding:20px 22px;border-bottom:1px solid rgba(255,255,255,0.06)"><h3 style="font-weight:900;color:#f8fafc">Transaction History</h3></div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden"><div style="padding:20px 22px;border-bottom:1px solid rgba(255,255,255,0.06)"><h3 style="font-weight:900;color:#f8fafc" data-ft="transactionHistory">Transaction History</h3></div>
           <table class="data-table"><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th>Amount</th><th>Platform Fee</th><th>Net</th><th>Status</th></tr></thead>
           <tbody><tr><td style="color:#64748b">Nov 08</td><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>₹2,240</td><td style="color:#f87171">-₹224</td><td style="color:#34d399;font-weight:800">₹2,016</td><td><span class="status-badge status-delivered">Paid</span></td></tr><tr><td style="color:#64748b">Nov 07</td><td style="font-weight:800">#ORD-8801</td><td>Rahul Sharma</td><td>₹1,500</td><td style="color:#f87171">-₹150</td><td style="color:#34d399;font-weight:800">₹1,350</td><td><span class="status-badge status-delivered">Paid</span></td></tr></tbody>
           </table></div>
@@ -541,7 +544,7 @@ select option { background: #0f172a; }
 
       <!-- FARM PROFILE -->
       <section id="f-view-farm-profile" class="view-section">
-        <div class="page-header"><div><h2>Farm Profile</h2><p>How buyers see your farm</p></div><button style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="edit-3" class="w-4 h-4"></i> Edit Profile</button></div>
+        <div class="page-header"><div><h2 data-ft="farmProfile">Farm Profile</h2><p data-ft="howBuyersSee">How buyers see your farm</p></div><button style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="edit-3" class="w-4 h-4"></i> <span data-ft="editProfile">Edit Profile</span></button></div>
         <div style="display:grid;grid-template-columns:8fr 4fr;gap:24px">
           <div style="display:flex;flex-direction:column;gap:20px">
             <div style="position:relative;border-radius:24px;overflow:hidden;height:220px"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div><div style="position:absolute;bottom:16px;left:20px;display:flex;gap:8px"><span class="verification-tag">Verified Organic</span><span class="verification-tag">No Pesticides</span></div></div>
@@ -549,19 +552,19 @@ select option { background: #0f172a; }
               <div><label>Farm Name</label><input type="text" value="Gloria's Sun Valley Farm"></div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Location</label><input type="text" value="Napa Valley, CA"></div><div><label>Farm Size</label><input type="text" value="48 Acres"></div></div>
               <div><label>Description</label><textarea rows="3" style="resize:none">Gloria focuses on heirloom seeds and natural pest control. All produce is harvested to order for maximum freshness.</textarea></div>
-              <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content">Save Changes</button>
+              <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content" data-ft="saveChanges">Save Changes</button>
             </div>
           </div>
           <div style="display:flex;flex-direction:column;gap:16px">
             <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#000;margin:0 auto 12px">GS</div><p style="font-weight:900;color:#f8fafc;font-size:1rem">Gloria S. Valley</p><p style="color:#64748b;font-size:0.82rem;margin-top:2px;margin-bottom:12px">Farm Owner</p><div style="display:flex;justify-content:center;gap:8px"><span class="verification-tag">★ 4.9</span><span class="status-badge status-delivered">Verified</span></div></div>
-            <div class="glass-card" style="border-radius:22px;padding:22px"><h4 style="font-weight:900;color:#f8fafc;margin-bottom:16px">Quick Stats</h4><div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Total Orders</span><span style="font-weight:800;color:#f8fafc">1,248</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Avg Response</span><span style="font-weight:800;color:#f8fafc">2 hrs</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Completion Rate</span><span style="font-weight:800;color:#34d399">98.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem">Member Since</span><span style="font-weight:800;color:#f8fafc">Mar 2021</span></div></div></div>
+            <div class="glass-card" style="border-radius:22px;padding:22px"><h4 style="font-weight:900;color:#f8fafc;margin-bottom:16px" data-ft="quickStats">Quick Stats</h4><div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="totalOrders">Total Orders</span><span style="font-weight:800;color:#f8fafc">1,248</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="avgResponse">Avg Response</span><span style="font-weight:800;color:#f8fafc">2 hrs</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="completionRate">Completion Rate</span><span style="font-weight:800;color:#34d399">98.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="memberSince">Member Since</span><span style="font-weight:800;color:#f8fafc">Mar 2021</span></div></div></div>
           </div>
         </div>
       </section>
 
       <!-- INVENTORY -->
       <section id="f-view-inventory" class="view-section">
-        <div class="page-header"><h2>Inventory Management</h2></div>
+        <div class="page-header"><h2 data-ft="inventoryMgmt">Inventory Management</h2></div>
         <div class="glass-card" style="border-radius:22px;overflow:hidden">
           <table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Stock Level</th><th>Unit</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
           <tbody id="f-inventoryTable"></tbody></table>
@@ -660,7 +663,7 @@ select option { background: #0f172a; }
   </div>
 </div>
 
-<!-- ════════════════ SETTINGS PANEL ════════════════ -->
+<!-- ════════════════ CUSTOMER SETTINGS PANEL ════════════════ -->
 <div id="settings-overlay" class="settings-overlay" onclick="handleSettingsOverlayClick(event)">
   <div class="settings-panel" id="settings-panel">
     <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
@@ -808,6 +811,98 @@ select option { background: #0f172a; }
   </div>
 </div>
 
+<!-- ════════════════ FARMER LANGUAGE PANEL ════════════════ -->
+<div id="farmer-lang-overlay" class="farmer-lang-overlay" onclick="handleFarmerLangOverlayClick(event)">
+  <div class="farmer-lang-panel" id="farmer-lang-panel">
+    <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem">Farm Settings</h3>
+        <p style="font-size:0.75rem;color:#475569;margin-top:2px">Language & preferences</p>
+      </div>
+      <button onclick="closeFarmerLang()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+
+    <!-- Farmer profile card -->
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.15);border-radius:16px;padding:16px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#000;flex-shrink:0">GS</div>
+        <div style="flex:1">
+          <p style="font-weight:900;color:#f8fafc;font-size:0.95rem">Gloria S. Valley</p>
+          <p style="font-size:0.72rem;color:#475569">gloria.valley@farmchain.in</p>
+          <span class="verification-tag" style="margin-top:6px;display:inline-flex;border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.1);color:#fbbf24">Verified Farmer</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px 0;overflow-y:auto;flex:1">
+      <!-- Language Section -->
+      <div style="padding:0 20px;margin-bottom:16px">
+        <p class="settings-section-title" style="padding:0 0 10px">🌐 Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="lang-btn active" id="f-lang-en" onclick="setFarmerLanguage('en')">English</button>
+          <button class="lang-btn" id="f-lang-ml" onclick="setFarmerLanguage('ml')">മലയാളം</button>
+          <button class="lang-btn" id="f-lang-hi" onclick="setFarmerLanguage('hi')">हिन्दी</button>
+          <button class="lang-btn" id="f-lang-ta" onclick="setFarmerLanguage('ta')">தமிழ்</button>
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:0 20px 16px"></div>
+
+      <p class="settings-section-title">⚙️ Farm Preferences</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="bell" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Order Alerts</p><p style="font-size:0.72rem;color:#475569">New order notifications</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="package" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Low Stock Alerts</p><p style="font-size:0.72rem;color:#475569">Alert when stock drops below 5</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="indian-rupee" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Payout Alerts</p><p style="font-size:0.72rem;color:#475569">Payment confirmation alerts</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <p class="settings-section-title">🔒 Security</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(239,68,68,0.12)"><i data-lucide="lock" style="width:16px;height:16px;color:#f87171"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Change Password</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="shield" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Two-Factor Auth</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <div style="padding:0 20px 20px">
+        <button onclick="logOut();closeFarmerLang()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:#f87171;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-size:0.88rem;transition:background 0.2s" onmouseover="this.style.background='rgba(239,68,68,0.12)'" onmouseout="this.style.background='rgba(239,68,68,0.06)'">
+          <i data-lucide="log-out" style="width:16px;height:16px"></i> Sign Out
+        </button>
+        <p style="text-align:center;font-size:0.7rem;color:#1e293b;margin-top:10px">v2.4.1 · FarmChain X</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ════════════════ CHATBOT ════════════════ -->
 <button class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()" style="display:none" title="Ask FarmBot">
   <i data-lucide="message-circle" style="width:26px;height:26px;color:#fff"></i>
@@ -821,21 +916,12 @@ select option { background: #0f172a; }
       </div>
       <div>
         <p style="font-weight:900;color:#f8fafc;font-size:0.9rem">FarmBot AI</p>
-        <p style="font-size:0.7rem;color:#34d399">Powered by Gemini</p>
+        <p style="font-size:0.7rem;color:#34d399" id="chat-status-line">● Online · Ready to help</p>
       </div>
     </div>
     <button onclick="toggleChat()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center">
       <i data-lucide="x" style="width:14px;height:14px"></i>
     </button>
-  </div>
-
-  <div class="api-key-banner" id="api-key-banner">
-    <strong>🔑 Gemini API Key Required</strong><br>
-    Enter your Google Gemini API key below to activate the chatbot.
-    <div class="api-key-input-row">
-      <input class="api-key-input" type="password" id="gemini-key-input" placeholder="AIza…your key here">
-      <button class="api-key-save-btn" onclick="saveApiKey()">Save</button>
-    </div>
   </div>
 
   <div class="chat-messages" id="chat-messages">
@@ -858,7 +944,7 @@ select option { background: #0f172a; }
 
 <script>
 // ══════════════════════════════════════════
-// TRANSLATIONS
+// TRANSLATIONS — Customer UI
 // ══════════════════════════════════════════
 const translations = {
   en: {
@@ -870,15 +956,10 @@ const translations = {
     reviewBasket:"Review Your Basket", backToOrders:"Back to orders",
     backToMarket:"Back to marketplace", topVerifiedFarms:"Top Verified Farms",
     addToBasket:"Add to Basket", confirmPay:"Confirm & Pay →", orderPlaced:"Order Placed! 🎉",
-    emptyBasket:"Your basket is empty", browseMarket:"Browse Market",
-    settings:"Settings",
-    // Product names
-    "Heirloom Tomatoes":"Heirloom Tomatoes",
-    "Organic Russet Potatoes":"Organic Russet Potatoes",
-    "Free Range Brown Eggs":"Free Range Brown Eggs",
-    "Grass-Fed Ribeye":"Grass-Fed Ribeye",
-    "Bell Peppers Mix":"Bell Peppers Mix",
-    "Honey Crisp Apples":"Honey Crisp Apples",
+    emptyBasket:"Your basket is empty", browseMarket:"Browse Market", settings:"Settings",
+    "Heirloom Tomatoes":"Heirloom Tomatoes","Organic Russet Potatoes":"Organic Russet Potatoes",
+    "Free Range Brown Eggs":"Free Range Brown Eggs","Grass-Fed Ribeye":"Grass-Fed Ribeye",
+    "Bell Peppers Mix":"Bell Peppers Mix","Honey Crisp Apples":"Honey Crisp Apples",
   },
   ml: {
     home:"ഹോം", categories:"വിഭാഗങ്ങൾ", yourOrders:"നിങ്ങളുടെ ഓർഡറുകൾ", topFarms:"മികച്ച ഫാമുകൾ",
@@ -889,15 +970,10 @@ const translations = {
     reviewBasket:"നിങ്ങളുടെ കൊട്ട അവലോകനം ചെയ്യുക", backToOrders:"ഓർഡറുകളിലേക്ക് മടങ്ങുക",
     backToMarket:"മാർക്കറ്റിലേക്ക് മടങ്ങുക", topVerifiedFarms:"മികച്ച സ്ഥിരീകരിച്ച ഫാമുകൾ",
     addToBasket:"കൊട്ടയിൽ ഇടുക", confirmPay:"ഉറപ്പിക്കുക & പണം നൽകുക →", orderPlaced:"ഓർഡർ നൽകി! 🎉",
-    emptyBasket:"നിങ്ങളുടെ കൊട്ട ഒഴിഞ്ഞിരിക്കുന്നു", browseMarket:"മാർക്കറ്റ് കാണുക",
-    settings:"ക്രമീകരണങ്ങൾ",
-    // Product names
-    "Heirloom Tomatoes":"ഹെയ്ർലൂം തക്കാളി",
-    "Organic Russet Potatoes":"ജൈവ ഉരുളക്കിഴങ്ങ്",
-    "Free Range Brown Eggs":"ഫ്രീ റേഞ്ച് തവിട്ട് മുട്ടകൾ",
-    "Grass-Fed Ribeye":"ഗ്രാസ്-ഫെഡ് റിബൈ",
-    "Bell Peppers Mix":"ബെൽ പെപ്പർ മിക്സ്",
-    "Honey Crisp Apples":"ഹണി ക്രിസ്പ് ആപ്പിൾ",
+    emptyBasket:"നിങ്ങളുടെ കൊട്ട ഒഴിഞ്ഞിരിക്കുന്നു", browseMarket:"മാർക്കറ്റ് കാണുക", settings:"ക്രമീകരണങ്ങൾ",
+    "Heirloom Tomatoes":"ഹെയ്ർലൂം തക്കാളി","Organic Russet Potatoes":"ജൈവ ഉരുളക്കിഴങ്ങ്",
+    "Free Range Brown Eggs":"ഫ്രീ റേഞ്ച് തവിട്ട് മുട്ടകൾ","Grass-Fed Ribeye":"ഗ്രാസ്-ഫെഡ് റിബൈ",
+    "Bell Peppers Mix":"ബെൽ പെപ്പർ മിക്സ്","Honey Crisp Apples":"ഹണി ക്രിസ്പ് ആപ്പിൾ",
   },
   hi: {
     home:"होम", categories:"श्रेणियाँ", yourOrders:"आपके ऑर्डर", topFarms:"शीर्ष फार्म",
@@ -908,15 +984,10 @@ const translations = {
     reviewBasket:"अपनी टोकरी देखें", backToOrders:"ऑर्डर पर वापस जाएं",
     backToMarket:"मार्केट पर वापस जाएं", topVerifiedFarms:"शीर्ष सत्यापित फार्म",
     addToBasket:"टोकरी में डालें", confirmPay:"पुष्टि करें & भुगतान करें →", orderPlaced:"ऑर्डर दिया गया! 🎉",
-    emptyBasket:"आपकी टोकरी खाली है", browseMarket:"मार्केट देखें",
-    settings:"सेटिंग्स",
-    // Product names
-    "Heirloom Tomatoes":"हेरलूम टमाटर",
-    "Organic Russet Potatoes":"जैविक आलू",
-    "Free Range Brown Eggs":"फ्री रेंज भूरे अंडे",
-    "Grass-Fed Ribeye":"घास-पोषित रिबाई",
-    "Bell Peppers Mix":"शिमला मिर्च मिश्रण",
-    "Honey Crisp Apples":"हनी क्रिस्प सेब",
+    emptyBasket:"आपकी टोकरी खाली है", browseMarket:"मार्केट देखें", settings:"सेटिंग्स",
+    "Heirloom Tomatoes":"हेरलूम टमाटर","Organic Russet Potatoes":"जैविक आलू",
+    "Free Range Brown Eggs":"फ्री रेंज भूरे अंडे","Grass-Fed Ribeye":"घास-पोषित रिबाई",
+    "Bell Peppers Mix":"शिमला मिर्च मिश्रण","Honey Crisp Apples":"हनी क्रिस्प सेब",
   },
   ta: {
     home:"முகப்பு", categories:"வகைகள்", yourOrders:"உங்கள் ஆர்டர்கள்", topFarms:"சிறந்த பண்ணைகள்",
@@ -927,51 +998,123 @@ const translations = {
     reviewBasket:"உங்கள் கூடையை சரிபார்க்கவும்", backToOrders:"ஆர்டர்களுக்கு திரும்பு",
     backToMarket:"சந்தைக்கு திரும்பு", topVerifiedFarms:"சிறந்த சரிபார்க்கப்பட்ட பண்ணைகள்",
     addToBasket:"கூடையில் சேர்", confirmPay:"உறுதிசெய் & பணம் செலு →", orderPlaced:"ஆர்டர் வழங்கப்பட்டது! 🎉",
-    emptyBasket:"உங்கள் கூடை காலியாக உள்ளது", browseMarket:"சந்தையை பார்க்கவும்",
-    settings:"அமைப்புகள்",
-    // Product names
-    "Heirloom Tomatoes":"பாரம்பரிய தக்காளி",
-    "Organic Russet Potatoes":"இயற்கை உருளைக்கிழங்கு",
-    "Free Range Brown Eggs":"இயற்கையாக வளர்க்கப்பட்ட பழுப்பு முட்டைகள்",
-    "Grass-Fed Ribeye":"புல் மேய்ந்த ரிபை",
-    "Bell Peppers Mix":"குடைமிளகாய் கலவை",
-    "Honey Crisp Apples":"தேன் கிரிஸ்ப் ஆப்பிள்",
+    emptyBasket:"உங்கள் கூடை காலியாக உள்ளது", browseMarket:"சந்தையை பார்க்கவும்", settings:"அமைப்புகள்",
+    "Heirloom Tomatoes":"பாரம்பரிய தக்காளி","Organic Russet Potatoes":"இயற்கை உருளைக்கிழங்கு",
+    "Free Range Brown Eggs":"இயற்கையாக வளர்க்கப்பட்ட பழுப்பு முட்டைகள்","Grass-Fed Ribeye":"புல் மேய்ந்த ரிபை",
+    "Bell Peppers Mix":"குடைமிளகாய் கலவை","Honey Crisp Apples":"தேன் கிரிஸ்ப் ஆப்பிள்",
+  }
+};
+
+// ══════════════════════════════════════════
+// FARMER TRANSLATIONS
+// ══════════════════════════════════════════
+const farmerTranslations = {
+  en: {
+    dashboard:"Dashboard", myProducts:"My Products", incomingOrders:"Incoming Orders",
+    earnings:"Earnings", farmProfile:"Farm Profile", inventory:"Inventory", logOut:"Log Out",
+    farmDashboard:"Farm Dashboard", revenueMonth:"Revenue This Month", ordersMonth:"Orders This Month",
+    activeListings:"Active Listings", avgRating:"Average Rating", salesOverview:"Sales Overview — Last 7 Days",
+    pendingActions:"Pending Actions", manageListings:"Manage your active listings",
+    addProduct:"Add Product", earningsPayouts:"Earnings & Payouts", totalEarned:"Total Earned",
+    thisMonth:"This Month", nextPayout:"Next Payout", transactionHistory:"Transaction History",
+    howBuyersSee:"How buyers see your farm", editProfile:"Edit Profile", saveChanges:"Save Changes",
+    quickStats:"Quick Stats", totalOrders:"Total Orders", avgResponse:"Avg Response",
+    completionRate:"Completion Rate", memberSince:"Member Since", inventoryMgmt:"Inventory Management",
+  },
+  ml: {
+    dashboard:"ഡാഷ്‌ബോർഡ്", myProducts:"എന്റെ ഉൽപ്പന്നങ്ങൾ", incomingOrders:"വരുന്ന ഓർഡറുകൾ",
+    earnings:"വരുമാനം", farmProfile:"ഫാം പ്രൊഫൈൽ", inventory:"ഇൻവെന്ററി", logOut:"പുറത്തുകടക്കുക",
+    farmDashboard:"ഫാം ഡാഷ്‌ബോർഡ്", revenueMonth:"ഈ മാസത്തെ വരുമാനം", ordersMonth:"ഈ മാസത്തെ ഓർഡറുകൾ",
+    activeListings:"സജീവ ലിസ്റ്റിംഗുകൾ", avgRating:"ശരാശരി റേറ്റിംഗ്", salesOverview:"കഴിഞ്ഞ 7 ദിവസത്തെ വിൽപ്പന",
+    pendingActions:"ഇനി ചെയ്യേണ്ടവ", manageListings:"നിങ്ങളുടെ ലിസ്റ്റിംഗുകൾ നിയന്ത്രിക്കുക",
+    addProduct:"ഉൽപ്പന്നം ചേർക്കുക", earningsPayouts:"വരുമാനവും പേഔട്ടും", totalEarned:"ആകെ വരുമാനം",
+    thisMonth:"ഈ മാസം", nextPayout:"അടുത്ത പേഔട്ട്", transactionHistory:"ഇടപാട് ചരിത്രം",
+    howBuyersSee:"വാങ്ങുന്നവർ നിങ്ങളുടെ ഫാം കാണുന്ന വിധം", editProfile:"പ്രൊഫൈൽ എഡിറ്റ് ചെയ്യുക",
+    saveChanges:"മാറ്റങ്ങൾ സേവ് ചെയ്യുക", quickStats:"ദ്രുത സ്ഥിതിവിവരക്കണക്കുകൾ",
+    totalOrders:"മൊത്തം ഓർഡറുകൾ", avgResponse:"ശരാശരി പ്രതികരണ സമയം",
+    completionRate:"പൂർത്തീകരണ നിരക്ക്", memberSince:"അംഗത്വം തൊട്ടുള്ള തീയതി",
+    inventoryMgmt:"ഇൻവെന്ററി മാനേജ്മെന്റ്",
+  },
+  hi: {
+    dashboard:"डैशबोर्ड", myProducts:"मेरे उत्पाद", incomingOrders:"आने वाले ऑर्डर",
+    earnings:"कमाई", farmProfile:"फार्म प्रोफ़ाइल", inventory:"इन्वेंट्री", logOut:"लॉग आउट",
+    farmDashboard:"फार्म डैशबोर्ड", revenueMonth:"इस महीने की कमाई", ordersMonth:"इस महीने के ऑर्डर",
+    activeListings:"सक्रिय लिस्टिंग", avgRating:"औसत रेटिंग", salesOverview:"पिछले 7 दिनों की बिक्री",
+    pendingActions:"लंबित कार्य", manageListings:"अपनी सक्रिय लिस्टिंग प्रबंधित करें",
+    addProduct:"उत्पाद जोड़ें", earningsPayouts:"कमाई और भुगतान", totalEarned:"कुल कमाई",
+    thisMonth:"इस महीने", nextPayout:"अगला भुगतान", transactionHistory:"लेनदेन इतिहास",
+    howBuyersSee:"खरीदार आपका फार्म कैसे देखते हैं", editProfile:"प्रोफ़ाइल संपादित करें",
+    saveChanges:"परिवर्तन सहेजें", quickStats:"त्वरित आँकड़े",
+    totalOrders:"कुल ऑर्डर", avgResponse:"औसत प्रतिक्रिया", completionRate:"पूर्णता दर",
+    memberSince:"सदस्य तब से", inventoryMgmt:"इन्वेंट्री प्रबंधन",
+  },
+  ta: {
+    dashboard:"டாஷ்போர்டு", myProducts:"என் தயாரிப்புகள்", incomingOrders:"வரும் ஆர்டர்கள்",
+    earnings:"வருவாய்", farmProfile:"பண்ணை சுயவிவரம்", inventory:"சரக்கு", logOut:"வெளியேறு",
+    farmDashboard:"பண்ணை டாஷ்போர்டு", revenueMonth:"இந்த மாத வருவாய்", ordersMonth:"இந்த மாத ஆர்டர்கள்",
+    activeListings:"செயலில் உள்ள பட்டியல்கள்", avgRating:"சராசரி மதிப்பீடு",
+    salesOverview:"கடந்த 7 நாள் விற்பனை", pendingActions:"நிலுவையில் உள்ள செயல்கள்",
+    manageListings:"உங்கள் பட்டியல்களை நிர்வகிக்கவும்", addProduct:"தயாரிப்பு சேர்க்க",
+    earningsPayouts:"வருவாய் & கொடுப்பனவுகள்", totalEarned:"மொத்த வருவாய்",
+    thisMonth:"இந்த மாதம்", nextPayout:"அடுத்த கொடுப்பனவு", transactionHistory:"பரிவர்த்தனை வரலாறு",
+    howBuyersSee:"வாங்குவோர் உங்கள் பண்ணையை எப்படி பார்க்கிறார்கள்",
+    editProfile:"சுயவிவரத்தை திருத்து", saveChanges:"மாற்றங்களை சேமி",
+    quickStats:"விரைவு புள்ளிவிவரங்கள்", totalOrders:"மொத்த ஆர்டர்கள்",
+    avgResponse:"சராசரி பதில் நேரம்", completionRate:"நிறைவு விகிதம்",
+    memberSince:"உறுப்பினர் ஆனது முதல்", inventoryMgmt:"சரக்கு மேலாண்மை",
   }
 };
 
 let currentLang = 'en';
-function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.en[key] || key; }
+let currentFarmerLang = 'en';
 
-// Helper to translate a product name (falls back to original English name)
+function t(key) { return (translations[currentLang] && translations[currentLang][key]) || translations.en[key] || key; }
+function ft(key) { return (farmerTranslations[currentFarmerLang] && farmerTranslations[currentFarmerLang][key]) || farmerTranslations.en[key] || key; }
 function tProduct(englishName) { return t(englishName); }
+function ftProduct(englishName) {
+  return (farmerTranslations[currentFarmerLang] && farmerTranslations[currentFarmerLang][englishName])
+    || (translations[currentFarmerLang] && translations[currentFarmerLang][englishName])
+    || englishName;
+}
 
 function setLanguage(lang) {
   currentLang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  const btn = document.getElementById('lang-'+lang);
-  if(btn) btn.classList.add('active');
+  document.querySelectorAll('#settings-panel .lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('lang-' + lang);
+  if (btn) btn.classList.add('active');
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
     el.textContent = t(key);
   });
-  // Re-render product grids to reflect translated names
   if (currentRole === 'customer') {
     cRenderProducts(products, 'c-productGrid');
-    const catResults = document.getElementById('c-categoryResults');
-    if (catResults && catResults.children.length && !catResults.querySelector('[data-t]')) {
-      // category results are showing — re-render them too by re-triggering last category filter
-      // just re-render with all for simplicity; user can re-click
-    }
     cRenderFavorites();
     cRenderFarms();
     cRenderOrders();
   }
+  const langName = lang==='en'?'English':lang==='ml'?'മലയാളം':lang==='hi'?'हिन्दी':'தமிழ்';
+  showToast('Language · ' + langName);
+}
+
+function setFarmerLanguage(lang) {
+  currentFarmerLang = lang;
+  // Sync shared lang too so product names etc. align
+  currentLang = lang;
+  document.querySelectorAll('#farmer-lang-panel .lang-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('f-lang-' + lang);
+  if (btn) btn.classList.add('active');
+  // Update data-ft elements
+  document.querySelectorAll('[data-ft]').forEach(el => {
+    const key = el.getAttribute('data-ft');
+    el.textContent = ft(key);
+  });
   if (currentRole === 'farmer') {
     fRenderProducts();
     fRenderOrders();
     fRenderInventory();
   }
-  showToast('Language changed · ' + (lang==='en'?'English':lang==='ml'?'മലയാളം':lang==='hi'?'हिन्दी':'தமிழ்'));
+  const langName = lang==='en'?'English':lang==='ml'?'മലയാളം':lang==='hi'?'हिन्दी':'தமிழ்';
+  showToast('Language · ' + langName);
 }
 
 // ══════════════════════════════════════════
@@ -995,7 +1138,6 @@ function showToast(msg) {
   setTimeout(() => t2.classList.remove('show'), 2500);
 }
 
-// Products store the canonical English name; display uses tProduct()
 const products = [
   {id:1,name:"Heirloom Tomatoes",category:"Vegetables",price:28,rating:4.9,image:"https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=400",farmId:101,unit:"kg",stock:40},
   {id:2,name:"Organic Russet Potatoes",category:"Vegetables",price:32,rating:4.7,image:"https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=400",farmId:102,unit:"kg",stock:8},
@@ -1083,7 +1225,7 @@ function showRegister() { document.getElementById('register-modal').classList.ad
 function closeRegister() { document.getElementById('register-modal').classList.remove('open'); }
 
 // ══════════════════════════════════════════
-// SETTINGS
+// CUSTOMER SETTINGS
 // ══════════════════════════════════════════
 function openSettings() {
   document.getElementById('settings-overlay').classList.add('open');
@@ -1095,27 +1237,127 @@ function handleSettingsOverlayClick(e) {
 }
 
 // ══════════════════════════════════════════
-// GEMINI CHATBOT
+// FARMER LANGUAGE PANEL
 // ══════════════════════════════════════════
-let geminiKey = localStorage.getItem('fcx_gemini_key') || '';
-let chatHistory = [];
+function openFarmerLang() {
+  document.getElementById('farmer-lang-overlay').classList.add('open');
+  lucide.createIcons();
+}
+function closeFarmerLang() { document.getElementById('farmer-lang-overlay').classList.remove('open'); }
+function handleFarmerLangOverlayClick(e) {
+  if (e.target === document.getElementById('farmer-lang-overlay')) closeFarmerLang();
+}
+
+// ══════════════════════════════════════════
+// FAKE CHATBOT (No API required)
+// ══════════════════════════════════════════
 let chatRole = 'customer';
+
+// Customer responses
+const customerResponses = [
+  { keys: ['hello','hi','hey','good morning','good afternoon','good evening','howdy'],
+    reply: "👋 Hello! Welcome to FarmChain X. I can help you find fresh produce, check order status, learn about our farms, or get recipe ideas. What can I do for you today?" },
+  { keys: ['tomato','tomatoes','heirloom'],
+    reply: "🍅 Our **Heirloom Tomatoes** are from Gloria's Sun Valley Farm, rated 4.9★. They're grown without pesticides using heirloom seeds. Price: ₹28/kg. Would you like to add them to your basket?" },
+  { keys: ['potato','potatoes','russet'],
+    reply: "🥔 **Organic Russet Potatoes** from Highland Root Farm are priced at ₹32/kg — certified organic and mountain-grown. Only 8 units left, so grab them soon!" },
+  { keys: ['egg','eggs','brown eggs','free range'],
+    reply: "🥚 Our **Free Range Brown Eggs** come from Ethical Pastures — 100% cruelty-free, 5.0★ rated. Priced at ₹90/doz. One of our bestsellers!" },
+  { keys: ['ribeye','beef','meat','grass fed'],
+    reply: "🥩 **Grass-Fed Ribeye** from Ethical Pastures is ₹249/kg. The cattle are 100% pasture-raised with no hormones. Premium quality, only 5 units in stock!" },
+  { keys: ['pepper','peppers','bell pepper','capsicum'],
+    reply: "🫑 **Bell Peppers Mix** (red, yellow, green) from Sun Valley Farm — ₹28/kg, rated 4.6★. Only 3 units left — low stock alert! 🚨" },
+  { keys: ['apple','apples','honey crisp'],
+    reply: "🍎 **Honey Crisp Apples** from Highland Root Farm are ₹168/bag, rated 4.9★. Crisp, sweet, and freshly harvested. 18 units available!" },
+  { keys: ['order','orders','my order','track','tracking','status','where is'],
+    reply: "📦 You can track your orders in the **'Your Orders'** section on the left menu. Click **'Track'** on any order to see live delivery status. Your most recent order ORD-9921 is currently In Transit and arriving today around 5:30 PM!" },
+  { keys: ['delivery','deliver','when','arrive','arrival','shipping'],
+    reply: "🚚 FarmChain X delivers within **24–48 hours** of order placement. Same-day delivery is available in select areas. Delivery fee is ₹40 flat. You can track your package live once it's picked up!" },
+  { keys: ['price','cost','how much','rate','cheap','expensive','discount','offer'],
+    reply: "💰 Here's a quick price guide:\n• Tomatoes: ₹28/kg\n• Potatoes: ₹32/kg\n• Eggs: ₹90/doz\n• Ribeye: ₹249/kg\n• Bell Peppers: ₹28/kg\n• Apples: ₹168/bag\n\nAll prices are direct-from-farm with no middlemen!" },
+  { keys: ['farm','farms','farmer','organic','certified','verified'],
+    reply: "🌾 FarmChain X has 3 top-rated verified farms:\n• **Gloria's Sun Valley Farm** – Organic, No Pesticides ⭐4.9\n• **Highland Root Farm** – Mountain Grown ⭐4.7\n• **Ethical Pastures** – Cruelty Free ⭐5.0\n\nAll farms are blockchain-verified for authenticity!" },
+  { keys: ['basket','cart','checkout','buy','purchase','add'],
+    reply: "🛒 To add items to your basket, click any product and hit **'Add to Basket'**. View your basket anytime from the left menu. When ready, click **'Confirm & Pay'** — we accept UPI, cards, and net banking!" },
+  { keys: ['recipe','cook','cooking','how to use','meal','dish','idea'],
+    reply: "👨‍🍳 Here are some quick recipe ideas using our produce:\n• **Heirloom Tomato Bruschetta** – slice tomatoes, drizzle olive oil, fresh basil\n• **Potato Wedges** – toss with herbs, bake at 200°C\n• **Stuffed Bell Peppers** – fill with rice, cheese, veggies\n• **Herb Ribeye Steak** – season with garlic butter, sear 4 min each side\n\nWant a detailed recipe for any of these?" },
+  { keys: ['pay','payment','upi','card','net banking','gpay','phonepe'],
+    reply: "💳 We accept multiple payment methods:\n• **UPI** (GPay, PhonePe, Paytm)\n• **Debit/Credit Cards** (Visa, Mastercard, RuPay)\n• **Net Banking**\n• **Cash on Delivery** (select areas)\n\nAll transactions are encrypted and secure!" },
+  { keys: ['refund','return','cancel','wrong','damaged','bad quality'],
+    reply: "↩️ Our **Fresh Guarantee** policy covers you! If you receive damaged or wrong items:\n1. Report within 24 hours via chat\n2. We'll issue a full refund or replacement\n3. No questions asked for quality issues\n\nYour satisfaction is our priority! 🌟" },
+  { keys: ['thank','thanks','great','awesome','perfect','wonderful','good'],
+    reply: "😊 You're very welcome! Happy to help. Enjoy your fresh FarmChain X produce! Feel free to ask anything else. 🌱" },
+  { keys: ['help','support','problem','issue','contact'],
+    reply: "🆘 Need help? I'm here! You can also:\n• Visit **Settings → Help & FAQ** for guides\n• Call our support: **1800-FARMCHAIN** (toll-free)\n• Email: **support@farmchainx.in**\n• Response time: under 2 hours on weekdays!" },
+  { keys: ['fresh','quality','safe','pesticide','chemical','natural'],
+    reply: "🌿 All FarmChain X produce is:\n✅ Directly sourced from verified farms\n✅ No harmful pesticides or chemicals\n✅ Blockchain-verified freshness\n✅ Harvested-to-order for maximum freshness\n✅ Quality-checked before dispatch" },
+  { keys: ['vegetable','vegetables','sabji'],
+    reply: "🥦 Our vegetables section includes Heirloom Tomatoes, Organic Russet Potatoes, and Bell Peppers Mix — all from verified local farms. Head to **Categories → Vegetables** to browse. New seasonal items added weekly!" },
+  { keys: ['fruit','fruits','sweet'],
+    reply: "🍎 Currently we have **Honey Crisp Apples** (₹168/bag, 4.9★) in the fruits section. More seasonal fruits — mangoes, berries, and citrus — are coming soon! Check back weekly for updates." },
+];
+
+// Farmer responses
+const farmerResponses = [
+  { keys: ['hello','hi','hey','good morning','good afternoon'],
+    reply: "👋 Hello Gloria! I'm FarmBot. I can help you with managing listings, pricing strategies, harvest planning, inventory alerts, and more. What do you need today?" },
+  { keys: ['order','orders','incoming','new order','confirm'],
+    reply: "📦 You have **8 pending orders** waiting for confirmation. Head to **Incoming Orders** in the sidebar to review and accept them. Early acceptance improves your response-time score!" },
+  { keys: ['price','pricing','how much','set price','increase price','competitive'],
+    reply: "💰 Pricing tips for your products:\n• **Tomatoes**: Market avg ₹30–35/kg — you're at ₹28 (competitive!)\n• **Potatoes**: ₹30–40/kg range — consider ₹35 for premium label\n• **Eggs**: ₹80–100/doz — free-range commands premium\n• **Bell Peppers**: ₹25–35/kg\n\nConsider a 10% seasonal hike in winter months!" },
+  { keys: ['stock','inventory','restock','low stock','shortage'],
+    reply: "📊 Stock alerts:\n🔴 **Bell Peppers** — 3 units left (critical!)\n🟡 **Grass-Fed Ribeye** — 5 units (low)\n🟡 **Potatoes** — 8 units (monitor)\n🟢 All others are healthy\n\nI recommend restocking Bell Peppers within 24 hours to avoid lost sales!" },
+  { keys: ['earning','revenue','sales','income','money','profit','payment'],
+    reply: "💵 Your farm performance this month:\n• Revenue: **₹48,320** (↑12% vs last month) 🎉\n• Total orders: **142**\n• Platform fee: **10%** per order\n• Next payout: **₹12,400** on Nov 15\n\nAll-time earnings: ₹2,14,850. Keep it up! 🌟" },
+  { keys: ['add product','new product','listing','list','create product'],
+    reply: "➕ To add a new product:\n1. Click **'Add Product'** in My Products\n2. Enter name, category, unit, price, and stock\n3. Add a product image URL\n4. Hit **'Add Listing'** — it goes live instantly!\n\nTip: High-quality photos increase sales by 40%!" },
+  { keys: ['rating','review','feedback','customer feedback','stars','rated'],
+    reply: "⭐ Your current rating is **4.9/5** with 128 reviews — excellent! Top tips to maintain it:\n• Confirm orders within 2 hours\n• Pack produce carefully to avoid damage\n• Respond to customer messages promptly\n• Ensure freshness by harvesting close to dispatch time!" },
+  { keys: ['harvest','crop','season','when to harvest','grow','growing'],
+    reply: "🌱 Harvest tips by product:\n• **Tomatoes**: Pick when fully red, firm to touch. Best early morning.\n• **Potatoes**: Wait until foliage yellows. Dig on dry days.\n• **Bell Peppers**: Harvest after color change for sweeter flavor.\n• **Apples**: Test by twisting — if it comes off easily, it's ready!\n\nWant advice on a specific crop?" },
+  { keys: ['profile','farm profile','bio','description','about'],
+    reply: "🏡 Your farm profile is looking great! To boost visibility:\n• Add more photos of your farm and process\n• Highlight certifications (Organic, No Pesticides)\n• Keep description updated with seasonal offerings\n• Respond to reviews to show engagement\n\nGo to **Farm Profile** to edit anytime!" },
+  { keys: ['payout','payment','bank','transfer','money','withdraw'],
+    reply: "💳 Payout information:\n• **Schedule**: Every 2 weeks (1st & 15th)\n• **Next payout**: ₹12,400 on Nov 15\n• **Platform fee**: 10% deducted automatically\n• **Bank**: Linked to your registered account\n\nContact support if any payout is delayed!" },
+  { keys: ['tips','advice','improve','better','boost','increase sales'],
+    reply: "📈 Top tips to boost your FarmChain X sales:\n1. 🌅 Update stock daily — buyers trust active sellers\n2. 📸 Add fresh product photos regularly\n3. ⚡ Accept orders within 1 hour for better ranking\n4. 💬 Reply to reviews — builds trust\n5. 🏷️ Offer bundle deals (e.g., Tomato+Eggs combo)\n6. 📦 Use eco-friendly packaging — customers love it!" },
+  { keys: ['thank','thanks','great','good','awesome','wonderful'],
+    reply: "😊 Glad I could help! Wishing you a great harvest season, Gloria. Your farm is one of our top-rated — keep up the excellent work! 🌾" },
+  { keys: ['help','support','problem','issue'],
+    reply: "🆘 Farmer support is available:\n• **Farmer Helpline**: 1800-FARM-FCX (toll-free)\n• **Email**: farmers@farmchainx.in\n• **Account Manager**: Ravi K. (dedicated to your account)\n• **Response time**: under 1 hour on weekdays\n\nWhat specific issue can I help with?" },
+];
+
+function getFakeBotReply(message, role) {
+  const lower = message.toLowerCase();
+  const responses = role === 'farmer' ? farmerResponses : customerResponses;
+  for (const r of responses) {
+    if (r.keys.some(k => lower.includes(k))) {
+      return r.reply;
+    }
+  }
+  // Fallback responses
+  const fallbacks = role === 'farmer'
+    ? [
+        "🤔 I'm not sure about that specific topic, but I can help with: pricing, inventory, orders, earnings, harvest tips, or profile management. What would you like to know?",
+        "🌾 Great question! For detailed farming advice, check the **Farm Profile** section or reach out to our farmer support team. Can I help with anything else?",
+        "📊 I can assist with order management, pricing strategies, stock alerts, and payout info. What would you like to explore?"
+      ]
+    : [
+        "🌱 I'm not sure about that! I can help you with: finding products, tracking orders, learning about farms, recipes, or payment options. What would you like?",
+        "😊 That's an interesting question! Try browsing the **Categories** section or ask me about specific products, delivery, or your orders!",
+        "🛒 I can help you shop smarter! Ask me about fresh produce, farm details, delivery times, or your order status."
+      ];
+  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+}
 
 function initChatbot(role) {
   chatRole = role;
-  chatHistory = [];
-  document.getElementById('chat-messages').innerHTML = `<div class="chat-msg bot">👋 Hi! I'm <strong>FarmBot</strong>, your AI assistant. I can help with ${role === 'farmer' ? 'managing your listings, pricing tips, harvest advice' : 'finding fresh produce, tracking orders, farm info'}. How can I help?</div>`;
-  const banner = document.getElementById('api-key-banner');
-  if (geminiKey) { banner.style.display = 'none'; } else { banner.style.display = 'block'; }
-}
-
-function saveApiKey() {
-  const k = document.getElementById('gemini-key-input').value.trim();
-  if (!k) { showToast('Please enter a valid API key'); return; }
-  geminiKey = k;
-  localStorage.setItem('fcx_gemini_key', k);
-  document.getElementById('api-key-banner').style.display = 'none';
-  showToast('API key saved! FarmBot is ready 🤖');
+  document.getElementById('chat-messages').innerHTML = `<div class="chat-msg bot">
+    👋 Hi! I'm <strong>FarmBot</strong>, your AI assistant.<br><br>
+    ${role === 'farmer'
+      ? 'I can help with <strong>orders, pricing, inventory, harvest tips</strong>, and more. How can I help you today, Gloria? 🌾'
+      : 'I can help you <strong>find fresh produce, track orders, discover farms</strong>, and get recipe ideas. What are you looking for? 🛒'}
+  </div>`;
 }
 
 function toggleChat() {
@@ -1134,32 +1376,27 @@ function appendMsg(text, sender) {
   return div;
 }
 
-async function sendChatMsg() {
+function sendChatMsg() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
   appendMsg(text, 'user');
-  chatHistory.push({ role:'user', parts:[{text}] });
-  if (!geminiKey) { appendMsg('⚠️ Please enter your Gemini API key above to activate FarmBot.', 'bot'); return; }
-  const typingEl = appendMsg('<em>FarmBot is thinking…</em>', 'bot typing');
-  const systemContext = chatRole === 'farmer'
-    ? `You are FarmBot, an AI assistant for farmers on FarmChain X. Help with listing products, pricing, inventory, crop advice. Products: ${products.map(p=>p.name).join(', ')}.`
-    : `You are FarmBot, an AI assistant for customers on FarmChain X. Help find produce, give recipe ideas, help with orders. Products: ${products.map(p=>p.name+' ₹'+p.price+'/'+p.unit).join(', ')}.`;
-  try {
-    const payload = { system_instruction:{parts:[{text:systemContext}]}, contents:chatHistory, generationConfig:{maxOutputTokens:300,temperature:0.7} };
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-    const data = await res.json();
+
+  // Show typing indicator
+  const typingEl = appendMsg('<em>FarmBot is typing…</em>', 'bot typing');
+
+  // Simulate thinking delay (600–1200ms)
+  const delay = 600 + Math.random() * 600;
+  setTimeout(() => {
     typingEl.remove();
-    if (data.error) { appendMsg(`❌ Gemini API error: ${data.error.message}`, 'bot'); return; }
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, no response.';
-    chatHistory.push({ role:'model', parts:[{text:reply}] });
-    appendMsg(reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>'), 'bot');
-  } catch(err) {
-    typingEl.remove();
-    appendMsg('❌ Connection error. Check your API key and internet.', 'bot');
-  }
-  lucide.createIcons();
+    const reply = getFakeBotReply(text, chatRole);
+    const formatted = reply
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    appendMsg(formatted, 'bot');
+    lucide.createIcons();
+  }, delay);
 }
 
 // ══════════════════════════════════════════
@@ -1413,7 +1650,6 @@ function cRenderFarms(){
 
 document.getElementById('c-searchInput').addEventListener('input', e => {
   const query = e.target.value.toLowerCase();
-  // Search against translated name so users can type in their language
   const filtered = products.filter(p =>
     tProduct(p.name).toLowerCase().includes(query) ||
     p.name.toLowerCase().includes(query) ||
@@ -1443,7 +1679,7 @@ function fRenderProducts(){
         <div style="position:absolute;top:8px;left:8px"><span class="status-badge ${p.stock<6?'status-busy':'status-delivered'}">${p.stock<6?'Low Stock':'In Stock'}</span></div>
         <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:800;color:#f8fafc">★ ${p.rating}</div>
       </div>
-      <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${tProduct(p.name)}</h3>
+      <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${ftProduct(p.name)}</h3>
       <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:10px">${p.category} · ${p.unit}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(p.price)}</span><span style="font-size:0.8rem;color:#475569">${p.stock} units left</span></div>
       <div style="display:flex;gap:8px">
@@ -1474,7 +1710,7 @@ function fRenderInventory(){
   const tb=document.getElementById('f-inventoryTable'); if(!tb) return;
   tb.innerHTML=products.map(p=>`
     <tr>
-      <td style="font-weight:800;color:#f8fafc">${tProduct(p.name)}</td>
+      <td style="font-weight:800;color:#f8fafc">${ftProduct(p.name)}</td>
       <td style="color:#64748b">${p.category}</td>
       <td><div style="display:flex;align-items:center;gap:10px"><div style="height:6px;width:80px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(p.stock/50)*100)}%;background:${p.stock<6?'#ef4444':p.stock<20?'#f59e0b':'#10b981'};border-radius:99px"></div></div><span style="font-weight:800;font-size:0.85rem;color:${p.stock<6?'#f87171':p.stock<20?'#fbbf24':'#34d399'}">${p.stock}</span></div></td>
       <td style="color:#64748b">${p.unit}</td>
