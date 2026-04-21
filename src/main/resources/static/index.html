@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FarmChain X | Farm to Doorstep</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+<!-- ════════════════ LOGIN ════════════════ -->
+<div id="login-screen">
+  <div style="width:100%;max-width:500px">
+    <div style="display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:48px">
+      <div style="width:48px;height:48px;background:#059669;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 32px rgba(5,150,105,0.4)">
+        <i data-lucide="sprout" style="width:28px;height:28px;color:#fff"></i>
+      </div>
+      <span style="font-size:1.9rem;font-weight:900;color:#f8fafc;letter-spacing:-0.02em">FarmChain <span style="color:#10b981">X</span></span>
+    </div>
+    <div style="text-align:center;margin-bottom:36px">
+      <h1 style="font-size:2rem;font-weight:900;color:#f8fafc;margin-bottom:6px">Welcome Back</h1>
+      <p style="color:#64748b">Choose your role to continue</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px">
+      <button class="role-btn" id="role-customer" onclick="selectRole('customer')">
+        <span style="font-size:2rem">🛒</span>
+        <span style="font-weight:800;font-size:0.95rem">Customer</span>
+        <span style="font-size:0.72rem;color:#64748b;text-align:center">Browse & buy fresh produce</span>
+      </button>
+      <button class="role-btn" id="role-farmer" onclick="selectRole('farmer')">
+        <span style="font-size:2rem">🌾</span>
+        <span style="font-weight:800;font-size:0.95rem">Farmer</span>
+        <span style="font-size:0.72rem;color:#64748b;text-align:center">List & manage your farm</span>
+      </button>
+      <button class="role-btn" id="role-distributor" onclick="selectRole('distributor')">
+        <span style="font-size:2rem">🚚</span>
+        <span style="font-weight:800;font-size:0.95rem">Distributor</span>
+        <span style="font-size:0.72rem;color:#64748b;text-align:center">Deliver farm orders</span>
+      </button>
+    </div>
+    <div class="glass-card" id="login-form" style="display:none;border-radius:24px;padding:28px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+        <span id="login-role-icon" style="font-size:1.8rem"></span>
+        <div>
+          <p id="login-role-title" style="font-weight:900;color:#f8fafc;font-size:1.1rem"></p>
+          <p id="login-role-sub" style="font-size:0.78rem;color:#64748b"></p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label>Email Address</label><input type="email" placeholder="you@example.com"/></div>
+        <div><label>Password</label><input type="password" placeholder="••••••••"/></div>
+        <div style="text-align:right"><a href="#" style="font-size:0.78rem;color:#10b981">Forgot password?</a></div>
+        <button onclick="doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.95rem;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">Sign In →</button>
+        <p style="text-align:center;font-size:0.8rem;color:#475569">No account? <a href="#" onclick="showRegister()" style="color:#34d399;font-weight:700">Register here</a></p>
+      </div>
+    </div>
+    <p style="text-align:center;font-size:0.72rem;color:#1e293b;margin-top:16px">Select any role and click Sign In to enter the demo</p>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div class="modal-overlay" id="register-modal">
+  <div class="modal-box">
+    <button onclick="closeRegister()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+    <h2 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:22px">Create Account</h2>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label>First Name</label><input type="text" placeholder="Athira"/></div>
+        <div><label>Last Name</label><input type="text" placeholder="Jayan"/></div>
+      </div>
+      <div><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+      <div><label>Phone</label><input type="tel" placeholder="+91 98765 43210"/></div>
+      <div><label>Password</label><input type="password" placeholder="••••••••"/></div>
+      <button onclick="closeRegister();doLogin()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem">Create Account & Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CUSTOMER PORTAL ════════════════ -->
+<div class="portal-screen" id="portal-customer">
+  <aside class="sidebar">
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px;cursor:pointer" onclick="cShowView('home')">
+      <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i>
+      </div>
+      <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
+      <button onclick="cShowView('home')" class="nav-link active" id="c-btn-home"><i data-lucide="home" class="w-4 h-4"></i><span data-t="home">Home</span></button>
+      <button onclick="cShowView('categories')" class="nav-link" id="c-btn-categories"><i data-lucide="layout-grid" class="w-4 h-4"></i><span data-t="categories">Categories</span></button>
+      <button onclick="cShowView('orders')" class="nav-link" id="c-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i><span data-t="yourOrders">Your Orders</span></button>
+      <button onclick="cShowView('top-farms')" class="nav-link" id="c-btn-top-farms"><i data-lucide="award" class="w-4 h-4"></i><span data-t="topFarms">Top Farms</span></button>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
+        <button onclick="cShowCheckout()" class="nav-link" id="c-btn-checkout">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i><span data-t="myBasket">My Basket</span>
+          <span id="c-basketBadge" class="nav-badge" style="display:none">0</span>
+        </button>
+        <button onclick="cShowView('favorites')" class="nav-link" id="c-btn-favorites"><i data-lucide="heart" class="w-4 h-4"></i><span data-t="favorites">Favorites</span></button>
+        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i><span data-t="logOut">Log Out</span></button>
+      </div>
+    </nav>
+    <button class="profile-avatar-btn" onclick="openSettings()" style="margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);margin-top:16px;border-radius:14px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">AKJ</div>
+      <div style="overflow:hidden;flex:1;text-align:left">
+        <p style="font-weight:800;color:#f8fafc;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Athira K Jayan</p>
+        <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Premium Buyer</p>
+      </div>
+      <i data-lucide="settings" style="width:16px;height:16px;color:#475569;flex-shrink:0"></i>
+    </button>
+  </aside>
+
+  <div class="main-pane">
+    <div class="main-inner">
+      <div style="position:relative;margin-bottom:28px">
+        <i data-lucide="search" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#475569"></i>
+        <input type="text" id="c-searchInput" class="search-bar" placeholder="          Search fresh produce or local farms…">
+      </div>
+
+      <!-- HOME -->
+      <section id="c-view-home" class="view-section active">
+        <div class="page-header">
+          <div><h2 data-t="freshFromField">Fresh From The Field</h2><p data-t="freshSubtitle">Direct from verified farms · Delivery in 24–48 hrs</p></div>
+          <span class="verification-tag"><i data-lucide="shield-check" class="w-3 h-3"></i> Quality Verified</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-productGrid"></div>
+      </section>
+
+      <!-- CATEGORIES -->
+      <section id="c-view-categories" class="view-section">
+        <div class="page-header"><h2 data-t="categories">Categories</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px">
+          <div onclick="cFilterCategory('Vegetables')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
+            <i data-lucide="carrot" style="width:36px;height:36px;color:#10b981;margin:0 auto 12px"></i>
+            <div style="font-weight:800" data-t="vegetables">Vegetables</div>
+          </div>
+          <div onclick="cFilterCategory('Fruits')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
+            <i data-lucide="apple" style="width:36px;height:36px;color:#f97316;margin:0 auto 12px"></i>
+            <div style="font-weight:800" data-t="fruits">Fruits</div>
+          </div>
+          <div onclick="cFilterCategory('Animal')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
+            <i data-lucide="egg" style="width:36px;height:36px;color:#eab308;margin:0 auto 12px"></i>
+            <div style="font-weight:800" data-t="dairyEggs">Dairy &amp; Eggs</div>
+          </div>
+          <div onclick="cFilterCategory('Meat')" class="glass-card" style="padding:24px;border-radius:22px;text-align:center;cursor:pointer">
+            <i data-lucide="beef" style="width:36px;height:36px;color:#ef4444;margin:0 auto 12px"></i>
+            <div style="font-weight:800" data-t="freshMeat">Fresh Meat</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-categoryResults">
+          <div style="grid-column:1/-1;padding:40px;text-align:center;color:#475569" data-t="selectCategory">Select a category above</div>
+        </div>
+      </section>
+
+      <!-- ORDERS -->
+      <section id="c-view-orders" class="view-section">
+        <div class="page-header"><h2 data-t="orderHistory">Your Order History</h2></div>
+        <div id="c-ordersContainer" style="display:flex;flex-direction:column;gap:16px"></div>
+      </section>
+
+      <!-- CHECKOUT -->
+      <section id="c-view-checkout" class="view-section">
+        <div class="page-header"><h2 data-t="reviewBasket">Review Your Basket</h2></div>
+        <div id="c-checkoutContent"></div>
+      </section>
+
+      <!-- TRACK ORDER -->
+      <section id="c-view-track-order" class="view-section">
+        <button onclick="cShowView('orders')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-t="backToOrders">Back to orders</span>
+        </button>
+        <div id="c-trackOrderContent"></div>
+      </section>
+
+      <!-- PRODUCT DETAIL -->
+      <section id="c-view-product-detail" class="view-section">
+        <button onclick="cShowView('home')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-t="backToMarket">Back to marketplace</span>
+        </button>
+        <div style="display:grid;grid-template-columns:8fr 4fr;gap:32px" id="c-productDetailContent"></div>
+      </section>
+
+      <!-- CUSTOMER FARM PROFILE -->
+      <section id="c-view-farm-profile" class="view-section">
+        <button onclick="cShowView('home')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span>Back to Market</span>
+        </button>
+        <div id="c-farmProfileContent"></div>
+        <div style="margin-top:40px;">
+          <h3 style="font-weight:900;color:#f8fafc;font-size:1.2rem;margin-bottom:20px;">Products from this Farm</h3>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-farmProfileProducts"></div>
+        </div>
+      </section>
+
+      <!-- TOP FARMS -->
+      <section id="c-view-top-farms" class="view-section">
+        <div class="page-header"><h2 data-t="topVerifiedFarms">Top Verified Farms</h2></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" id="c-topFarmsList"></div>
+      </section>
+
+      <!-- FAVORITES -->
+      <section id="c-view-favorites" class="view-section">
+        <div class="page-header"><h2 data-t="favorites">Your Favorites</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-favoritesContent"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ FARMER PORTAL ════════════════ -->
+<div class="portal-screen" id="portal-farmer">
+  <aside class="sidebar">
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px;cursor:pointer" onclick="fShowView('dashboard')">
+      <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i>
+      </div>
+      <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
+      <button onclick="fShowView('dashboard')" class="nav-link active" id="f-btn-dashboard"><i data-lucide="bar-chart-2" class="w-4 h-4"></i><span data-ft="dashboard">Dashboard</span></button>
+      <button onclick="fShowView('products')" class="nav-link" id="f-btn-products"><i data-lucide="package" class="w-4 h-4"></i><span data-ft="myProducts">My Products</span></button>
+      <button onclick="fShowView('orders')" class="nav-link" id="f-btn-orders"><i data-lucide="shopping-bag" class="w-4 h-4"></i><span data-ft="incomingOrders">Incoming Orders</span><span class="nav-badge green">8</span></button>
+      <button onclick="fShowView('earnings')" class="nav-link" id="f-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i><span data-ft="earnings">Earnings</span></button>
+      <button onclick="fShowView('farm-profile')" class="nav-link" id="f-btn-farm-profile"><i data-lucide="store" class="w-4 h-4"></i><span data-ft="farmProfile">Farm Profile</span></button>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
+        <button onclick="fShowView('inventory')" class="nav-link" id="f-btn-inventory"><i data-lucide="boxes" class="w-4 h-4"></i><span data-ft="inventory">Inventory</span></button>
+        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i><span data-ft="logOut">Log Out</span></button>
+      </div>
+    </nav>
+    <!-- Farmer Language + Profile -->
+    <button class="profile-avatar-btn" onclick="openFarmerLang()" style="margin-top:auto;margin-top:16px;border-radius:14px">
+      <div style="width:36px;height:36px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;color:#000;flex-shrink:0">GS</div>
+      <div style="overflow:hidden;flex:1;text-align:left">
+        <p style="font-weight:800;color:#f8fafc;font-size:0.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Gloria S. Valley</p>
+        <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Verified Farmer</p>
+      </div>
+      <i data-lucide="settings" style="width:16px;height:16px;color:#475569;flex-shrink:0"></i>
+    </button>
+  </aside>
+
+  <div class="main-pane">
+    <div class="main-inner">
+      <!-- DASHBOARD -->
+      <section id="f-view-dashboard" class="view-section active">
+        <div class="page-header">
+          <div><h2 data-ft="farmDashboard">Farm Dashboard</h2><p>Gloria's Sun Valley Farm · Napa Valley, CA</p></div>
+          <span class="verification-tag"><i data-lucide="shield-check" class="w-3 h-3"></i> Verified Organic</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="revenueMonth">Revenue This Month</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 12% vs last month</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">142</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="ordersMonth">Orders This Month</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">↑ 8 new today</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">6</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="activeListings">Active Listings</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">2 low stock alerts</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">4.9</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px" data-ft="avgRating">Average Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">128 reviews total</p></div>
+        </div>
+        <div style="display:grid;grid-template-columns:8fr 4fr;gap:20px">
+          <div class="glass-card" style="border-radius:22px;padding:24px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem" data-ft="salesOverview">Sales Overview — Last 7 Days</h3><span style="font-size:0.72rem;color:#475569">₹ Revenue</span></div>
+            <div style="display:flex;align-items:flex-end;gap:8px;height:140px">
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:60%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:80%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:45%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:92%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:70%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:85%"></div></div>
+              <div class="chart-bar" style="height:100%"><div class="bar-fill" style="height:100%"></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px"><span style="font-size:0.72rem;color:#475569">Mon</span><span style="font-size:0.72rem;color:#475569">Tue</span><span style="font-size:0.72rem;color:#475569">Wed</span><span style="font-size:0.72rem;color:#475569">Thu</span><span style="font-size:0.72rem;color:#475569">Fri</span><span style="font-size:0.72rem;color:#475569">Sat</span><span style="font-size:0.72rem;color:#10b981;font-weight:700">Sun</span></div>
+          </div>
+          <div class="glass-card" style="border-radius:22px;padding:24px">
+            <h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:18px" data-ft="pendingActions">Pending Actions</h3>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="clock" style="width:16px;height:16px;color:#fbbf24"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">8 to Confirm</span></div><button onclick="fShowView('orders')" style="font-size:0.75rem;font-weight:700;color:#fbbf24;background:none;border:none;cursor:pointer">View</button></div>
+              <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="alert-triangle" style="width:16px;height:16px;color:#f87171"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">2 Low Stock</span></div><button onclick="fShowView('inventory')" style="font-size:0.75rem;font-weight:700;color:#f87171;background:none;border:none;cursor:pointer">Fix</button></div>
+              <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:8px"><i data-lucide="message-circle" style="width:16px;height:16px;color:#60a5fa"></i><span style="font-weight:700;color:#f8fafc;font-size:0.85rem">3 Reviews</span></div><button style="font-size:0.75rem;font-weight:700;color:#60a5fa;background:none;border:none;cursor:pointer">Reply</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MY PRODUCTS -->
+      <section id="f-view-products" class="view-section">
+        <div class="page-header"><div><h2 data-ft="myProducts">My Products</h2><p data-ft="manageListings">Manage your active listings</p></div><button onclick="openAddProduct()" style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="plus" class="w-4 h-4"></i> <span data-ft="addProduct">Add Product</span></button></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px" id="f-productsList"></div>
+      </section>
+
+      <!-- ORDERS -->
+      <section id="f-view-orders" class="view-section">
+        <div class="page-header"><h2 data-ft="incomingOrders">Incoming Orders</h2></div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden">
+          <table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="f-ordersTable"></tbody></table>
+        </div>
+      </section>
+
+      <!-- EARNINGS -->
+      <section id="f-view-earnings" class="view-section">
+        <div class="page-header"><h2 data-ft="earningsPayouts">Earnings &amp; Payouts</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="totalEarned">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹2,14,850</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="thisMonth">This Month</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹48,320</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 12% growth</p></div>
+          <div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px" data-ft="nextPayout">Next Payout</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹12,400</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">Scheduled Nov 15</p></div>
+        </div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden"><div style="padding:20px 22px;border-bottom:1px solid rgba(255,255,255,0.06)"><h3 style="font-weight:900;color:#f8fafc" data-ft="transactionHistory">Transaction History</h3></div>
+          <table class="data-table"><thead><tr><th>Date</th><th>Order</th><th>Customer</th><th>Amount</th><th>Platform Fee</th><th>Net</th><th>Status</th></tr></thead>
+          <tbody><tr><td style="color:#64748b">Nov 08</td><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>₹2,240</td><td style="color:#f87171">-₹224</td><td style="color:#34d399;font-weight:800">₹2,016</td><td><span class="status-badge status-delivered">Paid</span></td></tr><tr><td style="color:#64748b">Nov 07</td><td style="font-weight:800">#ORD-8801</td><td>Rahul Sharma</td><td>₹1,500</td><td style="color:#f87171">-₹150</td><td style="color:#34d399;font-weight:800">₹1,350</td><td><span class="status-badge status-delivered">Paid</span></td></tr></tbody>
+          </table></div>
+      </section>
+
+      <!-- FARM PROFILE -->
+      <section id="f-view-farm-profile" class="view-section">
+        <div class="page-header"><div><h2 data-ft="farmProfile">Farm Profile</h2><p data-ft="howBuyersSee">How buyers see your farm</p></div><button style="display:flex;align-items:center;gap:8px;background:#059669;color:#fff;font-weight:800;padding:10px 20px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif"><i data-lucide="edit-3" class="w-4 h-4"></i> <span data-ft="editProfile">Edit Profile</span></button></div>
+        <div style="display:grid;grid-template-columns:8fr 4fr;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:20px">
+            <div style="position:relative;border-radius:24px;overflow:hidden;height:220px"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.6),transparent)"></div><div style="position:absolute;bottom:16px;left:20px;display:flex;gap:8px"><span class="verification-tag">Verified Organic</span><span class="verification-tag">No Pesticides</span></div></div>
+            <div class="glass-card" style="border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:16px">
+              <div><label>Farm Name</label><input type="text" value="Gloria's Sun Valley Farm"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Location</label><input type="text" value="Napa Valley, CA"></div><div><label>Farm Size</label><input type="text" value="48 Acres"></div></div>
+              <div><label>Description</label><textarea rows="3" style="resize:none">Gloria focuses on heirloom seeds and natural pest control. All produce is harvested to order for maximum freshness.</textarea></div>
+              <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content" data-ft="saveChanges">Save Changes</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#000;margin:0 auto 12px">GS</div><p style="font-weight:900;color:#f8fafc;font-size:1rem">Gloria S. Valley</p><p style="color:#64748b;font-size:0.82rem;margin-top:2px;margin-bottom:12px">Farm Owner</p><div style="display:flex;justify-content:center;gap:8px"><span class="verification-tag">★ 4.9</span><span class="status-badge status-delivered">Verified</span></div></div>
+            <div class="glass-card" style="border-radius:22px;padding:22px"><h4 style="font-weight:900;color:#f8fafc;margin-bottom:16px" data-ft="quickStats">Quick Stats</h4><div style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="totalOrders">Total Orders</span><span style="font-weight:800;color:#f8fafc">1,248</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="avgResponse">Avg Response</span><span style="font-weight:800;color:#f8fafc">2 hrs</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="completionRate">Completion Rate</span><span style="font-weight:800;color:#34d399">98.4%</span></div><div style="display:flex;justify-content:space-between"><span style="color:#64748b;font-size:0.85rem" data-ft="memberSince">Member Since</span><span style="font-weight:800;color:#f8fafc">Mar 2021</span></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INVENTORY -->
+      <section id="f-view-inventory" class="view-section">
+        <div class="page-header"><h2 data-ft="inventoryMgmt">Inventory Management</h2></div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden">
+          <table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Stock Level</th><th>Unit</th><th>Price</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="f-inventoryTable"></tbody></table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ DISTRIBUTOR PORTAL ════════════════ -->
+<div class="portal-screen" id="portal-distributor">
+  <aside class="sidebar">
+    <div style="display:flex;align-items:center;gap:10px;padding:4px 6px 0;margin-bottom:28px">
+      <div style="width:36px;height:36px;background:#059669;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="sprout" style="width:20px;height:20px;color:#fff"></i></div>
+      <span style="font-size:1.2rem;font-weight:900;color:#f8fafc">FarmChain <span style="color:#10b981">X</span></span>
+    </div>
+    <nav style="display:flex;flex-direction:column;gap:4px;flex:1">
+      <button onclick="dShowView('dashboard')" class="nav-link active" id="d-btn-dashboard"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</button>
+      <button onclick="dShowView('deliveries')" class="nav-link" id="d-btn-deliveries"><i data-lucide="truck" class="w-4 h-4"></i>My Deliveries</button>
+      <button onclick="dShowView('available')" class="nav-link" id="d-btn-available"><i data-lucide="bell" class="w-4 h-4"></i>Available Orders<span class="nav-badge green" id="d-availBadge">3</span></button>
+      <button onclick="dShowView('earnings')" class="nav-link" id="d-btn-earnings"><i data-lucide="indian-rupee" class="w-4 h-4"></i>My Earnings</button>
+      <button onclick="dShowView('map')" class="nav-link" id="d-btn-map"><i data-lucide="map" class="w-4 h-4"></i>Live Map</button>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;gap:4px">
+        <button onclick="dShowView('profile')" class="nav-link" id="d-btn-profile"><i data-lucide="user" class="w-4 h-4"></i>My Profile</button>
+        <button onclick="logOut()" class="nav-link"><i data-lucide="log-out" class="w-4 h-4"></i>Log Out</button>
+      </div>
+    </nav>
+    <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px;margin-top:16px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><span style="font-weight:800;color:#f8fafc;font-size:0.85rem">Online Status</span><label class="toggle"><input type="checkbox" id="d-onlineToggle" checked onchange="toggleOnlineStatus()"><span class="toggle-slider"></span></label></div>
+      <p id="d-statusText" style="font-size:0.75rem;color:#34d399;font-weight:700">● You are Online</p>
+    </div>
+    <div style="background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.75rem;flex-shrink:0">MK</div>
+        <div><p style="font-weight:800;color:#f8fafc;font-size:0.85rem">Mike K.</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em">Distributor</p></div>
+      </div>
+    </div>
+  </aside>
+  <div class="main-pane">
+    <div class="main-inner">
+      <section id="d-view-dashboard" class="view-section active">
+        <div class="page-header"><div><h2>Delivery Dashboard</h2><p>Mike K. · Chicago, IL</p></div><span class="status-badge status-available" style="font-size:0.8rem;padding:6px 14px">● Online &amp; Active</span></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(16,185,129,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="truck" style="width:20px;height:20px;color:#10b981"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">12</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Deliveries</p><p style="color:#34d399;font-size:0.75rem;font-weight:700;margin-top:6px">8 completed so far</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(59,130,246,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="indian-rupee" style="width:20px;height:20px;color:#60a5fa"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">₹2,840</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Today's Earnings</p><p style="color:#60a5fa;font-size:0.75rem;font-weight:700;margin-top:6px">₹240 in tips</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(245,158,11,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="clock" style="width:20px;height:20px;color:#fbbf24"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">28 min</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Avg Delivery Time</p><p style="color:#fbbf24;font-size:0.75rem;font-weight:700;margin-top:6px">Best: 24 min</p></div>
+          <div class="stat-card"><div style="width:40px;height:40px;background:rgba(168,85,247,0.12);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px"><i data-lucide="star" style="width:20px;height:20px;color:#c084fc"></i></div><p style="font-size:1.6rem;font-weight:900;color:#f8fafc">5.0</p><p style="color:#64748b;font-size:0.82rem;margin-top:4px">Rating</p><p style="color:#c084fc;font-size:0.75rem;font-weight:700;margin-top:6px">312 deliveries</p></div>
+        </div>
+        <div class="glass-card" style="border-radius:22px;padding:24px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem;margin-bottom:20px">Active Delivery</h3><div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:24px"><div style="width:44px;height:44px;background:#10b981;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="truck" style="width:22px;height:22px;color:#000"></i></div><div style="flex:1"><p style="font-weight:900;color:#f8fafc">ORD-9921 · Athira K Jayan</p><p style="font-size:0.82rem;color:#64748b">123 Eco-Friendly Lane, Chicago</p></div><span class="status-badge status-transit">En Route</span></div><button style="background:#059669;color:#fff;font-weight:900;padding:13px 24px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px"><i data-lucide="check-circle" class="w-5 h-5"></i> Mark Delivered</button></div>
+      </section>
+      <section id="d-view-deliveries" class="view-section">
+        <div class="page-header"><h2>Delivery History</h2></div>
+        <div class="glass-card" style="border-radius:22px;overflow:hidden"><table class="data-table"><thead><tr><th>Order ID</th><th>Customer</th><th>Farm</th><th>Distance</th><th>Earnings</th><th>Date</th><th>Status</th></tr></thead><tbody><tr><td style="font-weight:800">#ORD-9921</td><td>Athira K Jayan</td><td>Sun Valley Farm</td><td>4.2 km</td><td style="color:#34d399;font-weight:800">₹80</td><td style="color:#64748b">Nov 08</td><td><span class="status-badge status-delivered">Delivered</span></td></tr><tr><td style="font-weight:800">#ORD-9810</td><td>Rahul Sharma</td><td>Ethical Pastures</td><td>6.8 km</td><td style="color:#34d399;font-weight:800">₹120</td><td style="color:#64748b">Nov 07</td><td><span class="status-badge status-delivered">Delivered</span></td></tr></tbody></table></div>
+      </section>
+      <section id="d-view-available" class="view-section">
+        <div class="page-header"><div><h2>Available Orders</h2><p>Accept orders near you</p></div><span class="verification-tag">3 orders nearby</span></div>
+        <div style="display:flex;flex-direction:column;gap:16px" id="d-availableOrders"></div>
+      </section>
+      <section id="d-view-earnings" class="view-section">
+        <div class="page-header"><h2>My Earnings</h2></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px"><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Total Earned</p><p style="font-size:1.8rem;font-weight:900;color:#34d399">₹38,420</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">All time · 312 deliveries</p></div><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">This Week</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹4,200</p><p style="font-size:0.78rem;color:#34d399;font-weight:700;margin-top:6px">↑ 18% vs last week</p></div><div class="glass-card" style="border-radius:20px;padding:22px"><p style="font-size:0.68rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:800;margin-bottom:4px">Tips Received</p><p style="font-size:1.8rem;font-weight:900;color:#f8fafc">₹3,180</p><p style="font-size:0.78rem;color:#475569;margin-top:6px">From happy customers</p></div></div>
+      </section>
+      <section id="d-view-map" class="view-section">
+        <div class="page-header"><h2>Live Map</h2></div>
+        <div class="map-placeholder" style="height:500px"><div class="map-grid"></div><div class="map-dot" style="top:40%;left:50%"></div><div class="map-dot" style="top:28%;left:34%;animation-delay:0.5s"></div><i data-lucide="map" style="width:56px;height:56px;color:#1e293b;position:relative;z-index:1"></i><p style="color:#475569;font-size:0.9rem;position:relative;z-index:1">Live map integration ready — GPS tracking coming soon</p></div>
+      </section>
+      <section id="d-view-profile" class="view-section">
+        <div class="page-header"><h2>My Profile</h2></div>
+        <div style="display:grid;grid-template-columns:8fr 4fr;gap:24px">
+          <div class="glass-card" style="border-radius:22px;padding:28px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>First Name</label><input type="text" value="Mike"></div><div><label>Last Name</label><input type="text" value="Kowalski"></div></div>
+            <div><label>Email</label><input type="email" value="mike.k@farmchain.in"></div>
+            <div><label>Phone</label><input type="tel" value="+91 98765 43210"></div>
+            <div><label>Vehicle Type</label><select><option>2-Wheeler (Bike)</option><option selected>4-Wheeler (Car)</option></select></div>
+            <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:fit-content">Save Changes</button>
+          </div>
+          <div class="glass-card" style="border-radius:22px;padding:22px;text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem;color:#fff;margin:0 auto 12px">MK</div><p style="font-weight:900;color:#f8fafc;font-size:1rem">Mike K.</p><p style="color:#64748b;font-size:0.82rem;margin-bottom:12px">Distributor · Chicago</p><span class="verification-tag">★ 5.0 · Top Rated</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ ADD PRODUCT MODAL ════════════════ -->
+<div class="modal-overlay" id="addProductModal">
+  <div class="modal-box">
+    <button onclick="document.getElementById('addProductModal').classList.remove('open')" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <h2 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:22px">Add New Product</h2>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div><label>Product Name</label><input type="text" placeholder="e.g. Organic Spinach" id="np-name"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Category</label><select id="np-cat"><option>Vegetables</option><option>Fruits</option><option>Animal</option><option>Meat</option></select></div><div><label>Unit</label><select id="np-unit"><option>kg</option><option>g</option><option>doz</option><option>bag</option><option>piece</option></select></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div><label>Price (₹)</label><input type="number" placeholder="120" id="np-price"></div><div><label>Stock</label><input type="number" placeholder="50" id="np-stock"></div></div>
+      <div><label>Image URL</label><input type="url" placeholder="https://…" id="np-img"></div>
+      <button onclick="addNewProduct()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:14px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Add Listing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CUSTOMER SETTINGS PANEL ════════════════ -->
+<div id="settings-overlay" class="settings-overlay" onclick="handleSettingsOverlayClick(event)">
+  <div class="settings-panel" id="settings-panel">
+    <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem">Account &amp; Settings</h3>
+        <p style="font-size:0.75rem;color:#475569;margin-top:2px">Manage your preferences</p>
+      </div>
+      <button onclick="closeSettings()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.15);border-radius:16px;padding:16px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#10b981;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;flex-shrink:0">AKJ</div>
+        <div style="flex:1">
+          <p style="font-weight:900;color:#f8fafc;font-size:0.95rem">Athira K Jayan</p>
+          <p style="font-size:0.72rem;color:#475569">athira.k@email.com</p>
+          <span class="verification-tag" style="margin-top:6px;display:inline-flex">Premium Buyer</span>
+        </div>
+        <button style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:6px 12px;color:#94a3b8;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.75rem;font-weight:700;cursor:pointer">Edit</button>
+      </div>
+    </div>
+
+    <div style="padding:16px 0;overflow-y:auto;flex:1">
+      <div style="padding:0 20px;margin-bottom:16px">
+        <p class="settings-section-title" style="padding:0 0 10px">🌐 Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="lang-btn active" id="lang-en" onclick="setLanguage('en')">English</button>
+          <button class="lang-btn" id="lang-ml" onclick="setLanguage('ml')">മലയാളം</button>
+          <button class="lang-btn" id="lang-hi" onclick="setLanguage('hi')">हिन्दी</button>
+          <button class="lang-btn" id="lang-ta" onclick="setLanguage('ta')">தமிழ்</button>
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:0 20px 16px"></div>
+
+      <p class="settings-section-title">👤 Account</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="user" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Edit Profile</p><p style="font-size:0.72rem;color:#475569">Update name, photo, address</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="map-pin" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Saved Addresses</p><p style="font-size:0.72rem;color:#475569">Home, Work and more</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="credit-card" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Payment Methods</p><p style="font-size:0.72rem;color:#475569">UPI, Cards, Net Banking</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <p class="settings-section-title">⚙️ Preferences</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(168,85,247,0.12)"><i data-lucide="bell" style="width:16px;height:16px;color:#c084fc"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Notifications</p><p style="font-size:0.72rem;color:#475569">Order alerts, offers, news</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="leaf" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Eco-Friendly Filter</p><p style="font-size:0.72rem;color:#475569">Show only organic products</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="moon" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Dark Mode</p><p style="font-size:0.72rem;color:#475569">Always on dark theme</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <p class="settings-section-title">🔒 Privacy &amp; Security</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(239,68,68,0.12)"><i data-lucide="lock" style="width:16px;height:16px;color:#f87171"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Change Password</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="shield" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Two-Factor Auth</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="eye-off" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Data &amp; Privacy</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <p class="settings-section-title">💬 Support</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="help-circle" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Help &amp; FAQ</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="star" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Rate the App</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="share-2" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Refer &amp; Earn</p><p style="font-size:0.72rem;color:#475569">Get ₹50 per referral</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <div style="padding:0 20px 20px">
+        <button onclick="logOut();closeSettings()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:#f87171;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-size:0.88rem;transition:background 0.2s" onmouseover="this.style.background='rgba(239,68,68,0.12)'" onmouseout="this.style.background='rgba(239,68,68,0.06)'">
+          <i data-lucide="log-out" style="width:16px;height:16px"></i> Sign Out
+        </button>
+        <p style="text-align:center;font-size:0.7rem;color:#1e293b;margin-top:10px">v2.4.1 · FarmChain X</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ FARMER LANGUAGE PANEL ════════════════ -->
+<div id="farmer-lang-overlay" class="farmer-lang-overlay" onclick="handleFarmerLangOverlayClick(event)">
+  <div class="farmer-lang-panel" id="farmer-lang-panel">
+    <div style="padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem">Farm Settings</h3>
+        <p style="font-size:0.75rem;color:#475569;margin-top:2px">Language & preferences</p>
+      </div>
+      <button onclick="closeFarmerLang()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:34px;height:34px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+        <i data-lucide="x" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+
+    <!-- Farmer profile card -->
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;align-items:center;gap:14px;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.15);border-radius:16px;padding:16px">
+        <div style="width:52px;height:52px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1rem;color:#000;flex-shrink:0">GS</div>
+        <div style="flex:1">
+          <p style="font-weight:900;color:#f8fafc;font-size:0.95rem">Gloria S. Valley</p>
+          <p style="font-size:0.72rem;color:#475569">gloria.valley@farmchain.in</p>
+          <span class="verification-tag" style="margin-top:6px;display:inline-flex;border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.1);color:#fbbf24">Verified Farmer</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:16px 0;overflow-y:auto;flex:1">
+      <!-- Language Section -->
+      <div style="padding:0 20px;margin-bottom:16px">
+        <p class="settings-section-title" style="padding:0 0 10px">🌐 Language</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button class="lang-btn active" id="f-lang-en" onclick="setFarmerLanguage('en')">English</button>
+          <button class="lang-btn" id="f-lang-ml" onclick="setFarmerLanguage('ml')">മലയാളം</button>
+          <button class="lang-btn" id="f-lang-hi" onclick="setFarmerLanguage('hi')">हिन्दी</button>
+          <button class="lang-btn" id="f-lang-ta" onclick="setFarmerLanguage('ta')">தமிழ்</button>
+        </div>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:0 20px 16px"></div>
+
+      <p class="settings-section-title">⚙️ Farm Preferences</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(16,185,129,0.12)"><i data-lucide="bell" style="width:16px;height:16px;color:#10b981"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Order Alerts</p><p style="font-size:0.72rem;color:#475569">New order notifications</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="package" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Low Stock Alerts</p><p style="font-size:0.72rem;color:#475569">Alert when stock drops below 5</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(59,130,246,0.12)"><i data-lucide="indian-rupee" style="width:16px;height:16px;color:#60a5fa"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Payout Alerts</p><p style="font-size:0.72rem;color:#475569">Payment confirmation alerts</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <p class="settings-section-title">🔒 Security</p>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(239,68,68,0.12)"><i data-lucide="lock" style="width:16px;height:16px;color:#f87171"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Change Password</p></div>
+        </div>
+        <i data-lucide="chevron-right" style="width:16px;height:16px;color:#334155"></i>
+      </div>
+      <div class="settings-row">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="settings-row-icon" style="background:rgba(245,158,11,0.12)"><i data-lucide="shield" style="width:16px;height:16px;color:#fbbf24"></i></div>
+          <div><p style="font-weight:700;color:#f8fafc;font-size:0.88rem">Two-Factor Auth</p></div>
+        </div>
+        <label class="toggle" style="flex-shrink:0"><input type="checkbox"><span class="toggle-slider"></span></label>
+      </div>
+
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 20px 16px"></div>
+
+      <div style="padding:0 20px 20px">
+        <button onclick="logOut();closeFarmerLang()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:14px;border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.06);color:#f87171;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer;font-size:0.88rem;transition:background 0.2s" onmouseover="this.style.background='rgba(239,68,68,0.12)'" onmouseout="this.style.background='rgba(239,68,68,0.06)'">
+          <i data-lucide="log-out" style="width:16px;height:16px"></i> Sign Out
+        </button>
+        <p style="text-align:center;font-size:0.7rem;color:#1e293b;margin-top:10px">v2.4.1 · FarmChain X</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CHATBOT ════════════════ -->
+<button class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()" style="display:none" title="Ask FarmBot">
+  <i data-lucide="message-circle" style="width:26px;height:26px;color:#fff"></i>
+</button>
+
+<div class="chatbot-window" id="chatbot-window">
+  <div class="chat-header">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#059669,#10b981);display:flex;align-items:center;justify-content:center">
+        <i data-lucide="sprout" style="width:18px;height:18px;color:#fff"></i>
+      </div>
+      <div>
+        <p style="font-weight:900;color:#f8fafc;font-size:0.9rem">FarmBot AI</p>
+        <p style="font-size:0.7rem;color:#34d399" id="chat-status-line">● Online · Ready to help</p>
+      </div>
+    </div>
+    <button onclick="toggleChat()" style="background:rgba(255,255,255,0.06);border:none;color:#94a3b8;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center">
+      <i data-lucide="x" style="width:14px;height:14px"></i>
+    </button>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">
+      👋 Hi! I'm <strong>FarmBot</strong>, your AI farming assistant. How can I help today?
+    </div>
+  </div>
+
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" type="text" placeholder="Ask about produce, farms, orders…" onkeydown="if(event.key==='Enter')sendChatMsg()">
+    <button class="chat-send-btn" onclick="sendChatMsg()">
+      <i data-lucide="send" style="width:16px;height:16px;color:#fff"></i>
+    </button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+</div><!-- #app -->
+<script src="translations.js"></script>
+<script src="chatbotlogic.js"></script>
+<script>
+
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const DELIVERY_FEE = 40;
+let currentRole = null;
+let basket = [];
+let favorites = JSON.parse(localStorage.getItem('fcx_fav') || '[]');
+
+function fmt(n) {
+  n = Number(n);
+  if (isNaN(n)) return '₹0';
+  return '₹' + (n % 1 === 0 ? n.toLocaleString('en-IN') : n.toLocaleString('en-IN', {minimumFractionDigits:2,maximumFractionDigits:2}));
+}
+
+function showToast(msg) {
+  const t2 = document.getElementById('toast');
+  t2.textContent = msg;
+  t2.classList.add('show');
+  setTimeout(() => t2.classList.remove('show'), 2500);
+}
+
+let products = [];
+
+async function fetchProducts() {
+  try {
+    const response = await fetch('/api/products');
+    if (response.ok) {
+      products = await response.json();
+    }
+  } catch (e) {
+    console.error("Failed to fetch products:", e);
+  }
+}
+
+const farms = {
+  101:{name:"Gloria's Sun Valley Farm",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1505471768190-275e2ad7b3f9?auto=format&fit=crop&q=80&w=1200",description:"Gloria focuses on heirloom seeds and natural pest control. All produce harvested to order.",tags:["Verified Organic","No Pesticides", "Family Owned"],rating:4.9,location:"Napa Valley, CA", owner: "Gloria S.", memberSince: "Mar 2021", completionRate: "99%", totalOrders: "1.2k+"},
+  102:{name:"Highland Root Farm",image:"https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=1200",description:"Specializing in root vegetables and seasonal fruits from mountain terrain.",tags:["Mountain Grown", "Eco Packaging"],rating:4.7,location:"Asheville, NC", owner: "David M.", memberSince: "Jul 2022", completionRate: "95%", totalOrders: "850+"},
+  103:{name:"Ethical Pastures",image:"https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&q=80&w=1200",description:"Where animals come first. 100% free-range, cruelty-free certified.",tags:["Cruelty Free", "Pasture Raised"],rating:5.0,location:"Lancaster, PA", owner: "Sarah J.", memberSince: "Jan 2020", completionRate: "100%", totalOrders: "2.4k+"}
+};
+
+let customerOrders = [
+  {id:"ORD-9921",date:"Oct 24, 2023",status:"Delivered",total:2240,items:[
+    {productId:1,name:"Heirloom Tomatoes",qty:2,unit:"kg",price:375,img:products[0].image},
+    {productId:3,name:"Free Range Brown Eggs",qty:2,unit:"doz",price:500,img:products[2].image},
+  ]},
+  {id:"ORD-8812",date:"Nov 02, 2023",status:"In Transit",total:2120,items:[
+    {productId:4,name:"Grass-Fed Ribeye",qty:1,unit:"kg",price:2080,img:products[3].image}
+  ]}
+];
+
+const farmerOrders = [
+  {id:"ORD-9921",customer:"Athira K Jayan",items:"Heirloom Tomatoes ×2, Eggs ×2",total:2240,date:"Nov 08",status:"Delivered"},
+  {id:"ORD-8812",customer:"Rahul Sharma",items:"Bell Peppers ×1",total:265,date:"Nov 08",status:"Pending"},
+  {id:"ORD-8801",customer:"Priya Nair",items:"Heirloom Tomatoes ×3",total:1125,date:"Nov 07",status:"Processing"},
+  {id:"ORD-8790",customer:"Sanjay Patel",items:"Tomatoes ×1, Bell Peppers ×2",total:905,date:"Nov 07",status:"Delivered"},
+];
+
+const availableOrders = [
+  {id:"ORD-9960",farm:"Gloria's Sun Valley Farm",farmAddr:"Napa Valley Hub, Sector 4",destAddr:"123 Maple Street, Chicago",dist:"3.2 km",pay:65,items:"Tomatoes ×2, Eggs ×1"},
+  {id:"ORD-9958",farm:"Highland Root Farm",farmAddr:"Highland Hub, Block B",destAddr:"56 River Road, Evanston",dist:"5.8 km",pay:110,items:"Potatoes ×5, Apples ×2"},
+  {id:"ORD-9950",farm:"Ethical Pastures",farmAddr:"Ethical Pastures Hub",destAddr:"789 Oak Lane, Naperville",dist:"8.1 km",pay:145,items:"Ribeye ×2"},
+];
+
+// ══════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════
+function selectRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('role-'+role).classList.add('selected');
+  const icons = {customer:'🛒',farmer:'🌾',distributor:'🚚'};
+  const titles = {customer:'Customer Login',farmer:'Farmer Login',distributor:'Distributor Login'};
+  const subs = {customer:'Browse and buy fresh produce',farmer:'Manage your farm and listings',distributor:'Accept and deliver orders'};
+  document.getElementById('login-role-icon').textContent = icons[role];
+  document.getElementById('login-role-title').textContent = titles[role];
+  document.getElementById('login-role-sub').textContent = subs[role];
+  document.getElementById('login-form').style.display = 'block';
+}
+
+async function doLogin() {
+  if (!currentRole) { alert('Please select a role first'); return; }
+  
+  // Fetch latest products from API before proceeding
+  await fetchProducts();
+
+  document.getElementById('login-screen').style.display = 'none';
+  document.querySelectorAll('.portal-screen').forEach(p => p.classList.remove('active'));
+  document.getElementById('portal-'+currentRole).classList.add('active');
+  if (currentRole === 'customer') { cRenderProducts(products,'c-productGrid'); cRenderOrders(); cRenderFarms(); }
+  if (currentRole === 'farmer') { fRenderProducts(); fRenderOrders(); fRenderInventory(); }
+  if (currentRole === 'distributor') { dRenderAvailableOrders(); }
+  const fab = document.getElementById('chatbot-fab');
+  if (currentRole === 'customer' || currentRole === 'farmer') {
+    fab.style.display = 'flex';
+    initChatbot(currentRole);
+  } else {
+    fab.style.display = 'none';
+  }
+  lucide.createIcons();
+}
+
+function logOut() {
+  document.querySelectorAll('.portal-screen').forEach(p => p.classList.remove('active'));
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('chatbot-fab').style.display = 'none';
+  document.getElementById('chatbot-window').classList.remove('open');
+  currentRole = null;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('login-form').style.display = 'none';
+  basket = [];
+}
+
+function showRegister() { document.getElementById('register-modal').classList.add('open'); lucide.createIcons(); }
+function closeRegister() { document.getElementById('register-modal').classList.remove('open'); }
+
+// ══════════════════════════════════════════
+// CUSTOMER SETTINGS
+// ══════════════════════════════════════════
+function openSettings() {
+  document.getElementById('settings-overlay').classList.add('open');
+  lucide.createIcons();
+}
+function closeSettings() { document.getElementById('settings-overlay').classList.remove('open'); }
+function handleSettingsOverlayClick(e) {
+  if (e.target === document.getElementById('settings-overlay')) closeSettings();
+}
+
+// ══════════════════════════════════════════
+// FARMER LANGUAGE PANEL
+// ══════════════════════════════════════════
+function openFarmerLang() {
+  document.getElementById('farmer-lang-overlay').classList.add('open');
+  lucide.createIcons();
+}
+function closeFarmerLang() { document.getElementById('farmer-lang-overlay').classList.remove('open'); }
+function handleFarmerLangOverlayClick(e) {
+  if (e.target === document.getElementById('farmer-lang-overlay')) closeFarmerLang();
+}
+
+// ══════════════════════════════════════════
+// CUSTOMER
+// ══════════════════════════════════════════
+async function cShowView(v) {
+  document.querySelectorAll('#portal-customer .view-section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('c-view-'+v);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('#portal-customer .nav-link').forEach(n => n.classList.remove('active'));
+  const btn = document.getElementById('c-btn-'+v);
+  if (btn) btn.classList.add('active');
+  
+  if (v==='home' || v==='categories') {
+    await fetchProducts();
+    if(v==='home') cRenderProducts(products,'c-productGrid');
+    else cFilterCategory(document.querySelector('.glass-card[onclick^="cFilterCategory"]') ? 'Vegetables' : ''); // Just keep current logic or fetch
+  }
+  
+  if (v==='favorites') cRenderFavorites();
+  if (v==='top-farms') cRenderFarms();
+  if (v==='orders') cRenderOrders();
+  document.querySelector('#portal-customer .main-pane').scrollTop = 0;
+  lucide.createIcons();
+}
+
+function cRenderProducts(items, containerId) {
+  const c = document.getElementById(containerId); if (!c) return;
+  if (!items.length) {
+    c.innerHTML = `<div style="grid-column:1/-1;padding:40px;text-align:center;color:#475569">No products found.</div>`;
+    return;
+  }
+  c.innerHTML = items.map(p => {
+    const fav = favorites.includes(p.id);
+    const displayName = tProduct(p.name);
+    return `<div class="glass-card" style="padding:14px;border-radius:22px;cursor:pointer;position:relative" onclick="cViewProduct(${p.id})">
+      <button onclick="cToggleFav(${p.id},event)" style="position:absolute;top:10px;right:10px;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'#94a3b8'}">
+        <i data-lucide="heart" style="width:14px;height:14px;${fav?'fill:#f87171':''}"></i>
+      </button>
+      <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:12px;background:#0f172a">
+        <img src="${p.image}" alt="${displayName}" class="product-img" style="transition:transform 0.4s" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:800;color:#f8fafc">★ ${p.rating}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
+        <h3 style="font-weight:800;color:#f8fafc;font-size:0.9rem;overflow:hidden;text-overflow:ellipsis;word-wrap:break-word;word-break:break-word;flex:1;padding-right:8px;line-height:1.3;max-height:2.6em">${displayName}</h3>
+        <span style="color:#34d399;font-weight:900;font-size:0.9rem;white-space:nowrap">${fmt(p.price)}</span>
+      </div>
+      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.1em;font-weight:700">${t(p.category) || p.category} · ${p.unit}</p>
+    </div>`;
+  }).join('');
+  lucide.createIcons();
+}
+
+function cToggleFav(id, e) {
+  if (e) e.stopPropagation();
+  const i = favorites.indexOf(id);
+  if (i===-1) favorites.push(id); else favorites.splice(i,1);
+  localStorage.setItem('fcx_fav', JSON.stringify(favorites));
+  cRenderProducts(products, 'c-productGrid');
+}
+
+function cViewProduct(id) {
+  const p = products.find(x=>x.id===id);
+  const farm = farms[p.farmId];
+  const fav = favorites.includes(p.id);
+  const displayName = tProduct(p.name);
+  document.getElementById('c-productDetailContent').innerHTML = `
+    <!-- LEFT SIDE: PRODUCT -->
+    <div>
+      <div style="border-radius:28px;overflow:hidden;background:#0f172a;margin-bottom:20px;position:relative">
+        <img src="${p.image}" style="width:100%;height:420px;object-fit:cover">
+        <button onclick="cToggleFav(${p.id});event.stopPropagation();" style="position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'rgba(255,255,255,0.8)'}">
+          <i data-lucide="heart" style="width:22px;height:22px;${fav?'fill:#f87171':''}"></i>
+        </button>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="verification-tag" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2);color:#60a5fa;"><i data-lucide="tag" class="w-3 h-3"></i> ${p.category}</span>
+          </div>
+          <h1 style="font-size:2.2rem;font-weight:900;color:#f8fafc;line-height:1.1">${displayName}</h1>
+        </div>
+        <div style="text-align:right">
+          <p style="font-size:2rem;font-weight:900;color:#34d399;line-height:1">${fmt(p.price)}</p>
+          <p style="font-size:0.75rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px">Per ${p.unit}</p>
+        </div>
+      </div>
+      
+      <p style="color:#94a3b8;font-size:0.95rem;line-height:1.6;margin-bottom:24px;">${p.description || 'Fresh from the farm to your doorstep.'}</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;color:#10b981;"><i data-lucide="leaf" style="width:20px;height:20px"></i></div>
+          <div><p style="font-size:0.7rem;color:#64748b;text-transform:uppercase;font-weight:800;letter-spacing:0.05em">Freshness</p><p style="font-size:0.9rem;font-weight:800;color:#f8fafc">${p.harvestDate || 'Harvested recently'}</p></div>
+        </div>
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;color:#60a5fa;"><i data-lucide="clock" style="width:20px;height:20px"></i></div>
+          <div><p style="font-size:0.7rem;color:#64748b;text-transform:uppercase;font-weight:800;letter-spacing:0.05em">Shelf Life</p><p style="font-size:0.9rem;font-weight:800;color:#f8fafc">${p.shelfLife || 'Check packaging'}</p></div>
+        </div>
+      </div>
+      
+      <button onclick="cAddToBasket(${p.id})" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:18px;border-radius:16px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s;box-shadow:0 8px 24px rgba(5,150,105,0.25);" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        <i data-lucide="shopping-cart" style="width:22px;height:22px"></i> Add to Basket
+      </button>
+    </div>
+
+    <!-- RIGHT SIDE: FARM -->
+    <div class="glass-card farm-profile-card" onclick="cViewFarmProfile(${p.farmId})" style="border-radius:24px;padding:28px;height:fit-content;position:sticky;top:24px;cursor:pointer;transition:transform 0.2s, background 0.2s;border:1px solid rgba(255,255,255,0.06);" onmouseover="this.style.background='rgba(30,41,59,0.7)'" onmouseout="this.style.background='rgba(15,23,42,0.4)'">
+      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800;margin-bottom:18px">Sold By</p>
+      <div style="text-align:center;margin-bottom:20px;">
+        <img src="${farm.image}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #10b981;margin:0 auto 12px;box-shadow:0 0 20px rgba(16,185,129,0.3);">
+        <h4 style="font-weight:900;color:#f8fafc;font-size:1.1rem;margin-bottom:4px">${farm.name}</h4>
+        <p style="font-size:0.8rem;color:#475569;margin-bottom:8px">${farm.location}</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,0.1);padding:4px 10px;border-radius:99px;border:1px solid rgba(251,191,36,0.2);">
+          <i data-lucide="star" style="width:12px;height:12px;fill:#fbbf24;color:#fbbf24"></i>
+          <span style="font-size:0.8rem;font-weight:800;color:#fbbf24">${farm.rating}</span>
+        </div>
+      </div>
+      <div style="background:rgba(15,23,42,0.4);border-radius:16px;padding:16px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;">
+          <div><p style="font-weight:900;color:#f8fafc;font-size:1rem">${farm.totalOrders || '1.2k+'}</p><p style="font-size:0.65rem;color:#64748b;text-transform:uppercase;">Orders</p></div>
+          <div style="border-left:1px solid rgba(255,255,255,0.06)"><p style="font-weight:900;color:#34d399;font-size:1rem">${farm.completionRate || '99%'}</p><p style="font-size:0.65rem;color:#64748b;text-transform:uppercase;">Rate</p></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px;">${(farm.tags||[]).map(tag=>`<span class="verification-tag" style="font-size:0.65rem">${tag}</span>`).join('')}</div>
+      <button style="width:100%;background:none;color:#10b981;font-weight:800;padding:12px;border-radius:12px;border:1px solid rgba(16,185,129,0.3);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s">
+        View Farm Profile <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+    `;
+  cShowView('product-detail');
+  lucide.createIcons();
+}
+
+function cViewFarmProfile(farmId) {
+  const farm = farms[farmId];
+  if(!farm) return;
+  const farmProducts = products.filter(p => p.farmId === farmId);
+  
+  document.getElementById('c-farmProfileContent').innerHTML = `
+    <div style="border-radius:28px;overflow:hidden;background:#0f172a;margin-bottom:28px;position:relative;border:1px solid rgba(255,255,255,0.06);">
+      <div style="height:220px;width:100%;position:relative;">
+        <img src="${farm.banner || farm.image}" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(15,23,42,1), rgba(15,23,42,0));"></div>
+      </div>
+      <div style="padding:0 32px 32px;position:relative;z-index:2;display:flex;align-items:flex-end;gap:24px;margin-top:-60px;">
+        <img src="${farm.image}" style="width:120px;height:120px;border-radius:20px;object-fit:cover;border:4px solid #0f172a;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div style="flex:1;">
+          <h1 style="font-size:2.2rem;font-weight:900;color:#f8fafc;margin-bottom:4px;line-height:1.1">${farm.name}</h1>
+          <p style="color:#94a3b8;font-size:0.95rem;"><i data-lucide="map-pin" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>${farm.location} · ${farm.memberSince ? 'Member since ' + farm.memberSince : 'Verified Farm'}</p>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;display:flex;align-items:center;gap:8px;">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> Contact
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div style="display:grid;grid-template-columns:8fr 4fr;gap:28px;">
+      <div class="glass-card" style="padding:32px;border-radius:24px;">
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.2rem;margin-bottom:16px;">About the Farm</h3>
+        <p style="color:#94a3b8;font-size:1rem;line-height:1.7;margin-bottom:24px;">${farm.description}</p>
+        <h4 style="font-weight:800;color:#f8fafc;font-size:0.95rem;margin-bottom:12px;">Farm Certifications</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">${(farm.tags||[]).map(tag=>`<span class="verification-tag" style="font-size:0.8rem;padding:6px 12px;"><i data-lucide="shield-check" class="w-3 h-3"></i> ${tag}</span>`).join('')}</div>
+      </div>
+      <div class="glass-card" style="padding:28px;border-radius:24px;">
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem;margin-bottom:20px;">Farm Metrics</h3>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="star" style="width:20px;height:20px;color:#fbbf24;"></i> <span style="font-weight:800;color:#f8fafc;">Rating</span></div>
+            <span style="font-weight:900;color:#fbbf24;font-size:1.1rem">${farm.rating} / 5</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa;"></i> <span style="font-weight:800;color:#f8fafc;">Total Orders</span></div>
+            <span style="font-weight:900;color:#f8fafc;font-size:1.1rem">${farm.totalOrders || '1.2k+'}</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="check-square" style="width:20px;height:20px;color:#10b981;"></i> <span style="font-weight:800;color:#f8fafc;">Completion</span></div>
+            <span style="font-weight:900;color:#34d399;font-size:1.1rem">${farm.completionRate || '99%'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  cShowView('farm-profile');
+  cRenderProducts(farmProducts, 'c-farmProfileProducts');
+  lucide.createIcons();
+}
+
+function cAddToBasket(id, qty=1) {
+  const p = products.find(x=>x.id===id);
+  const ex = basket.find(x=>x.id===id);
+  if (ex) ex.qty+=qty; else basket.push({...p,qty});
+  cUpdateBasketUI();
+  showToast('Added to Basket! 🛒');
+}
+
+function cUpdateBasketUI() {
+  const count = basket.reduce((a,i)=>a+i.qty,0);
+  const b = document.getElementById('c-basketBadge');
+  if (count > 0) { b.textContent=count; b.style.display='flex'; }
+  else b.style.display='none';
+}
+
+function cShowCheckout() {
+  const c = document.getElementById('c-checkoutContent');
+  if (!basket.length) {
+    c.innerHTML = `<div class="glass-card" style="padding:80px;border-radius:32px;text-align:center">
+      <i data-lucide="shopping-cart" style="width:56px;height:56px;color:#1e293b;margin:0 auto 20px;display:block"></i>
+      <h3 style="font-size:1.4rem;font-weight:900;color:#f8fafc;margin-bottom:8px">${t('emptyBasket')}</h3>
+      <button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:900;padding:14px 32px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:16px">${t('browseMarket')}</button>
+    </div>`;
+    cShowView('checkout'); lucide.createIcons(); return;
+  }
+  const sub = basket.reduce((a,i)=>a+(i.price*i.qty),0);
+  const total = sub + DELIVERY_FEE;
+  c.innerHTML = `<div style="display:grid;grid-template-columns:7fr 5fr;gap:28px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      ${basket.map(item=>`
+      <div class="glass-card" style="padding:20px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+        <div style="display:flex;align-items:center;gap:16px">
+          <img src="${item.image}" style="width:72px;height:72px;border-radius:16px;object-fit:cover">
+          <div>
+            <h4 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${tProduct(item.name)}</h4>
+            <p style="font-size:0.72rem;color:#475569;text-transform:uppercase;font-weight:700">${item.category}</p>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+              <button onclick="cChangeQty(${item.id},-1)" style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:#f8fafc;cursor:pointer;font-size:1.1rem">−</button>
+              <span style="font-weight:800;color:#f8fafc;min-width:40px;text-align:center">${item.qty} ${item.unit}</span>
+              <button onclick="cChangeQty(${item.id},1)" style="width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,0.08);border:none;color:#f8fafc;cursor:pointer;font-size:1.1rem">+</button>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <p style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(item.price*item.qty)}</p>
+          <button onclick="cRemove(${item.id})" style="font-size:0.75rem;color:#f87171;font-weight:700;background:none;border:none;cursor:pointer;margin-top:6px">Remove</button>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div>
+      <div class="glass-card" style="padding:28px;border-radius:24px;position:sticky;top:24px">
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem;margin-bottom:20px">Order Summary</h3>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+          <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Subtotal</span><span style="font-weight:800;color:#f8fafc">${fmt(sub)}</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="color:#64748b">Eco-Delivery</span><span style="font-weight:800;color:#f8fafc">${fmt(DELIVERY_FEE)}</span></div>
+          <div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08)">
+            <span style="font-size:1.1rem;font-weight:900;color:#f8fafc">Total</span>
+            <span style="font-size:1.4rem;font-weight:900;color:#34d399">${fmt(total)}</span>
+          </div>
+        </div>
+        <button onclick="cCompleteOrder()" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:16px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+          ${t('confirmPay')}
+        </button>
+      </div>
+    </div>
+  </div>`;
+  cShowView('checkout');
+  lucide.createIcons();
+}
+
+function cChangeQty(id,d){const i=basket.find(x=>x.id===id);if(i){i.qty+=d;if(i.qty<=0)cRemove(id);else cShowCheckout();}cUpdateBasketUI();}
+function cRemove(id){basket=basket.filter(i=>i.id!==id);cUpdateBasketUI();cShowCheckout();}
+
+function cCompleteOrder(){
+  const nid="ORD-"+Math.floor(1000+Math.random()*9000);
+  const total=basket.reduce((a,i)=>a+(i.price*i.qty),0)+DELIVERY_FEE;
+  customerOrders.unshift({id:nid,date:"Just Now",status:"In Transit",total,items:basket.map(b=>({...b,productId:b.id,img:b.image}))});
+  basket=[]; cUpdateBasketUI();
+  document.getElementById('c-checkoutContent').innerHTML=`
+    <div class="glass-card" style="padding:80px;border-radius:32px;text-align:center">
+      <div style="width:80px;height:80px;background:#10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;box-shadow:0 0 40px rgba(16,185,129,0.35)">
+        <i data-lucide="check" style="width:40px;height:40px;color:#000"></i>
+      </div>
+      <h2 style="font-size:2rem;font-weight:900;color:#f8fafc;margin-bottom:10px">${t('orderPlaced')}</h2>
+      <p style="color:#64748b;margin-bottom:32px">Order ID: <strong style="color:#f8fafc">${nid}</strong></p>
+      <div style="display:flex;justify-content:center;gap:14px">
+        <button onclick="cShowView('orders')" style="background:rgba(255,255,255,0.08);color:#f8fafc;font-weight:800;padding:13px 28px;border-radius:14px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">View Orders</button>
+        <button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:13px 28px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Back to Market</button>
+      </div>
+    </div>`;
+  lucide.createIcons();
+}
+
+function cRenderOrders(){
+  const c=document.getElementById('c-ordersContainer');
+  if(!customerOrders.length){c.innerHTML=`<div style="padding:60px;text-align:center;color:#475569">No orders yet.</div>`;lucide.createIcons();return;}
+  c.innerHTML=customerOrders.map(o=>`
+    <div class="order-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06)">
+        <div><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800">Order ID</p><h4 style="font-size:1.2rem;font-weight:900;color:#f8fafc">${o.id}</h4></div>
+        <div style="display:flex;align-items:center;gap:14px"><p style="font-size:0.85rem;color:#475569">${o.date}</p><span class="status-badge ${o.status==='Delivered'?'status-delivered':'status-transit'}">${o.status}</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px">
+        ${o.items.map(i=>`<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:12px"><img src="${i.img}" style="width:44px;height:44px;border-radius:12px;object-fit:cover"><div><p style="font-weight:800;color:#f8fafc;font-size:0.9rem">${tProduct(i.name)}</p><p style="font-size:0.75rem;color:#475569">Qty: ${i.qty} ${i.unit||''}</p></div></div><p style="font-weight:700;color:#94a3b8;font-size:0.9rem">${fmt(i.price*i.qty)}</p></div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.5);padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,0.05)">
+        <p style="font-size:1.4rem;font-weight:900;color:#34d399">${fmt(o.total)}</p>
+        <div style="display:flex;gap:10px">
+          <button onclick="cTrackOrder('${o.id}')" style="padding:9px 20px;background:rgba(255,255,255,0.06);color:#f8fafc;font-weight:700;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem">Track</button>
+          <button onclick="cOrderAgain('${o.id}')" style="padding:9px 20px;background:#059669;color:#fff;font-weight:800;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem">Order Again</button>
+        </div>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function cOrderAgain(id){const o=customerOrders.find(x=>x.id===id);o.items.forEach(i=>cAddToBasket(i.productId,i.qty));cShowCheckout();}
+
+function cTrackOrder(id){
+  document.getElementById('c-trackOrderContent').innerHTML=`
+    <div class="glass-card" style="padding:36px;border-radius:28px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:40px;flex-wrap:wrap;gap:16px">
+        <div><p style="font-size:0.65rem;color:#10b981;text-transform:uppercase;letter-spacing:0.2em;font-weight:800;margin-bottom:6px">Live Tracking</p><h2 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${id}</h2></div>
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);padding:12px 20px;border-radius:16px;text-align:center"><p style="font-size:0.65rem;color:#10b981;text-transform:uppercase;font-weight:800;letter-spacing:0.1em">Est. Arrival</p><p style="font-size:1.2rem;font-weight:900;color:#f8fafc">Today, 5:30 PM</p></div>
+      </div>
+      <div style="position:relative;display:flex;justify-content:space-between">
+        <div style="position:absolute;top:22px;left:0;right:0;height:3px;background:rgba(255,255,255,0.06);border-radius:99px"><div style="height:100%;width:75%;background:#10b981;border-radius:99px"></div></div>
+        ${[['check','Ordered','white'],['package','Packed','white'],['truck','Shipping','#34d399'],['home','Arrived','','0.3']].map(([ic,lbl,col,op])=>`
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:1;${op?'opacity:'+op:''}">
+          <div style="width:44px;height:44px;background:${col==='#34d399'?'#10b981':col==='white'?'#10b981':'rgba(255,255,255,0.06)'};border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #020617;margin-bottom:10px">
+            <i data-lucide="${ic}" style="width:20px;height:20px;color:${col==='white'?'#000':col==='#34d399'?'#fff':'#475569'}"></i>
+          </div>
+          <p style="font-size:0.72rem;font-weight:800;color:${col==='#34d399'?'#34d399':'#f8fafc'};text-transform:uppercase;letter-spacing:0.05em">${lbl}</p>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  cShowView('track-order'); lucide.createIcons();
+}
+
+function cRenderFavorites(){
+  const c=document.getElementById('c-favoritesContent');
+  const list=products.filter(p=>favorites.includes(p.id));
+  if(!list.length){c.style.display='block';c.innerHTML=`<div style="padding:60px;text-align:center;color:#475569"><i data-lucide="heart" style="width:48px;height:48px;color:#1e293b;margin:0 auto 16px;display:block"></i><h3 style="font-size:1.2rem;font-weight:900;color:#f8fafc;margin-bottom:8px">No favorites yet</h3><button onclick="cShowView('home')" style="background:#059669;color:#fff;font-weight:800;padding:11px 24px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:14px">Browse Products</button></div>`;lucide.createIcons();return;}
+  c.style.display='grid'; cRenderProducts(list,'c-favoritesContent');
+}
+
+function cFilterCategory(cat){
+  const filtered=products.filter(p=>p.category===cat);
+  cRenderProducts(filtered,'c-categoryResults');
+  cShowView('categories');
+}
+
+function cRenderFarms(){
+  const c=document.getElementById('c-topFarmsList'); if(!c) return;
+  c.innerHTML=Object.keys(farms).map(id=>{const f=farms[id];return `<div class="glass-card" style="padding:20px;border-radius:22px;cursor:pointer;transition:transform 0.2s;border:1px solid rgba(255,255,255,0.06);" onclick="cViewFarmProfile(${id})" onmouseover="this.style.transform='scale(1.02)';this.style.borderColor='rgba(16,185,129,0.3)';" onmouseout="this.style.transform='scale(1)';this.style.borderColor='rgba(255,255,255,0.06)';"><div style="display:flex;gap:18px"><img src="${f.image}" style="width:100px;height:100px;border-radius:18px;object-fit:cover;flex-shrink:0"><div><h3 style="font-weight:900;color:#f8fafc;font-size:1.05rem;margin-bottom:4px">${f.name}</h3><p style="color:#fbbf24;font-size:0.85rem;font-weight:700;margin-bottom:6px">★ ${f.rating}</p><p style="color:#64748b;font-size:0.83rem;line-height:1.5">${f.description}</p><p style="color:#334155;font-size:0.75rem;margin-top:8px">${f.location}</p></div></div></div>`;}).join('');
+  lucide.createIcons();
+}
+
+document.getElementById('c-searchInput').addEventListener('input', e => {
+  const query = e.target.value.toLowerCase();
+  const filtered = products.filter(p =>
+    tProduct(p.name).toLowerCase().includes(query) ||
+    p.name.toLowerCase().includes(query) ||
+    p.category.toLowerCase().includes(query)
+  );
+  cRenderProducts(filtered, 'c-productGrid');
+});
+
+// ══════════════════════════════════════════
+// FARMER
+// ══════════════════════════════════════════
+function fShowView(v){
+  document.querySelectorAll('#portal-farmer .view-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('f-view-'+v)?.classList.add('active');
+  document.querySelectorAll('#portal-farmer .nav-link').forEach(n=>n.classList.remove('active'));
+  document.getElementById('f-btn-'+v)?.classList.add('active');
+  document.querySelector('#portal-farmer .main-pane').scrollTop=0;
+  lucide.createIcons();
+}
+
+function fRenderProducts(){
+  const c=document.getElementById('f-productsList'); if(!c) return;
+  c.innerHTML=products.map(p=>`
+    <div class="glass-card" style="padding:16px;border-radius:20px">
+      <div style="position:relative;overflow:hidden;border-radius:16px;margin-bottom:14px;background:#0f172a">
+        <img src="${p.image}" style="width:100%;height:160px;object-fit:cover">
+        <div style="position:absolute;top:8px;left:8px"><span class="status-badge ${p.stock<6?'status-busy':'status-delivered'}">${p.stock<6?'Low Stock':'In Stock'}</span></div>
+        <div style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:800;color:#f8fafc">★ ${p.rating}</div>
+      </div>
+      <h3 style="font-weight:900;color:#f8fafc;margin-bottom:3px">${ftProduct(p.name)}</h3>
+      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:700;letter-spacing:0.08em;margin-bottom:10px">${p.category} · ${p.unit}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><span style="font-size:1.1rem;font-weight:900;color:#34d399">${fmt(p.price)}</span><span style="font-size:0.8rem;color:#475569">${p.stock} units left</span></div>
+      <div style="display:flex;gap:8px">
+        <button style="flex:1;background:rgba(255,255,255,0.06);color:#f8fafc;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px"><i data-lucide="edit-3" style="width:13px;height:13px"></i> Edit</button>
+        <button style="flex:1;background:rgba(16,185,129,0.1);color:#34d399;font-weight:700;padding:9px;border-radius:12px;border:1px solid rgba(16,185,129,0.2);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.8rem;display:flex;align-items:center;justify-content:center;gap:5px"><i data-lucide="eye" style="width:13px;height:13px"></i> Preview</button>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function fRenderOrders(){
+  const tb=document.getElementById('f-ordersTable'); if(!tb) return;
+  tb.innerHTML=farmerOrders.map(o=>`
+    <tr>
+      <td style="font-weight:800;color:#f8fafc">#${o.id}</td>
+      <td>${o.customer}</td>
+      <td style="color:#64748b;font-size:0.8rem">${o.items}</td>
+      <td style="font-weight:800;color:#34d399">${fmt(o.total)}</td>
+      <td style="color:#475569">${o.date}</td>
+      <td><span class="status-badge ${o.status==='Delivered'?'status-delivered':o.status==='Pending'?'status-pending':'status-transit'}">${o.status}</span></td>
+      <td>${o.status==='Pending'?`<button onclick="fAcceptOrder(this,'${o.id}')" style="background:#059669;color:#fff;font-size:0.78rem;font-weight:800;padding:7px 16px;border-radius:10px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Accept</button>`:'<span style="color:#334155">—</span>'}</td>
+    </tr>`).join('');
+}
+
+function fAcceptOrder(btn,id){const o=farmerOrders.find(x=>x.id===id);if(o)o.status='Processing';fRenderOrders();lucide.createIcons();showToast('Order accepted!');}
+
+function fRenderInventory(){
+  const tb=document.getElementById('f-inventoryTable'); if(!tb) return;
+  tb.innerHTML=products.map(p=>`
+    <tr>
+      <td style="font-weight:800;color:#f8fafc">${ftProduct(p.name)}</td>
+      <td style="color:#64748b">${p.category}</td>
+      <td><div style="display:flex;align-items:center;gap:10px"><div style="height:6px;width:80px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(p.stock/50)*100)}%;background:${p.stock<6?'#ef4444':p.stock<20?'#f59e0b':'#10b981'};border-radius:99px"></div></div><span style="font-weight:800;font-size:0.85rem;color:${p.stock<6?'#f87171':p.stock<20?'#fbbf24':'#34d399'}">${p.stock}</span></div></td>
+      <td style="color:#64748b">${p.unit}</td>
+      <td style="font-weight:700;color:#f8fafc">${fmt(p.price)}</td>
+      <td><span class="status-badge ${p.stock<6?'status-busy':'status-delivered'}">${p.stock<6?'Low':'Good'}</span></td>
+      <td><button style="background:rgba(255,255,255,0.06);color:#f8fafc;font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Restock</button></td>
+    </tr>`).join('');
+  lucide.createIcons();
+}
+
+function openAddProduct(){ document.getElementById('addProductModal').classList.add('open'); lucide.createIcons(); }
+
+async function addNewProduct(){
+  const name=document.getElementById('np-name').value;
+  if(!name){alert('Please enter a product name');return;}
+  const cat=document.getElementById('np-cat').value;
+  const unit=document.getElementById('np-unit').value;
+  const price=parseFloat(document.getElementById('np-price').value)||0;
+  const stock=parseInt(document.getElementById('np-stock').value)||0;
+  const img=document.getElementById('np-img').value||'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=400';
+  
+  const newProduct = {name,category:cat,price,rating:5.0,image:img,farmId:101,unit,stock};
+  
+  try {
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newProduct)
+    });
+    
+    if (response.ok) {
+      await fetchProducts(); // Refresh list from backend
+      document.getElementById('addProductModal').classList.remove('open');
+      fRenderProducts(); fRenderInventory();
+      showToast('Product added! ✅');
+    } else {
+      showToast('Failed to add product ❌');
+    }
+  } catch(e) {
+    console.error(e);
+    showToast('Error adding product ❌');
+  }
+}
+
+// ══════════════════════════════════════════
+// DISTRIBUTOR
+// ══════════════════════════════════════════
+function dShowView(v){
+  document.querySelectorAll('#portal-distributor .view-section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('d-view-'+v)?.classList.add('active');
+  document.querySelectorAll('#portal-distributor .nav-link').forEach(n=>n.classList.remove('active'));
+  document.getElementById('d-btn-'+v)?.classList.add('active');
+  document.querySelector('#portal-distributor .main-pane').scrollTop=0;
+  lucide.createIcons();
+}
+
+function dRenderAvailableOrders(){
+  const c=document.getElementById('d-availableOrders'); if(!c) return;
+  c.innerHTML=availableOrders.map((o,i)=>`
+    <div class="order-card" id="avail-${i}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;align-items:flex-start;gap:16px">
+          <div style="width:52px;height:52px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="package" style="width:26px;height:26px;color:#10b981"></i></div>
+          <div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><h3 style="font-weight:900;color:#f8fafc;font-size:1rem">#${o.id}</h3><span class="status-badge status-available">New</span></div>
+            <p style="font-size:0.83rem;color:#64748b;margin-bottom:6px">${o.items}</p>
+            <div style="display:flex;gap:16px;font-size:0.75rem;color:#475569"><span>${o.farm}</span><span>${o.dist}</span></div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px">
+          <div style="text-align:center"><p style="font-size:1.4rem;font-weight:900;color:#34d399">₹${o.pay}</p><p style="font-size:0.65rem;color:#475569;text-transform:uppercase;font-weight:800">Your Pay</p></div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button onclick="dAcceptOrder(${i})" style="background:#059669;color:#fff;font-weight:900;padding:10px 22px;border-radius:12px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem">Accept</button>
+            <button style="background:rgba(255,255,255,0.05);color:#64748b;font-weight:700;padding:10px 22px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem">Skip</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function dAcceptOrder(i){
+  const card=document.getElementById('avail-'+i);
+  if(card){card.innerHTML=`<div style="display:flex;align-items:center;gap:16px;padding:8px"><div style="width:44px;height:44px;background:#10b981;border-radius:14px;display:flex;align-items:center;justify-content:center"><i data-lucide="check" style="width:22px;height:22px;color:#000"></i></div><div><p style="font-weight:900;color:#f8fafc">Order Accepted!</p><p style="font-size:0.82rem;color:#34d399">Navigating to pickup…</p></div></div>`;
+  const badge=document.getElementById('d-availBadge');if(badge){const n=Math.max(0,parseInt(badge.textContent)-1);badge.textContent=n;if(n===0)badge.style.display='none';}
+  lucide.createIcons();showToast('Order accepted! 🚚');}
+}
+
+function toggleOnlineStatus(){
+  const on=document.getElementById('d-onlineToggle').checked;
+  const st=document.getElementById('d-statusText');
+  st.textContent=on?'● You are Online':'● You are Offline';
+  st.style.color=on?'#34d399':'#475569';
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+window.onload = () => { lucide.createIcons(); };
+</script>
+</body>
+</html>
