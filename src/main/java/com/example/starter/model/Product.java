@@ -10,11 +10,14 @@ public class Product {
     private Long farmId;
     private String unit;
     private int stock;
+    private String description;
+    private String harvestDate;
+    private String shelfLife;
 
     public Product() {
     }
 
-    public Product(Long id, String name, String category, double price, double rating, String image, Long farmId, String unit, int stock) {
+    public Product(Long id, String name, String category, double price, double rating, String image, Long farmId, String unit, int stock, String description, String harvestDate, String shelfLife) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -24,6 +27,9 @@ public class Product {
         this.farmId = farmId;
         this.unit = unit;
         this.stock = stock;
+        this.description = description;
+        this.harvestDate = harvestDate;
+        this.shelfLife = shelfLife;
     }
 
     public Long getId() {
@@ -96,5 +102,29 @@ public class Product {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getHarvestDate() {
+        return harvestDate;
+    }
+
+    public void setHarvestDate(String harvestDate) {
+        this.harvestDate = harvestDate;
+    }
+
+    public String getShelfLife() {
+        return shelfLife;
+    }
+
+    public void setShelfLife(String shelfLife) {
+        this.shelfLife = shelfLife;
     }
 }
