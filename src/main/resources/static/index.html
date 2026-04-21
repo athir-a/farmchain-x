@@ -180,8 +180,20 @@
       <section id="c-view-product-detail" class="view-section">
         <button onclick="cShowView('home')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
           <i data-lucide="arrow-left" class="w-4 h-4"></i> <span data-t="backToMarket">Back to marketplace</span>
+               </button>
+        <div style="display:grid;grid-template-columns:8fr 4fr;gap:32px" id="c-productDetailContent"></div>
+      </section>
+
+      <!-- CUSTOMER FARM PROFILE -->
+      <section id="c-view-farm-profile" class="view-section">
+        <button onclick="cShowView('home')" style="display:flex;align-items:center;gap:8px;color:#64748b;background:none;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-bottom:24px;font-size:0.9rem" onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#64748b'">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> <span>Back to Market</span>
         </button>
-        <div style="display:grid;grid-template-columns:7fr 5fr;gap:32px" id="c-productDetailContent"></div>
+        <div id="c-farmProfileContent"></div>
+        <div style="margin-top:40px;">
+          <h3 style="font-weight:900;color:#f8fafc;font-size:1.2rem;margin-bottom:20px;">Products from this Farm</h3>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px" id="c-farmProfileProducts"></div>
+        </div>
       </section>
 
       <!-- TOP FARMS -->
@@ -736,9 +748,9 @@ async function fetchProducts() {
 }
 
 const farms = {
-  101:{name:"Gloria's Sun Valley Farm",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800",description:"Gloria focuses on heirloom seeds and natural pest control. All produce harvested to order.",tags:["Verified Organic","No Pesticides"],rating:4.9,location:"Napa Valley, CA"},
-  102:{name:"Highland Root Farm",image:"https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&q=80&w=800",description:"Specializing in root vegetables and seasonal fruits from mountain terrain.",tags:["Mountain Grown"],rating:4.7,location:"Asheville, NC"},
-  103:{name:"Ethical Pastures",image:"https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=800",description:"Where animals come first. 100% free-range, cruelty-free certified.",tags:["Cruelty Free"],rating:5.0,location:"Lancaster, PA"}
+  101:{name:"Gloria's Sun Valley Farm",image:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1505471768190-275e2ad7b3f9?auto=format&fit=crop&q=80&w=1200",description:"Gloria focuses on heirloom seeds and natural pest control. All produce harvested to order.",tags:["Verified Organic","No Pesticides", "Family Owned"],rating:4.9,location:"Napa Valley, CA", owner: "Gloria S.", memberSince: "Mar 2021", completionRate: "99%", totalOrders: "1.2k+"},
+  102:{name:"Highland Root Farm",image:"https://images.unsplash.com/photo-1569239591652-6cc3025b07fa?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&q=80&w=1200",description:"Specializing in root vegetables and seasonal fruits from mountain terrain.",tags:["Mountain Grown", "Eco Packaging"],rating:4.7,location:"Asheville, NC", owner: "David M.", memberSince: "Jul 2022", completionRate: "95%", totalOrders: "850+"},
+  103:{name:"Ethical Pastures",image:"https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&q=80&w=800",banner:"https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&q=80&w=1200",description:"Where animals come first. 100% free-range, cruelty-free certified.",tags:["Cruelty Free", "Pasture Raised"],rating:5.0,location:"Lancaster, PA", owner: "Sarah J.", memberSince: "Jan 2020", completionRate: "100%", totalOrders: "2.4k+"}
 };
 
 let customerOrders = [
@@ -905,36 +917,126 @@ function cViewProduct(id) {
   const fav = favorites.includes(p.id);
   const displayName = tProduct(p.name);
   document.getElementById('c-productDetailContent').innerHTML = `
+    <!-- LEFT SIDE: PRODUCT -->
     <div>
       <div style="border-radius:28px;overflow:hidden;background:#0f172a;margin-bottom:20px;position:relative">
         <img src="${p.image}" style="width:100%;height:420px;object-fit:cover">
-        <button onclick="cToggleFav(${p.id});cViewProduct(${p.id})" style="position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'rgba(255,255,255,0.8)'}">
+        <button onclick="cToggleFav(${p.id});event.stopPropagation();" style="position:absolute;top:14px;right:14px;width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.5);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:${fav?'#f87171':'rgba(255,255,255,0.8)'}">
           <i data-lucide="heart" style="width:22px;height:22px;${fav?'fill:#f87171':''}"></i>
         </button>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-        <h1 style="font-size:1.8rem;font-weight:900;color:#f8fafc">${displayName}</h1>
-        <div style="text-align:right"><p style="font-size:1.6rem;font-weight:900;color:#34d399">${fmt(p.price)}</p><p style="font-size:0.72rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em">Per ${p.unit}</p></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="verification-tag" style="background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2);color:#60a5fa;"><i data-lucide="tag" class="w-3 h-3"></i> ${p.category}</span>
+          </div>
+          <h1 style="font-size:2.2rem;font-weight:900;color:#f8fafc;line-height:1.1">${displayName}</h1>
+        </div>
+        <div style="text-align:right">
+          <p style="font-size:2rem;font-weight:900;color:#34d399;line-height:1">${fmt(p.price)}</p>
+          <p style="font-size:0.75rem;color:#475569;text-transform:uppercase;letter-spacing:0.08em;margin-top:4px">Per ${p.unit}</p>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:20px;color:#fbbf24">
-        <i data-lucide="star" style="width:18px;height:18px;fill:#fbbf24"></i>
-        <span style="font-size:1rem;font-weight:800;color:#f8fafc">${p.rating}</span>
-        <span style="font-size:0.8rem;color:#475569">· ${p.category}</span>
+      
+      <p style="color:#94a3b8;font-size:0.95rem;line-height:1.6;margin-bottom:24px;">${p.description || 'Fresh from the farm to your doorstep.'}</p>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;color:#10b981;"><i data-lucide="leaf" style="width:20px;height:20px"></i></div>
+          <div><p style="font-size:0.7rem;color:#64748b;text-transform:uppercase;font-weight:800;letter-spacing:0.05em">Freshness</p><p style="font-size:0.9rem;font-weight:800;color:#f8fafc">${p.harvestDate || 'Harvested recently'}</p></div>
+        </div>
+        <div style="background:rgba(15,23,42,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;color:#60a5fa;"><i data-lucide="clock" style="width:20px;height:20px"></i></div>
+          <div><p style="font-size:0.7rem;color:#64748b;text-transform:uppercase;font-weight:800;letter-spacing:0.05em">Shelf Life</p><p style="font-size:0.9rem;font-weight:800;color:#f8fafc">${p.shelfLife || 'Check packaging'}</p></div>
+        </div>
       </div>
-      <button onclick="cAddToBasket(${p.id})" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:16px;border-radius:16px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
-        <i data-lucide="shopping-cart" style="width:20px;height:20px"></i> ${t('addToBasket')}
+      
+      <button onclick="cAddToBasket(${p.id})" style="width:100%;background:#059669;color:#fff;font-weight:900;padding:18px;border-radius:16px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:1.05rem;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.2s;box-shadow:0 8px 24px rgba(5,150,105,0.25);" onmouseover="this.style.background='#10b981'" onmouseout="this.style.background='#059669'">
+        <i data-lucide="shopping-cart" style="width:22px;height:22px"></i> Add to Basket
       </button>
     </div>
-    <div class="glass-card" style="border-radius:22px;padding:24px;height:fit-content;position:sticky;top:24px">
-      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800;margin-bottom:18px">About the Farm</p>
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-        <img src="${farm.image}" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid rgba(255,255,255,0.08)">
-        <div><h4 style="font-weight:900;color:#f8fafc;font-size:1rem">${farm.name}</h4><p style="font-size:0.78rem;color:#475569">${farm.location}</p></div>
+
+    <!-- RIGHT SIDE: FARM -->
+    <div class="glass-card farm-profile-card" onclick="cViewFarmProfile(${p.farmId})" style="border-radius:24px;padding:28px;height:fit-content;position:sticky;top:24px;cursor:pointer;transition:transform 0.2s, background 0.2s;border:1px solid rgba(255,255,255,0.06);" onmouseover="this.style.background='rgba(30,41,59,0.7)'" onmouseout="this.style.background='rgba(15,23,42,0.4)'">
+      <p style="font-size:0.65rem;color:#475569;text-transform:uppercase;letter-spacing:0.15em;font-weight:800;margin-bottom:18px">Sold By</p>
+      <div style="text-align:center;margin-bottom:20px;">
+        <img src="${farm.image}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #10b981;margin:0 auto 12px;box-shadow:0 0 20px rgba(16,185,129,0.3);">
+        <h4 style="font-weight:900;color:#f8fafc;font-size:1.1rem;margin-bottom:4px">${farm.name}</h4>
+        <p style="font-size:0.8rem;color:#475569;margin-bottom:8px">${farm.location}</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,0.1);padding:4px 10px;border-radius:99px;border:1px solid rgba(251,191,36,0.2);">
+          <i data-lucide="star" style="width:12px;height:12px;fill:#fbbf24;color:#fbbf24"></i>
+          <span style="font-size:0.8rem;font-weight:800;color:#fbbf24">${farm.rating}</span>
+        </div>
       </div>
-      <p style="color:#64748b;font-size:0.85rem;line-height:1.6;margin-bottom:16px">${farm.description}</p>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">${(farm.tags||[]).map(tag=>`<span class="verification-tag">${tag}</span>`).join('')}</div>
-    </div>`;
+      <div style="background:rgba(15,23,42,0.4);border-radius:16px;padding:16px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;">
+          <div><p style="font-weight:900;color:#f8fafc;font-size:1rem">${farm.totalOrders || '1.2k+'}</p><p style="font-size:0.65rem;color:#64748b;text-transform:uppercase;">Orders</p></div>
+          <div style="border-left:1px solid rgba(255,255,255,0.06)"><p style="font-weight:900;color:#34d399;font-size:1rem">${farm.completionRate || '99%'}</p><p style="font-size:0.65rem;color:#64748b;text-transform:uppercase;">Rate</p></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px;">${(farm.tags||[]).map(tag=>`<span class="verification-tag" style="font-size:0.65rem">${tag}</span>`).join('')}</div>
+      <button style="width:100%;background:none;color:#10b981;font-weight:800;padding:12px;border-radius:12px;border:1px solid rgba(16,185,129,0.3);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.2s">
+        View Farm Profile <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
+      </button>
+    </div>
+    `;
   cShowView('product-detail');
+  lucide.createIcons();
+}
+
+function cViewFarmProfile(farmId) {
+  const farm = farms[farmId];
+  if(!farm) return;
+  const farmProducts = products.filter(p => p.farmId === farmId);
+  
+  document.getElementById('c-farmProfileContent').innerHTML = `
+    <div style="border-radius:28px;overflow:hidden;background:#0f172a;margin-bottom:28px;position:relative;border:1px solid rgba(255,255,255,0.06);">
+      <div style="height:220px;width:100%;position:relative;">
+        <img src="${farm.banner || farm.image}" style="width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(15,23,42,1), rgba(15,23,42,0));"></div>
+      </div>
+      <div style="padding:0 32px 32px;position:relative;z-index:2;display:flex;align-items:flex-end;gap:24px;margin-top:-60px;">
+        <img src="${farm.image}" style="width:120px;height:120px;border-radius:20px;object-fit:cover;border:4px solid #0f172a;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div style="flex:1;">
+          <h1 style="font-size:2.2rem;font-weight:900;color:#f8fafc;margin-bottom:4px;line-height:1.1">${farm.name}</h1>
+          <p style="color:#94a3b8;font-size:0.95rem;"><i data-lucide="map-pin" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:4px;"></i>${farm.location} · ${farm.memberSince ? 'Member since ' + farm.memberSince : 'Verified Farm'}</p>
+        </div>
+        <div style="display:flex;gap:12px;">
+          <button style="background:#059669;color:#fff;font-weight:800;padding:12px 24px;border-radius:14px;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.9rem;display:flex;align-items:center;gap:8px;">
+            <i data-lucide="message-circle" class="w-4 h-4"></i> Contact
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div style="display:grid;grid-template-columns:8fr 4fr;gap:28px;">
+      <div class="glass-card" style="padding:32px;border-radius:24px;">
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.2rem;margin-bottom:16px;">About the Farm</h3>
+        <p style="color:#94a3b8;font-size:1rem;line-height:1.7;margin-bottom:24px;">${farm.description}</p>
+        <h4 style="font-weight:800;color:#f8fafc;font-size:0.95rem;margin-bottom:12px;">Farm Certifications</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">${(farm.tags||[]).map(tag=>`<span class="verification-tag" style="font-size:0.8rem;padding:6px 12px;"><i data-lucide="shield-check" class="w-3 h-3"></i> ${tag}</span>`).join('')}</div>
+      </div>
+      <div class="glass-card" style="padding:28px;border-radius:24px;">
+        <h3 style="font-weight:900;color:#f8fafc;font-size:1.1rem;margin-bottom:20px;">Farm Metrics</h3>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="star" style="width:20px;height:20px;color:#fbbf24;"></i> <span style="font-weight:800;color:#f8fafc;">Rating</span></div>
+            <span style="font-weight:900;color:#fbbf24;font-size:1.1rem">${farm.rating} / 5</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="shopping-bag" style="width:20px;height:20px;color:#60a5fa;"></i> <span style="font-weight:800;color:#f8fafc;">Total Orders</span></div>
+            <span style="font-weight:900;color:#f8fafc;font-size:1.1rem">${farm.totalOrders || '1.2k+'}</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(15,23,42,0.4);padding:14px 18px;border-radius:14px;">
+            <div style="display:flex;align-items:center;gap:12px;"><i data-lucide="check-square" style="width:20px;height:20px;color:#10b981;"></i> <span style="font-weight:800;color:#f8fafc;">Completion</span></div>
+            <span style="font-weight:900;color:#34d399;font-size:1.1rem">${farm.completionRate || '99%'}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  cShowView('farm-profile');
+  cRenderProducts(farmProducts, 'c-farmProfileProducts');
   lucide.createIcons();
 }
 
@@ -1092,7 +1194,7 @@ function cFilterCategory(cat){
 
 function cRenderFarms(){
   const c=document.getElementById('c-topFarmsList'); if(!c) return;
-  c.innerHTML=Object.keys(farms).map(id=>{const f=farms[id];return `<div class="glass-card" style="padding:20px;border-radius:22px"><div style="display:flex;gap:18px"><img src="${f.image}" style="width:100px;height:100px;border-radius:18px;object-fit:cover;flex-shrink:0"><div><h3 style="font-weight:900;color:#f8fafc;font-size:1.05rem;margin-bottom:4px">${f.name}</h3><p style="color:#fbbf24;font-size:0.85rem;font-weight:700;margin-bottom:6px">★ ${f.rating}</p><p style="color:#64748b;font-size:0.83rem;line-height:1.5">${f.description}</p><p style="color:#334155;font-size:0.75rem;margin-top:8px">${f.location}</p></div></div></div>`;}).join('');
+  c.innerHTML=Object.keys(farms).map(id=>{const f=farms[id];return `<div class="glass-card" style="padding:20px;border-radius:22px;cursor:pointer;transition:transform 0.2s;border:1px solid rgba(255,255,255,0.06);" onclick="cViewFarmProfile(${id})" onmouseover="this.style.transform='scale(1.02)';this.style.borderColor='rgba(16,185,129,0.3)';" onmouseout="this.style.transform='scale(1)';this.style.borderColor='rgba(255,255,255,0.06)';"><div style="display:flex;gap:18px"><img src="${f.image}" style="width:100px;height:100px;border-radius:18px;object-fit:cover;flex-shrink:0"><div><h3 style="font-weight:900;color:#f8fafc;font-size:1.05rem;margin-bottom:4px">${f.name}</h3><p style="color:#fbbf24;font-size:0.85rem;font-weight:700;margin-bottom:6px">★ ${f.rating}</p><p style="color:#64748b;font-size:0.83rem;line-height:1.5">${f.description}</p><p style="color:#334155;font-size:0.75rem;margin-top:8px">${f.location}</p></div></div></div>`;}).join('');
   lucide.createIcons();
 }
 
